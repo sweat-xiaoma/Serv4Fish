@@ -1,0 +1,6 @@
+/Users/apple/Projects/FishCommon3/bin/Debug/FishCommon3.dll
+/Users/apple/Projects/FishCommon3/bin/Debug/FishCommon3.pdb
+/Users/apple/Projects/FishCommon3/obj/Debug/FishCommon3.csprojResolveAssemblyReference.cache
+/Users/apple/Projects/FishCommon3/obj/Debug/FishCommon3.csproj.CoreCompileInputs.cache
+/Users/apple/Projects/FishCommon3/obj/Debug/FishCommon3.dll
+/Users/apple/Projects/FishCommon3/obj/Debug/FishCommon3.pdb
