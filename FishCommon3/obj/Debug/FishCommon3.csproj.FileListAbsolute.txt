@@ -4,3 +4,9 @@
 /Users/apple/Projects/FishCommon3/obj/Debug/FishCommon3.csproj.CoreCompileInputs.cache
 /Users/apple/Projects/FishCommon3/obj/Debug/FishCommon3.dll
 /Users/apple/Projects/FishCommon3/obj/Debug/FishCommon3.pdb
+/Users/apple/Serv4Fish/FishCommon3/bin/Debug/FishCommon3.dll
+/Users/apple/Serv4Fish/FishCommon3/bin/Debug/FishCommon3.pdb
+/Users/apple/Serv4Fish/FishCommon3/obj/Debug/FishCommon3.csproj.CoreCompileInputs.cache
+/Users/apple/Serv4Fish/FishCommon3/obj/Debug/FishCommon3.dll
+/Users/apple/Serv4Fish/FishCommon3/obj/Debug/FishCommon3.pdb
+/Users/apple/Serv4Fish/FishCommon3/obj/Debug/FishCommon3.csprojAssemblyReference.cache

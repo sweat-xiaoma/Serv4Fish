@@ -68,15 +68,15 @@ namespace Serv4Fish3.ServerSide
             controllerManager.HandleRequest(requestCode, actionCode, data, client);
         }
 
-        /// <summary>
-        /// 第一个client是创建者
-        /// </summary>
-        public void CreateRoom(Client client)
+        //public void CreateRoom(Client client)
+        Room CreateRoom(Client client)
         {
             Room room = new Room(this);
-            room.AddClient(client);
+            room.AddClient(client, 0); // 创建的空房间 玩家坐在 0 号座位上
             roomList.Add(room);
+            return room;
         }
+
 
         public void RemoveRoom(Room room)
         {
@@ -91,14 +91,46 @@ namespace Serv4Fish3.ServerSide
             return roomList;
         }
 
-        public Room GetRoomById(int id)
+        //public Room GetRoomById(int id)
+        //{
+        //    foreach (Room room in roomList)
+        //    {
+        //        if (room.GetId() == id) // 找到了要查询的房间房主id
+        //            return room;
+        //    }
+        //    return null;
+        //}
+
+        // 快速游戏 （进入最近的一个有空座位的房间）
+        public Room JoinRoomFast(Client client)
         {
-            foreach (Room room in roomList)
+            foreach (Room item in roomList)
             {
-                if (room.GetId() == id) // 找到了要查询的房间房主id
-                    return room;
+                int seat = item.EmptySeat();
+                if (seat != -1) // 找到空位了坐下
+                {
+                    item.AddClient(client, seat);
+                    return item;
+                }
             }
-            return null;
+
+            // 没有空房间，创建一个
+            Room room = this.CreateRoom(client);
+            return room;
+        }
+
+        // 用户重复连接 // todo 用guid检测登陆过期
+        public bool CheckUserRepeat(string username)
+        {
+            foreach (Client client in clientList)
+            {
+                if (client.GetUser() != null)
+                    if (client.GetUser().Username == username)
+                    {
+                        return false;
+                    }
+            }
+            return true;
         }
     }
 }

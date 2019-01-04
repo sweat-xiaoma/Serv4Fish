@@ -15,6 +15,9 @@ namespace FishCommon3
         ShowTimer, // 开始倒计时
         StartPlay, // 正式开始游戏
         Move, // 角色移动
+        Shoot, // 射击
+        Rotate, // 旋转
+
 
     }
 }

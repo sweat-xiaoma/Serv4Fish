@@ -16,7 +16,9 @@ namespace Serv4Fish3.ServerSide
         Message msg = new Message();
         MySqlConnection mySqlConn;
         User user;
-        Result result;
+        //Result result;
+        Wallet wallet;
+
         Room room;
 
         public MySqlConnection MySQlConn
@@ -27,20 +29,34 @@ namespace Serv4Fish3.ServerSide
             }
         }
 
-        public void SetUserData(User user, Result result)
+        //public void SetUserData(User user, Result result)
+        public void SetUserData(User user, Wallet wallet)
         {
             this.user = user;
-            this.result = result;
+            //this.result = result;
+            this.wallet = wallet;
+
         }
 
         public string GetUserData()
         {
-            return user.id + "," + user.username + "," + result.Totalresult + "," + result.Winresult;
+            if (this.user == null)
+                return "";
+            //return user.Id + "," + user.Username + "," + result.Totalresult + "," + result.Winresult;
+            return user.Username + ","
+                + user.Corner + ","
+                + wallet.Money + ","
+                + wallet.Diamond;
         }
 
         public int GetUserId()
         {
-            return user.id;
+            return user.Id;
+        }
+
+        public User GetUser()
+        {
+            return user;
         }
 
         public Room Room
@@ -57,7 +73,7 @@ namespace Serv4Fish3.ServerSide
             this.clientAddress = clientSocket.RemoteEndPoint.ToString();
             Console.WriteLine("新用户[{0}]连接", this.clientAddress);
 
-            mySqlConn = ConnetHelper.Connect(); // 每个用户 keep 一个 sql 连接。
+            mySqlConn = ConnectHelper.Connect(); // 每个用户 keep 一个 sql 连接。
         }
 
         public void Start()
@@ -89,34 +105,40 @@ namespace Serv4Fish3.ServerSide
 
         void OnProcessMessage(RequestCode requestCode, ActionCode actionCode, string data)
         {
-            Console.WriteLine("[Client - 接收] RequestCode:{0} ActionCode:{1} data:{2}",
-                              requestCode,
-                              actionCode,
-                              data);
+            Console.WriteLine("[Client - 接收 {0} ] " +
+                "\n\tRequestCode: {1} " +
+                "\n\tActionCode: {2} " +
+                "\n\tdata: {3}",
+                clientSocket.RemoteEndPoint.ToString(),
+                requestCode,
+                actionCode,
+                data);
             server.HandleRequest(requestCode, actionCode, data, this);
         }
 
         void Close()
         {
             Console.WriteLine("用户[{0}]断开连接", this.clientAddress);
-            ConnetHelper.CloseConnection(this.mySqlConn);
+            ConnectHelper.CloseConnection(this.mySqlConn);
 
             if (clientSocket != null)
                 clientSocket.Close();
 
             if (this.room != null)
-                room.Close(this); // 用户退出检测关闭房间
+                room.QuitRoom(this); // 用户退出 检测关闭房间
 
             server.RemoveClient(this);
 
         }
 
-        //public void Send(RequestCode requestCode, string data)
         public void Send(ActionCode actionCode, string data)
         {
-            Console.WriteLine("[Client - 发送] ActionCode:{0} data:{1}",
-                              actionCode,
-                              data);
+            Console.WriteLine("[Client - 发送 {0}]" +
+                "\n\tActionCode: {1} " +
+                "\n\tdata: {2}",
+                clientSocket.RemoteEndPoint.ToString(),
+                actionCode,
+                data);
             byte[] bytes = Message.PackData(actionCode, data);
             clientSocket.Send(bytes);
         }

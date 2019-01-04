@@ -55,7 +55,7 @@
     <Compile Include="ServerSide\Client.cs" />
     <Compile Include="ServerSide\Message.cs" />
     <Compile Include="ServerSide\Server.cs" />
-    <Compile Include="Tools\ConnetHelper.cs" />
+    <Compile Include="Tools\ConnectHelper.cs" />
     <Compile Include="Controller\UserController.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="DAO\UserDAO.cs" />
@@ -64,6 +64,9 @@
     <Compile Include="Model\Result.cs" />
     <Compile Include="DAO\ResultDAO.cs" />
     <Compile Include="Controller\GameController.cs" />
+    <Compile Include="Model\Wallet.cs" />
+    <Compile Include="DAO\WalletDAO.cs" />
+    <Compile Include="Tools\Util.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

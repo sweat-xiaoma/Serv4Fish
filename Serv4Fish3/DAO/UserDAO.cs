@@ -6,20 +6,19 @@ namespace Serv4Fish3.DAO
 {
     public class UserDAO
     {
-        public User VerifyUser(MySqlConnection conn, string username, string password)
+        public User VerifyUser(MySqlConnection conn, string username)
         {
             MySqlDataReader reader = null;
 
             try
             {
-                MySqlCommand command = new MySqlCommand("select * from user where username=@username and password=@password", conn);
+                MySqlCommand command = new MySqlCommand("select * from user where username= @username", conn);
                 command.Parameters.AddWithValue("username", username);
-                command.Parameters.AddWithValue("password", password);
                 reader = command.ExecuteReader();
                 if (reader.Read())
                 {
                     int id = reader.GetInt32("id");
-                    User user = new User(id, username, password);
+                    User user = new User(id, username);
                     return user;
                 }
                 else

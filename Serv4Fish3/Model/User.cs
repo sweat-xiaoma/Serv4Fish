@@ -1,17 +1,22 @@
 ﻿using System;
+using MySql.Data.MySqlClient;
+
+
+
 namespace Serv4Fish3.Model
 {
     public class User
     {
-        public int id;
-        public string username;
-        public string password;
+        public readonly int Id;
+        public readonly string Username;
+        public int Corner; // 玩家的座位 -1没座位，0左下，1右下，2右上，3左上
 
-        public User(int id, string username, string password)
+        public User(int id, string username)
         {
-            this.id = id;
-            this.username = username;
-            this.password = password;
+            this.Id = id;
+            this.Username = username;
         }
+
+
     }
 }

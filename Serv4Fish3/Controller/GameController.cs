@@ -27,5 +27,13 @@ namespace Serv4Fish3.Controller
                 return ((int)ReturnCode.Fail).ToString();
             }
         }
+
+        public string Rotate(string data, Client client, Server server)
+        {
+            Room room = client.Room;
+            if (room != null)
+                room.BroadcastMessage(client, ActionCode.Rotate, data); // 直接转发
+            return "";
+        }
     }
 }

@@ -8,8 +8,6 @@ namespace Serv4Fish3.Controller
 {
     public class UserController : BaseController
     {
-        UserDAO userDAO = new UserDAO();
-        ResultDAO resultDAO = new ResultDAO();
         public UserController()
         {
             requestCode = RequestCode.User;
@@ -18,23 +16,29 @@ namespace Serv4Fish3.Controller
         public string Login(string data, Client client, Server server)
         {
             string[] strs = data.Split(',');
-            User user = userDAO.VerifyUser(client.MySQlConn, strs[0], strs[1]);
+            string username = strs[0];
+
+            if (!server.CheckUserRepeat(username)) // 检测用户重复登陆
+            {
+                return ((int)ReturnCode.Fail).ToString();
+            }
+
+            UserDAO userDAO = new UserDAO();
+            User user = userDAO.VerifyUser(client.MySQlConn, username);
             if (user == null)
             {
-                //Enum.GetName(typeof(ReturnCode), ReturnCode.Fail);
-                //return ((int)ReturnCode.Fail).ToString();
-                //return Enum.GetName(typeof(ReturnCode), ReturnCode.Fail);
                 return ((int)ReturnCode.Fail).ToString();
             }
             else
             {
-                Result result = resultDAO.GetResultByUserid(client.MySQlConn, user.id);
-                client.SetUserData(user, result);
-                return string.Format("{0},{1},{2},{3}",
-                                     ((int)ReturnCode.Success).ToString(),
-                                     user.username,
-                                     result.Totalresult,
-                                     result.Winresult);
+                WalletDAO walletDAO = new WalletDAO();
+                Wallet wallet = walletDAO.GetWalletByUsername(client.MySQlConn, user.Username);
+                client.SetUserData(user, wallet); // 设置玩家信息
+                return ((int)ReturnCode.Success).ToString() + ","
+                                                + wallet.Money + ","
+                                                + wallet.Diamond;
+
+
             }
         }
     }

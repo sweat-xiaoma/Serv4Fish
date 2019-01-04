@@ -16,11 +16,13 @@ namespace Serv4Fish3.ServerSide
         End
     }
 
-
     public class Room
     {
-        List<Client> clientList = new List<Client>();
+        public const int MaxPeople = 4;
+
+        Client[] clientArray = new Client[MaxPeople];
         RoomState state = RoomState.WaitingJoin;
+
         Server server;
 
         public Room(Server server)
@@ -37,69 +39,123 @@ namespace Serv4Fish3.ServerSide
         // 第一个就是房主
         public bool IsRoomOwner(Client client)
         {
-            return client == clientList[0];
+            return client == clientArray[0];
         }
 
-        public void AddClient(Client client)
+        //public void AddClient(Client client)
+        public void AddClient(Client client, int index)
         {
-            clientList.Add(client);
-            client.Room = this;
-
-            if (clientList.Count >= 2) // 最大人数
+            //clientList.Add(client);
+            if (clientArray[index] == null)
             {
-                state = RoomState.WaitingBattle; // 满员了 等待开始战斗
+                clientArray[index] = client;
+                client.Room = this;
+                client.GetUser().Corner = index;
             }
+            else
+            {
+                Console.WriteLine("[Room AddClient] 用户进房间座位有人了");
+            }
+
+            //if (clientList.Count >= Room.MaxPeople) // 最大人数
+            //{
+            //    state = RoomState.WaitingBattle; // 满员了 等待开始战斗
+            //}
         }
 
-        public void RemoveClient(Client client)
+        //public void RemoveClient(Client client)
+        public void RemoveClient(Client client, int index)
         {
             client.Room = null;
-            clientList.Remove(client);
+            //clientList.Remove(client);
+            clientArray[index] = null;
 
-            if (clientList.Count >= 2) // 最大人数
+            //if (clientList.Count >= 2) // 最大人数
+            //{
+            //    state = RoomState.WaitingBattle; // 满员了 等待开始战斗
+            //}
+            //else
+            //{
+            //    state = RoomState.WaitingJoin;
+            //}
+        }
+
+        //// 获取房主信息  第一个进房间的人（创建者）
+        //public string GetHouseOwnerData()
+        //{
+        //    return clientList[0].GetUserData();
+        //}
+
+        public void QuitRoom(Client client)
+        {
+            // 从座位上移除
+            this.RemoveClient(client, client.GetUser().Corner);
+
+            // 广播给房间内其他人 我走了～再见。
+            BroadcastMessage(client, ActionCode.UpdateRoom, GetRoomData());
+
+            // 判断房间里没人了就销毁房间
+            bool isEmpty = true;
+            foreach (var item in clientArray)
             {
-                state = RoomState.WaitingBattle; // 满员了 等待开始战斗
+                if (item != null)
+                {
+                    isEmpty = false;
+                    break;
+                }
             }
-            else
+            if (isEmpty)
             {
-                state = RoomState.WaitingJoin;
+                //server.RemoveRoom(this);
+                DestroyRoom();
             }
         }
 
-        // 获取房主信息  第一个进房间的人（创建者）
-        public string GetHouseOwnerData()
+        // 销毁房间
+        //public void Close()
+        void DestroyRoom()
         {
-            return clientList[0].GetUserData();
+            foreach (Client client in clientArray)
+            {
+                client.Room = null;
+            }
+            server.RemoveRoom(this);
         }
 
-        public void Close(Client client)
-        {
-            if (client == clientList[0]) // 只有房主退出才关闭房间
-            {
-                server.RemoveRoom(this);
-            }
-            else
-            {
-                clientList.Remove(client);
-            }
-        }
+        //public int GetId()
+        //{
+        //    if (clientList.Count > 0)
+        //    {
+        //        return clientList[0].GetUserId();
+        //    }
+        //    return -1;
+        //}
 
-        public int GetId()
+        /// <summary>
+        /// 获取一个空座位
+        /// </summary>
+        /// <returns>获得座位号，-1表示没有空位.</returns>
+        public int EmptySeat()
         {
-            if (clientList.Count > 0)
+            for (int i = 0; i < clientArray.Length; i++)
             {
-                return clientList[0].GetUserId();
+                if (clientArray[i] == null)
+                {
+                    return i;
+                }
             }
             return -1;
         }
 
-        public string GetRoomData() // 房间信息 和 房间里的用户信息
+        public string GetRoomData() // 房间里的用户信息
         {
-            //string 
             StringBuilder sb = new StringBuilder();
-            foreach (Client client in clientList)
+            foreach (Client client in clientArray)
             {
-                sb.Append(client.GetUserData() + "|");
+                if (client == null)
+                    sb.Append("|");
+                else
+                    sb.Append(client.GetUserData() + "|");
             }
 
             if (sb.Length > 0)
@@ -110,28 +166,18 @@ namespace Serv4Fish3.ServerSide
         }
 
         /// <summary>
-        /// Broadcasts the message.
+        /// 房内广播
         /// </summary>
         /// <param name="excludeClient">不接受广播的用户 一般是当前客户端不用再接收</param>
         public void BroadcastMessage(Client excludeClient, ActionCode actionCode, string data)
         {
-            foreach (Client client in clientList)
+            foreach (Client client in clientArray)
             {
-                if (client != excludeClient)
+                if (client != null && client != excludeClient)
                 {
                     server.SendResponse(client, actionCode, data);
                 }
             }
-        }
-
-        // 销毁房间
-        public void Close()
-        {
-            foreach (Client client in clientList)
-            {
-                client.Room = null;
-            }
-            server.RemoveRoom(this);
         }
 
         public void StartTimer()
