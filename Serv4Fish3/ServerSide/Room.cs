@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define DEBUG_VIEW
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Serv4Fish3.Model;
@@ -171,13 +173,25 @@ namespace Serv4Fish3.ServerSide
         /// <param name="excludeClient">不接受广播的用户 一般是当前客户端不用再接收</param>
         public void BroadcastMessage(Client excludeClient, ActionCode actionCode, string data)
         {
+#if DEBUG_VIEW
+            StringBuilder sb = new StringBuilder();
+#endif
             foreach (Client client in clientArray)
             {
                 if (client != null && client != excludeClient)
                 {
+#if DEBUG_VIEW
+                    //client.GetUser().Username 
+                    sb.Append(client.GetUser().Username + ",");
+#endif 
                     server.SendResponse(client, actionCode, data);
                 }
             }
+
+#if DEBUG_VIEW
+            Console.WriteLine("房间[{0}]内广播消息[{1}]给[{2}]", this.GetHashCode(), actionCode, sb);
+#endif
+
         }
 
         public void StartTimer()

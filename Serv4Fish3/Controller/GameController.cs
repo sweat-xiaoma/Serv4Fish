@@ -35,5 +35,14 @@ namespace Serv4Fish3.Controller
                 room.BroadcastMessage(client, ActionCode.Rotate, data); // 直接转发
             return "";
         }
+
+        public string Shoot(string data, Client client, Server server)
+        {
+
+            Room room = client.Room;
+            if (room != null)
+                room.BroadcastMessage(client, ActionCode.Shoot, data); // 直接转发
+            return "";
+        }
     }
 }
