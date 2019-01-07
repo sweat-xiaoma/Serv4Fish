@@ -44,6 +44,7 @@ namespace Serv4Fish3.ServerSide
                 return "";
             //return user.Id + "," + user.Username + "," + result.Totalresult + "," + result.Winresult;
             return user.Username + ","
+                + user.Nickname + ","
                 + user.Corner + ","
                 + wallet.Money + ","
                 + wallet.Diamond;

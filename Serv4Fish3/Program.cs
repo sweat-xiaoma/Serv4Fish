@@ -105,6 +105,11 @@ namespace Serv4Fish3
 
         static void debugSql()
         {
+            for (int i = 0; i < 10; i++)
+            {
+                Console.WriteLine(GetRequireExpByLevel(i));
+            }
+            return;
             string guid = "V4BqJJuh7OpSoKm79ShUQg7LeUEoIkRrTd63PhlAZmHAKD_NZRkhTzvF7KhCbBHmUjVXtlZXErTVdXT8ocPak4UvCA3HYm3xt8effunyNUqgUWvBinIWwy7_8ZQQBRKHNJEbjvvk-7_uYKNbK8DGrdLFZuMXAIBai916_rnwNksF3gVVOaTekYwoTQ7rWL3UhYkIRctweiKyzgOrvT-RUoQtc5MgyJnMh9WHXzvXGMJzD2TQ8wM7meKTE_nG5pgzUsaXTUg_cIgU9LK-dkRuDrAplGruZA_vbKsFMFeR5gq4LiDXhJ6M76AtdgVkRScJRK-nNNVzY22-ZYgRxFgOzg";
             //string re = urlsafeB64Decode(guid);
             //Console.WriteLine(re);
@@ -136,7 +141,8 @@ namespace Serv4Fish3
             {
                 int id = reader.GetInt32("id");
                 string username = reader.GetString("username");
-                User user = new User(id, username);
+                string nickname = reader.GetString("nickname");
+                User user = new User(id, username, nickname);
                 Console.WriteLine(id);
                 Console.WriteLine(username);
                 Console.WriteLine(user.Username);
@@ -144,5 +150,12 @@ namespace Serv4Fish3
             reader.Close();
             return;
         }
+
+
+        static int GetRequireExpByLevel(int level)
+        {
+            return (int)((level - 1) * (100f + (100f + 10f * (level - 2f))) / 2);
+        }
     }
+
 }

@@ -83,6 +83,7 @@ namespace Serv4Fish3.ServerSide
         {
             if (roomList != null && room != null)
             {
+                Console.WriteLine("销毁空房间 [{0}] ", room.GetHashCode());
                 roomList.Remove(room);
             }
         }

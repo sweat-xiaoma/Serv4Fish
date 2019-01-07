@@ -18,7 +18,8 @@ namespace Serv4Fish3.DAO
                 if (reader.Read())
                 {
                     int id = reader.GetInt32("id");
-                    User user = new User(id, username);
+                    string nickname = reader.GetString("nickname");
+                    User user = new User(id, username, nickname);
                     return user;
                 }
                 else
