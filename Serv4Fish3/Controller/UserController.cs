@@ -27,7 +27,7 @@ namespace Serv4Fish3.Controller
             User user = userDAO.VerifyUser(client.MySQlConn, username);
             if (user == null)
             {
-                return ((int)ReturnCode.Fail).ToString();
+                return ((int)ReturnCode.Notdfound).ToString();
             }
             else
             {

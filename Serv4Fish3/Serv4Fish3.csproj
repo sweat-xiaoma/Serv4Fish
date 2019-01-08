@@ -28,14 +28,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="Google.Protobuf">
-      <HintPath>..\Serv4FishClientDemo\packages\Google.Protobuf.3.5.1\lib\net45\Google.Protobuf.dll</HintPath>
-    </Reference>
-    <Reference Include="MySql.Data">
-      <HintPath>..\Serv4FishClientDemo\packages\MySql.Data.8.0.13\lib\net452\MySql.Data.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.ComponentModel" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Configuration.Install" />
@@ -45,6 +38,13 @@
     <Reference Include="System.Management" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Xml" />
+    <Reference Include="Google.Protobuf">
+      <HintPath>packages\Google.Protobuf.3.5.1\lib\net45\Google.Protobuf.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data">
+      <HintPath>packages\MySql.Data.8.0.13\lib\net452\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -69,9 +69,6 @@
     <Compile Include="Tools\Util.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\FishCommon3\FishCommon3.csproj">
       <Project>{85CF404B-3848-4D89-A01C-FD863EA2B1DE}</Project>
       <Name>FishCommon3</Name>
@@ -81,6 +78,9 @@
     <Folder Include="Controller\" />
     <Folder Include="DAO\" />
     <Folder Include="Model\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 

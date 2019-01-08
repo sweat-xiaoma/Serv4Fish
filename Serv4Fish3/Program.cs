@@ -10,6 +10,7 @@ using MySql.Data.MySqlClient;
 using System.Text;
 
 
+
 namespace Serv4Fish3
 {
     class MainClass
@@ -61,7 +62,8 @@ namespace Serv4Fish3
 #endif
 
 
-            Server server = new Server("127.0.0.1", 1234);
+            //Server server = new Server("127.0.0.1", 1234);
+            Server server = new Server("0.0.0.0", 1234);
             server.Start();
             //Console.ReadLine();
             while (true)
