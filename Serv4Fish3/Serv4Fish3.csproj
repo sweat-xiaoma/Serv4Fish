@@ -68,6 +68,8 @@
     <Compile Include="DAO\WalletDAO.cs" />
     <Compile Include="Tools\Util.cs" />
     <Compile Include="Tools\Coroutine\A.cs" />
+    <Compile Include="Tools\Coroutine\PBTest.cs" />
+    <Compile Include="ServerSide\PersonMc.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FishCommon3\FishCommon3.csproj">

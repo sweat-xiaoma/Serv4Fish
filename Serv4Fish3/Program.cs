@@ -10,8 +10,8 @@ using MySql.Data.MySqlClient;
 using System.Text;
 using System.Collections;
 using System.Collections.Generic;
-
-
+using System.Threading;
+using Protobuf;
 
 namespace Serv4Fish3
 {
@@ -59,8 +59,39 @@ namespace Serv4Fish3
             //return;
 
 #if DEBUG_VIEW
-            debugSql();
-            return;
+            PersonMc personMc = new PersonMc();
+            //Console.WriteLine(DateTime.Now.Millisecond);
+            //Thread.Sleep(20);
+            //Console.WriteLine(DateTime.Now.Millisecond);
+            //Thread.Sleep(20);
+            //Console.WriteLine(DateTime.Now.Millisecond);
+            //Thread.Sleep(20);
+            //Console.WriteLine(DateTime.Now.Millisecond);
+
+
+            //debugSql();
+
+            //Console.WriteLine(Guid.NewGuid());
+            //Console.WriteLine(Guid.NewGuid());
+            //Console.WriteLine(Guid.NewGuid());
+
+            //Console.WriteLine(DateTime.Now.Second);
+            //Console.WriteLine(DateTime.Now.Second);
+            //Console.WriteLine(DateTime.Now.Second);
+
+            //Console.WriteLine(DateTime.Now.Ticks);
+            //Console.WriteLine(DateTime.Now.Ticks);
+            //Console.WriteLine(DateTime.Now.Ticks);
+
+            //Console.WriteLine(DateTime.Now.ToUniversalTime());
+            //Console.WriteLine(DateTime.Now.ToUniversalTime());
+            //Console.WriteLine(DateTime.Now.ToUniversalTime());
+
+            //Console.WriteLine(DateTime.Now.ToUniversalTime().Ticks);
+            //Console.WriteLine(DateTime.Now.ToUniversalTime().Ticks);
+            //Console.WriteLine(DateTime.Now.ToUniversalTime().Ticks);
+
+            //return;
 #endif
 
 
@@ -115,8 +146,57 @@ namespace Serv4Fish3
             return data;
         }
 
+        static IEnumerator Test01()
+        {
+
+            Console.WriteLine(DateTime.Now.Millisecond);
+
+
+            Console.WriteLine("start Test01" + " [" + DateTime.Now + "]");
+            //Console.WriteLine("start Test01" + " [" + DateTime.Now.ToLongDateString() + "]");
+            //Console.WriteLine("start Test01" + " [" + DateTime.Now.ToLongTimeString() + "]");
+            //Console.WriteLine("start Test01" + " [" + DateTime.Now.ToShortDateString() + "]");
+            //Console.WriteLine("start Test01" + " [" + DateTime.Now.ToShortTimeString() + "]");
+            //DateTime 当前时间 = DateTime.Now;
+            //string 毫秒 = 当前时间.ToString(@"ss\:fff"); //显示2位秒数和秒数后面3位
+            //Console.WriteLine(毫秒);
+
+            yield return new WaitForSeconds(5);
+            Console.WriteLine("等五秒" + " [" + DateTime.Now + "]");
+            Console.WriteLine(DateTime.Now.Millisecond);
+            yield return new WaitForSeconds(5);
+            Console.WriteLine("再等五秒" + " [" + DateTime.Now + "]");
+            Console.WriteLine(DateTime.Now.Millisecond);
+
+
+        }
+
+        //static IEnumerator Test02()
+        //{
+        //    Console.WriteLine("start test 02");
+        //    yield return new WaitForFrames(500);
+        //    Console.WriteLine("after 500 frames");
+        //}
+
         static void debugSql()
         {
+            //var t1 = Test01();
+            //var t2 = Test02();
+            //CoroutineManager.Instance.StartCoroutine(t1);
+            //CoroutineManager.Instance.StartCoroutine(t2);
+
+            CoroutineManager.Instance.StartCoroutine(Test01());
+
+            while (true)// 模拟update
+            {
+                // 帧率 1000 / 20 = 50
+                Thread.Sleep(Time.deltaMilliseconds);
+                CoroutineManager.Instance.UpdateCoroutine();
+            }
+
+            return;
+
+
             for (int i = 0; i < 10; i++)
             {
                 Console.WriteLine(GetRequireExpByLevel(i));

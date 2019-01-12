@@ -50,9 +50,31 @@ namespace Serv4Fish3.Controller
             return "";
         }
 
+        public string HitFish(string data, Client client, Server server)
+        {
+
+            //int fishGuid = 0;
+            //Room room = client.Room;
+            //foreach(FishData fish in room.fishList)
+            //{
+            //    fish.hpSub();
+            //    if (fish.hp < 0)
+            //    {
+            //        // 广播 移除鱼
+            //        // 广播 发金币 显示掉落金币
+            //    }
+            //}
+
+
+            return "";
+        }
+
         public string FishGenerate(string data, Client client, Server server)
         {
             Room room = client.Room;
+
+            //room.AddFish(); // 房间里保存鱼
+
             if (room != null)
                 room.BroadcastMessage(client, ActionCode.FishGenerate, data); // 直接转发
             return "";

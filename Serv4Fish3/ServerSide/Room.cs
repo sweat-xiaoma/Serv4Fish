@@ -21,6 +21,7 @@ namespace Serv4Fish3.ServerSide
     public class Room
     {
         public const int MaxPeople = 4;
+        //public const int MaxPeople = 1;
 
         Client[] clientArray = new Client[MaxPeople];
         RoomState state = RoomState.WaitingJoin;

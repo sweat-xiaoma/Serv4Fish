@@ -2,10 +2,10 @@
   <MonoDevelop.Ide.ItemProperties.Serv4Fish3 PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Controller/GameController.cs">
     <Files>
-      <File FileName="Controller/RoomController.cs" Line="77" Column="45" />
-      <File FileName="ServerSide/Room.cs" Line="218" Column="15" />
-      <File FileName="ServerSide/Client.cs" Line="53" Column="29" />
-      <File FileName="Controller/GameController.cs" Line="57" Column="44" />
+      <File FileName="Program.cs" Line="33" Column="13" />
+      <File FileName="Controller/RoomController.cs" Line="29" Column="55" />
+      <File FileName="ServerSide/Client.cs" Line="116" Column="33" />
+      <File FileName="Controller/GameController.cs" Line="75" Column="13" NotebookId="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
