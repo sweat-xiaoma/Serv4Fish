@@ -11,22 +11,22 @@ namespace Serv4Fish3.Controller
             requestCode = RequestCode.Game;
         }
 
-        public string StartGame(string data, Client client, Server server)
-        {
-            if (client.IsRoomOwner()) // 房主才能开始
-            {
-                Room room = client.Room;
-                room.BroadcastMessage(client, ActionCode.StartGame, ((int)ReturnCode.Success).ToString()); // 给其他客户端广播 开始游戏
+        //public string StartGame(string data, Client client, Server server)
+        //{
+        //    if (client.IsRoomOwner()) // 房主才能开始
+        //    {
+        //        Room room = client.Room;
+        //        room.BroadcastMessage(client, ActionCode.StartGame, ((int)ReturnCode.Success).ToString()); // 给其他客户端广播 开始游戏
 
-                room.StartTimer(); // 开始倒计时
+        //        room.StartTimer(); // 开始倒计时
 
-                return ((int)ReturnCode.Success).ToString(); // 给当前客户端发送 开始游戏
-            }
-            else
-            {
-                return ((int)ReturnCode.Fail).ToString();
-            }
-        }
+        //        return ((int)ReturnCode.Success).ToString(); // 给当前客户端发送 开始游戏
+        //    }
+        //    else
+        //    {
+        //        return ((int)ReturnCode.Fail).ToString();
+        //    }
+        //}
 
         public string Rotate(string data, Client client, Server server)
         {
@@ -42,6 +42,19 @@ namespace Serv4Fish3.Controller
             Room room = client.Room;
             if (room != null)
                 room.BroadcastMessage(client, ActionCode.Shoot, data); // 直接转发
+            return "";
+        }
+
+        public string FishSync(string data, Client client, Server server)
+        {
+            return "";
+        }
+
+        public string FishGenerate(string data, Client client, Server server)
+        {
+            Room room = client.Room;
+            if (room != null)
+                room.BroadcastMessage(client, ActionCode.FishGenerate, data); // 直接转发
             return "";
         }
     }

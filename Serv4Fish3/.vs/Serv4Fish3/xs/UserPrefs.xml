@@ -1,18 +1,17 @@
 ﻿<Properties StartupConfiguration="{B66DF2C2-269B-4AAE-AE97-FB8313DCAE23}|Default">
   <MonoDevelop.Ide.ItemProperties.Serv4Fish3 PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Program.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Controller/GameController.cs">
     <Files>
-      <File FileName="Controller/UserController.cs" Line="30" Column="63" />
-      <File FileName="../FishCommon3/ReturnCode.cs" Line="8" Column="18" />
-      <File FileName="Program.cs" Line="69" Column="25" />
+      <File FileName="Controller/RoomController.cs" Line="77" Column="45" />
+      <File FileName="ServerSide/Room.cs" Line="218" Column="15" />
+      <File FileName="ServerSide/Client.cs" Line="53" Column="29" />
+      <File FileName="Controller/GameController.cs" Line="57" Column="44" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="/Users/apple/Serv4Fish/Serv4Fish3/ServerSide/Server.cs" relfile="ServerSide/Server.cs" line="93" column="1" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MultiItemStartupConfigurations />
 </Properties>

@@ -67,6 +67,7 @@
     <Compile Include="Model\Wallet.cs" />
     <Compile Include="DAO\WalletDAO.cs" />
     <Compile Include="Tools\Util.cs" />
+    <Compile Include="Tools\Coroutine\A.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FishCommon3\FishCommon3.csproj">
@@ -78,6 +79,7 @@
     <Folder Include="Controller\" />
     <Folder Include="DAO\" />
     <Folder Include="Model\" />
+    <Folder Include="Tools\Coroutine\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

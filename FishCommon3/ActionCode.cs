@@ -17,6 +17,8 @@ namespace FishCommon3
         Move, // 角色移动
         Shoot, // 射击
         Rotate, // 旋转
+        FishSync, // 鱼的同步
+        FishGenerate, // 鱼的生成
 
 
     }

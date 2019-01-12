@@ -18,6 +18,8 @@ namespace Serv4Fish3.ServerSide
         User user;
         //Result result;
         Wallet wallet;
+        // 是否是房主 // 房主是每个房间的第一个客户端[负责发鱼 和 鱼的帧同步]
+        public int isMaster = 0;
 
         Room room;
 
@@ -47,7 +49,8 @@ namespace Serv4Fish3.ServerSide
                 + user.Nickname + ","
                 + user.Corner + ","
                 + wallet.Money + ","
-                + wallet.Diamond;
+                + wallet.Diamond + ","
+                + this.isMaster;
         }
 
         public int GetUserId()
@@ -72,7 +75,7 @@ namespace Serv4Fish3.ServerSide
             this.server = server;
 
             this.clientAddress = clientSocket.RemoteEndPoint.ToString();
-            Console.WriteLine("新用户[{0}]连接", this.clientAddress);
+            Console.WriteLine("[" + DateTime.Now + "] " + "新用户[{0}]连接", this.clientAddress);
 
             mySqlConn = ConnectHelper.Connect(); // 每个用户 keep 一个 sql 连接。
         }
@@ -99,14 +102,15 @@ namespace Serv4Fish3.ServerSide
             }
             catch (Exception ex)
             {
-                Console.WriteLine("[Client ReceiveCallback]" + ex.Message);
+                Console.WriteLine("[" + DateTime.Now + "] " + "[Client ReceiveCallback]" + ex.Message);
                 Close();
             }
         }
 
         void OnProcessMessage(RequestCode requestCode, ActionCode actionCode, string data)
         {
-            Console.WriteLine("[Client - 接收 {0} ] " +
+
+            Console.WriteLine("[" + DateTime.Now + "] " + "[Client - 接收 {0} ] " +
                 "\n\tRequestCode: {1} " +
                 "\n\tActionCode: {2} " +
                 "\n\tdata: {3}",
@@ -119,7 +123,7 @@ namespace Serv4Fish3.ServerSide
 
         void Close()
         {
-            Console.WriteLine("用户[{0}]断开连接", this.clientAddress);
+            Console.WriteLine("[" + DateTime.Now + "] " + "用户[{0}]断开连接", this.clientAddress);
             ConnectHelper.CloseConnection(this.mySqlConn);
 
             if (clientSocket != null)
@@ -134,7 +138,7 @@ namespace Serv4Fish3.ServerSide
 
         public void Send(ActionCode actionCode, string data)
         {
-            Console.WriteLine("[Client - 发送 {0}]" +
+            Console.WriteLine("[" + DateTime.Now + "] " + "[Client - 发送 {0}]" +
                 "\n\tActionCode: {1} " +
                 "\n\tdata: {2}",
                 clientSocket.RemoteEndPoint.ToString(),
@@ -144,10 +148,11 @@ namespace Serv4Fish3.ServerSide
             clientSocket.Send(bytes);
         }
 
-        public bool IsRoomOwner()
-        {
-            return room.IsRoomOwner(this);
-        }
+        //public bool IsRoomOwner()
+        //{
+        //    return room.IsRoomOwner(this);
+        //}
+
 
     }
 }

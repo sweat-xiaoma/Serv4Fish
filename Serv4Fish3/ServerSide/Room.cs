@@ -38,15 +38,33 @@ namespace Serv4Fish3.ServerSide
             return state == RoomState.WaitingJoin;
         }
 
-        // 第一个就是房主
-        public bool IsRoomOwner(Client client)
-        {
-            return client == clientArray[0];
-        }
+        //// 第一个就是房主
+        //public bool IsRoomOwner(Client client)
+        //{
+        //    return client == clientArray[0];
+        //}
 
         //public void AddClient(Client client)
         public void AddClient(Client client, int index)
         {
+            // 判断是否有房主 没有房主的话 自己当房主
+            // 正常情况除非房内没人，不然是有房主的
+            bool hasMaster = false;
+            foreach (Client item in clientArray)
+            {
+                if (item != null && item.isMaster == 1) // 房主
+                {
+                    hasMaster = true;
+                    break;
+                }
+            }
+
+            if (hasMaster == false)
+            {
+                client.isMaster = 1;
+            }
+
+
             //clientList.Add(client);
             if (clientArray[index] == null)
             {
@@ -56,7 +74,7 @@ namespace Serv4Fish3.ServerSide
             }
             else
             {
-                Console.WriteLine("[Room AddClient] 用户进房间座位有人了");
+                Console.WriteLine("[" + DateTime.Now + "] " + "[Room AddClient] 用户进房间座位有人了");
             }
 
             //if (clientList.Count >= Room.MaxPeople) // 最大人数
@@ -90,11 +108,11 @@ namespace Serv4Fish3.ServerSide
 
         public void QuitRoom(Client client)
         {
+            // 退出的人 是否是房主
+            bool quitIsMaster = client.isMaster == 1;
+
             // 从座位上移除
             this.RemoveClient(client, client.GetUser().Corner);
-
-            // 广播给房间内其他人 我走了～再见。
-            BroadcastMessage(client, ActionCode.UpdateRoom, GetRoomData());
 
             // 判断房间里没人了就销毁房间
             bool isEmpty = true;
@@ -111,6 +129,23 @@ namespace Serv4Fish3.ServerSide
                 //server.RemoveRoom(this);
                 DestroyRoom();
             }
+            else
+            {
+                if (quitIsMaster) // 退出的是房主， 且房间里还有人 -》 转移房主
+                {
+                    foreach (Client item in clientArray)
+                    {
+                        if (item != null) // 剩余人的第一个当房主
+                        {
+                            item.isMaster = 1;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // 广播给房间内其他人 我走了～再见。
+            BroadcastMessage(client, ActionCode.UpdateRoom, GetRoomData());
         }
 
         // 销毁房间
@@ -189,28 +224,39 @@ namespace Serv4Fish3.ServerSide
             }
 
 #if DEBUG_VIEW
-            Console.WriteLine("房间[{0}]内广播消息[{1}]给[{2}]", this.GetHashCode(), actionCode, sb);
+            Console.WriteLine("[" + DateTime.Now + "] " + "房间[{0}]内广播消息[{1}]给[{2}]", this.GetHashCode(), actionCode, sb);
 #endif
 
         }
 
-        public void StartTimer()
-        {
-            new Thread(RunTimer).Start();
-        }
+        //public void StartTimer()
+        //{
+        //    new Thread(RunTimer).Start();
+        //}
 
-        void RunTimer()
-        {
-            Thread.Sleep(1000); // 三秒倒计时前先等一秒
-            for (int i = 3; i > 0; i--)
-            {
-                BroadcastMessage(null, ActionCode.ShowTimer, i.ToString());
-                Thread.Sleep(1000);
-            }
-            BroadcastMessage(null, ActionCode.StartPlay, "ee");
+        //void RunTimer()
+        //{
+        //    Thread.Sleep(1000); // 三秒倒计时前先等一秒
+        //    for (int i = 3; i > 0; i--)
+        //    {
+        //        BroadcastMessage(null, ActionCode.ShowTimer, i.ToString());
+        //        Thread.Sleep(1000);
+        //    }
+        //    BroadcastMessage(null, ActionCode.StartPlay, "ee");
+        //}
 
 
-        }
+        //// 更新房主，每次有人退出
+        //void UpdateMaster()
+        //{
+        //    foreach (Client client in clientArray)
+        //    {
+        //        if (client != null)
+        //        {
+
+        //        }
+        //    }
+        //}
     }
 
 }

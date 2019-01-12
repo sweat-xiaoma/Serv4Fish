@@ -39,7 +39,7 @@ namespace Serv4Fish3.ServerSide
             serverSocket.Bind(ipEndPoint);
             serverSocket.Listen(0);
             serverSocket.BeginAccept(AcceptCallback, null);
-            Console.WriteLine("服务启动成功～");
+            Console.WriteLine("[" + DateTime.Now + "] " + "服务启动成功～");
         }
 
         void AcceptCallback(IAsyncResult ar)
@@ -83,7 +83,7 @@ namespace Serv4Fish3.ServerSide
         {
             if (roomList != null && room != null)
             {
-                Console.WriteLine("销毁空房间 [{0}] ", room.GetHashCode());
+                Console.WriteLine("[" + DateTime.Now + "] " + "销毁空房间 [{0}] ", room.GetHashCode());
                 roomList.Remove(room);
             }
         }

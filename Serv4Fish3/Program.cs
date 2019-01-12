@@ -8,6 +8,8 @@ using Serv4Fish3.Model;
 using Serv4Fish3.Tools;
 using MySql.Data.MySqlClient;
 using System.Text;
+using System.Collections;
+using System.Collections.Generic;
 
 
 
@@ -72,8 +74,16 @@ namespace Serv4Fish3
                 switch (str)
                 {
                     case "print":
-                        server.ListRoom();
+                        //Console.WriteLine(server.ListRoom());
+                        List<Room> rooms = server.ListRoom();
+                        foreach (Room room in rooms)
+                        {
+
+                        }
+
+
                         break;
+
                     case "quit":
                     case "exit":
                         break;

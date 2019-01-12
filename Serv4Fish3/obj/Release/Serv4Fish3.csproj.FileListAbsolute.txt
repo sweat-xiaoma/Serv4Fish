@@ -1,0 +1,10 @@
+/Users/apple/Serv4Fish/Serv4Fish3/bin/Release/Serv4Fish3.exe
+/Users/apple/Serv4Fish/Serv4Fish3/bin/Release/FishCommon3.dll
+/Users/apple/Serv4Fish/Serv4Fish3/bin/Release/Google.Protobuf.dll
+/Users/apple/Serv4Fish/Serv4Fish3/bin/Release/MySql.Data.dll
+/Users/apple/Serv4Fish/Serv4Fish3/bin/Release/Google.Protobuf.xml
+/Users/apple/Serv4Fish/Serv4Fish3/bin/Release/MySql.Data.xml
+/Users/apple/Serv4Fish/Serv4Fish3/obj/Release/Serv4Fish3.csprojAssemblyReference.cache
+/Users/apple/Serv4Fish/Serv4Fish3/obj/Release/Serv4Fish3.csproj.CoreCompileInputs.cache
+/Users/apple/Serv4Fish/Serv4Fish3/obj/Release/Serv4Fish3.csproj.CopyComplete
+/Users/apple/Serv4Fish/Serv4Fish3/obj/Release/Serv4Fish3.exe

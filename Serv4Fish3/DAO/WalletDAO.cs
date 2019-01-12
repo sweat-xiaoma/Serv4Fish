@@ -30,7 +30,7 @@ namespace Serv4Fish3.DAO
             }
             catch (Exception ex)
             {
-                Console.WriteLine("[VerifyUser] 出现异常" + ex.Message);
+                Console.WriteLine("[" + DateTime.Now + "] " + "[VerifyUser] 出现异常" + ex.Message);
             }
             finally
             {

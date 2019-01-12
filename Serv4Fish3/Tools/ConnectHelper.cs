@@ -23,7 +23,7 @@ namespace Serv4Fish3.Tools
             }
             catch (Exception ex)
             {
-                Console.WriteLine("连接数据库异常： " + ex.Message);
+                Console.WriteLine("[" + DateTime.Now + "] " + "连接数据库异常： " + ex.Message);
             }
             return null;
         }
@@ -38,12 +38,12 @@ namespace Serv4Fish3.Tools
                 }
                 else
                 {
-                    Console.WriteLine("mysqlconnection 不能为空");
+                    Console.WriteLine("[" + DateTime.Now + "] " + "mysqlconnection 不能为空");
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("数据库关闭异常" + ex.Message);
+                Console.WriteLine("[" + DateTime.Now + "] " + "数据库关闭异常" + ex.Message);
             }
 
         }

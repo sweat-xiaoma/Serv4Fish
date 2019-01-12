@@ -36,7 +36,7 @@ namespace Serv4Fish3.DAO
             }
             catch (Exception ex)
             {
-                Console.WriteLine("[GetResultByUserid] 出现异常" + ex.Message);
+                Console.WriteLine("[" + DateTime.Now + "] " + "[GetResultByUserid] 出现异常" + ex.Message);
             }
             finally
             {

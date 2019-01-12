@@ -34,18 +34,18 @@ namespace Serv4Fish3.Controller
             bool isGet = controllerDict.TryGetValue(requestCode, out controller);
             if (!isGet)
             {
-                Console.WriteLine("无法得到[{0}] 所对应的 Controller，无法处理请求", requestCode); // 写日志
+                Console.WriteLine("[" + DateTime.Now + "] " + "无法得到[{0}] 所对应的 Controller，无法处理请求", requestCode); // 写日志
             }
 
             string methodName = Enum.GetName(typeof(ActionCode), actionCode);
             MethodInfo methodInfo = controller.GetType().GetMethod(methodName);
             if (methodInfo == null)
             {
-                Console.WriteLine("[警告] 在 Controller[{0}] 中没有对应的处理方法[{1}]", controller.GetType(), methodName);
+                Console.WriteLine("[" + DateTime.Now + "] " + "[警告] 在 Controller[{0}] 中没有对应的处理方法[{1}]", controller.GetType(), methodName);
             }
 
             object[] parameters = new object[] { data, client, this.server };
-            Console.WriteLine("[ControllerManager - 处理] " +
+            Console.WriteLine("[" + DateTime.Now + "] " + "[ControllerManager - 处理] " +
                 "\n\tController: {0} " +
                 "\n\tmethod: {1} " +
                 "\n\tdata: {2}",
