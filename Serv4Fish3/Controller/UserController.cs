@@ -1,5 +1,4 @@
-﻿using System;
-using FishCommon3;
+﻿using FishCommon3;
 using Serv4Fish3.ServerSide;
 using Serv4Fish3.DAO;
 using Serv4Fish3.Model;
@@ -40,6 +39,31 @@ namespace Serv4Fish3.Controller
 
 
             }
+        }
+
+        public string ChangeCost(string data, Client client, Server server)
+        {
+            if (data == "a")
+            {
+                client.GetUser().Cost += 5; // 加倍
+            }
+            else
+            {
+                client.GetUser().Cost -= 5; // 减倍数
+            }
+
+            if (client.GetUser().Cost < 0)
+            {
+                client.GetUser().Cost = 0;
+            }
+
+            string re = client.GetUser().Corner + "|" + client.GetUser().Cost;
+
+            Room room = client.Room;
+            if (room != null)
+                room.BroadcastMessage(null, ActionCode.ChangeCost, re);
+
+            return "";
         }
     }
 }

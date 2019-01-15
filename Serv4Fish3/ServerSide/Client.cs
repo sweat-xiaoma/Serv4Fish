@@ -49,6 +49,7 @@ namespace Serv4Fish3.ServerSide
             return user.Username + ","
                 + user.Nickname + ","
                 + user.Corner + ","
+                + user.Cost + ","
                 + wallet.Money + ","
                 + wallet.Diamond + ","
                 + this.isMaster;
@@ -151,12 +152,12 @@ namespace Serv4Fish3.ServerSide
 
         public void Send(ActionCode actionCode, string data)
         {
-            Console.WriteLine("[" + DateTime.Now + "] " + "[Client - 发送 {0}]" +
-                "\n\tActionCode: {1} " +
-                "\n\tdata: {2}",
-                clientSocket.RemoteEndPoint.ToString(),
-                actionCode,
-                data);
+            //Console.WriteLine("[" + DateTime.Now + "] " + "[Client - 发送 {0}]" +
+            //"\n\tActionCode: {1} " +
+            //"\n\tdata: {2}",
+            //clientSocket.RemoteEndPoint.ToString(),
+            //actionCode,
+            //data);
             byte[] bytes = Message.PackData(actionCode, data);
             clientSocket.Send(bytes);
         }

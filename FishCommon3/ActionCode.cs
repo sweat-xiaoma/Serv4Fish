@@ -23,6 +23,6 @@ namespace FishCommon3
         FishDead, // 鱼被打死
         //FishBonus, // 鱼掉钱 （暂时和上一个合并）
         FishOutScreen, // 鱼游出屏幕
-
+        ChangeCost, // 改变消耗
     }
 }

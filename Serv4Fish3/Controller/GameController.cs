@@ -73,9 +73,9 @@ namespace Serv4Fish3.Controller
             Room room = client.Room;
 
             string[] strs = data.Split('|');
-            string guid = strs[0];
-            int damage = int.Parse(strs[1]);
-            room.HitFish(client, guid, damage); // 后续操作交给 Room 处理。
+            string fishguid = strs[0];
+            //int damage = int.Parse(strs[1]);
+            room.HitFish(client, fishguid); // 后续操作交给 Room 处理。
             return "";
         }
 

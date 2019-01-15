@@ -275,37 +275,40 @@ namespace Serv4Fish3.ServerSide
         //    }
         //}
 
-        public void AddFish(string guid, FishData fishData)
+        public void AddFish(string fishguid, FishData fishData)
         {
-            if (fishDic.ContainsKey(guid))
+            if (fishDic.ContainsKey(fishguid))
             {
-                fishDic.Remove(guid);
+                fishDic.Remove(fishguid);
             }
 
-            fishDic.Add(guid, fishData);
+            fishDic.Add(fishguid, fishData);
 #if DEBUG_VIEW
             Console.WriteLine("鱼+1，鱼数量: " + fishDic.Count);
 #endif
         }
 
-        public void HitFish(Client client, string guid, int damage)
+        public void HitFish(Client client, string fishguid)
         {
-            if (fishDic.ContainsKey(guid))
+            if (fishDic.ContainsKey(fishguid))
             {
-                FishData findFish = fishDic[guid];
+                FishData findFish = fishDic[fishguid];
+
+                int damage = client.GetUser().Cost;
+
                 findFish.hp -= damage;
 
                 if (findFish.hp <= 0)
                 {
                     int killCorner = client.GetUser().Corner;
                     // 广播 鱼死了,发钱
-                    string data2 = killCorner + "|" + guid + "|" + findFish.coin;
+                    string data2 = killCorner + "|" + fishguid + "|" + findFish.coin;
                     this.BroadcastMessage(null, ActionCode.FishDead, data2);
 
 
                     //client
 
-                    fishDic.Remove(guid); // 移除掉
+                    fishDic.Remove(fishguid); // 移除掉
 
 #if DEBUG_VIEW
                     Console.WriteLine("鱼死 鱼减少， 鱼数量: " + fishDic.Count);
@@ -314,26 +317,26 @@ namespace Serv4Fish3.ServerSide
 #if DEBUG_VIEW
                 else
                 {
-                    //Console.WriteLine("鱼没死 " + "  : " + guid);
-                    Console.WriteLine("鱼没死 guid:{0} hp:{1} damage:{2}",
-                    guid, findFish.hp, damage);
+                    //Console.WriteLine("鱼没死 " + "  : " + fishguid);
+                    Console.WriteLine("鱼没死 fishguid:{0} hp:{1} damage:{2}",
+                    fishguid, findFish.hp, damage);
                 }
 #endif
             }
 #if DEBUG_VIEW
             else
             {
-                Console.WriteLine("没找到鱼" + guid);
+                Console.WriteLine("没找到鱼: " + fishguid);
             }
 #endif
         }
 
-        public void FishOutByClient(Client client, string guid)
+        public void FishOutByClient(Client client, string fishguid)
         {
-            if (fishDic.ContainsKey(guid))
+            if (fishDic.ContainsKey(fishguid))
             {
-                FishData findData = fishDic[guid];
-                fishDic.Remove(guid); // 出屏了。 移除掉。 
+                FishData findData = fishDic[fishguid];
+                fishDic.Remove(fishguid); // 出屏了。 移除掉。 
 #if DEBUG_VIEW
                 Console.WriteLine("出屏 鱼减少， 鱼数量: " + fishDic.Count);
 #endif

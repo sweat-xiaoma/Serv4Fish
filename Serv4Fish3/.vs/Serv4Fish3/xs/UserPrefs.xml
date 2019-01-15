@@ -1,23 +1,18 @@
 ﻿<Properties StartupConfiguration="{B66DF2C2-269B-4AAE-AE97-FB8313DCAE23}|Default">
   <MonoDevelop.Ide.ItemProperties.Serv4Fish3 PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Controller/RoomController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Controller/GameController.cs">
     <Files>
-      <File FileName="ServerSide/Room.cs" Line="227" Column="31" />
-      <File FileName="Controller/UserController.cs" Line="35" Column="67" />
-      <File FileName="DAO/WalletDAO.cs" Line="45" Column="32" />
-      <File FileName="Model/Wallet.cs" Line="18" Column="1" />
-      <File FileName="ServerSide/Client.cs" Line="56" Column="9" />
-      <File FileName="Model/User.cs" Line="16" Column="9" />
-      <File FileName="Controller/RoomController.cs" Line="23" Column="18" />
+      <File FileName="Controller/RoomController.cs" Line="8" Column="49" />
+      <File FileName="Controller/GameController.cs" Line="90" Column="2" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
-      <Breakpoint enabled="false" file="/Users/apple/Serv4Fish/Serv4Fish3/ServerSide/Room.cs" relfile="ServerSide/Room.cs" line="335" column="17" />
       <Breakpoint enabled="false" file="/Users/apple/Serv4Fish/Serv4Fish3/ServerSide/Room.cs" relfile="ServerSide/Room.cs" line="338" column="17" />
-      <Breakpoint enabled="false" file="/Users/apple/Serv4Fish/Serv4Fish3/ServerSide/Room.cs" relfile="ServerSide/Room.cs" line="336" column="17" />
+      <Breakpoint enabled="false" file="/Users/apple/Serv4Fish/Serv4Fish3/ServerSide/Room.cs" relfile="ServerSide/Room.cs" line="341" column="17" />
+      <Breakpoint enabled="false" file="/Users/apple/Serv4Fish/Serv4Fish3/ServerSide/Room.cs" relfile="ServerSide/Room.cs" line="339" column="17" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MultiItemStartupConfigurations />
