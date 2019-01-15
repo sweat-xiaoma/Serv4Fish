@@ -12,7 +12,8 @@ namespace Serv4Fish3.DAO
 
             try
             {
-                MySqlCommand command = new MySqlCommand("select money,diamond,eth from wallet where username = @username", conn);
+                string sqlStr = "select money,diamond,eth from wallet where username = @username";
+                MySqlCommand command = new MySqlCommand(sqlStr, conn);
                 command.Parameters.AddWithValue("username", username);
                 reader = command.ExecuteReader();
                 if (reader.Read())
@@ -38,6 +39,27 @@ namespace Serv4Fish3.DAO
                     reader.Close();
             }
             return null;
+        }
+
+
+        public void UpdateWalletMoney(MySqlConnection conn, string username, int money)
+        {
+            string sqlstr = string.Format("UPDATE `wallet` set `money`= {0} WHERE username = {1};", money, username);
+
+            MySqlCommand command = new MySqlCommand(sqlstr, conn);
+
+            int re = command.ExecuteNonQuery(); // 返回受影响的行数，为int值。可以根据返回的值进行判断是否成功。
+
+            if (re > 0)
+            {
+                // 操作成功
+            }
+            else
+            {
+                // 操作失败
+            }
+
+            conn.Close();//关闭连接
         }
     }
 }

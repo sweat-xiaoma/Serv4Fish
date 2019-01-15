@@ -5,6 +5,7 @@ using MySql.Data.MySqlClient;
 using Serv4Fish3.Tools;
 using FishCommon3;
 using Serv4Fish3.Model;
+using Serv4Fish3.DAO;
 
 namespace Serv4Fish3.ServerSide
 {
@@ -63,6 +64,17 @@ namespace Serv4Fish3.ServerSide
             return user;
         }
 
+        //public Wallet GetWallet()
+        //{
+        //    return wallet;
+        //}
+
+        public void SaveMoneySQL()
+        {
+            WalletDAO walletDAO = new WalletDAO();
+            walletDAO.UpdateWalletMoney(mySqlConn, wallet.Username, wallet.Money);
+        }
+
         public Room Room
         {
             set { room = value; }
@@ -109,7 +121,7 @@ namespace Serv4Fish3.ServerSide
 
         void OnProcessMessage(RequestCode requestCode, ActionCode actionCode, string data)
         {
-
+            /*
             Console.WriteLine("[" + DateTime.Now + "] " + "[Client - 接收 {0} ] " +
                 "\n\tRequestCode: {1} " +
                 "\n\tActionCode: {2} " +
@@ -118,6 +130,7 @@ namespace Serv4Fish3.ServerSide
                 requestCode,
                 actionCode,
                 data);
+                */
             server.HandleRequest(requestCode, actionCode, data, this);
         }
 

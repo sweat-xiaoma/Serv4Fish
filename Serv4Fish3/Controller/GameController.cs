@@ -45,38 +45,45 @@ namespace Serv4Fish3.Controller
             return "";
         }
 
-        public string FishSync(string data, Client client, Server server)
-        {
-            return "";
-        }
-
-        public string HitFish(string data, Client client, Server server)
-        {
-
-            //int fishGuid = 0;
-            //Room room = client.Room;
-            //foreach(FishData fish in room.fishList)
-            //{
-            //    fish.hpSub();
-            //    if (fish.hp < 0)
-            //    {
-            //        // 广播 移除鱼
-            //        // 广播 发金币 显示掉落金币
-            //    }
-            //}
-
-
-            return "";
-        }
+        //public string FishSync(string data, Client client, Server server)
+        //{
+        //    return "";
+        //}
 
         public string FishGenerate(string data, Client client, Server server)
         {
+            string[] strs = data.Split('|');
+
+            FishData fishData = new FishData();
+            fishData.hp = int.Parse(strs[1]);
+            fishData.coin = int.Parse(strs[2]);
+
+            Room room = client.Room;
+            if (room != null)
+            {
+                room.AddFish(strs[0], fishData);
+                room.BroadcastMessage(client, ActionCode.FishGenerate, data); // 直接转发
+            }
+
+            return "";
+        }
+
+        public string FishHit(string data, Client client, Server server)
+        {
             Room room = client.Room;
 
-            //room.AddFish(); // 房间里保存鱼
+            string[] strs = data.Split('|');
+            string guid = strs[0];
+            int damage = int.Parse(strs[1]);
+            room.HitFish(client, guid, damage); // 后续操作交给 Room 处理。
+            return "";
+        }
 
-            if (room != null)
-                room.BroadcastMessage(client, ActionCode.FishGenerate, data); // 直接转发
+        public string FishOutScreen(string data, Client client, Server server)
+        {
+            Room room = client.Room;
+            room.FishOutByClient(client, data);
+
             return "";
         }
     }

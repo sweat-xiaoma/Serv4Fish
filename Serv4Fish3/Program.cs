@@ -59,7 +59,31 @@ namespace Serv4Fish3
             //return;
 
 #if DEBUG_VIEW
-            PersonMc personMc = new PersonMc();
+            return;
+
+            //Dictionary<string, int> testDic = new Dictionary<string, int>();
+            //testDic.Add("a", 1000);
+            //testDic.Add("b", 2000);
+            //string guid1 = "a";
+            //if (testDic.ContainsKey(guid1))
+            //{
+            //    Console.WriteLine(testDic[guid1]);
+            //}
+
+            //string guid2 = "c";
+            //if (testDic.ContainsKey(guid2))
+            //{
+            //    Console.WriteLine(testDic[guid2]);
+            //}
+
+            int a = 100;
+            a -= 5;
+            a -= 5;
+            Console.WriteLine(a);
+            return;
+
+
+            //PersonMc personMc = new PersonMc();
             //Console.WriteLine(DateTime.Now.Millisecond);
             //Thread.Sleep(20);
             //Console.WriteLine(DateTime.Now.Millisecond);
@@ -91,9 +115,8 @@ namespace Serv4Fish3
             //Console.WriteLine(DateTime.Now.ToUniversalTime().Ticks);
             //Console.WriteLine(DateTime.Now.ToUniversalTime().Ticks);
 
-            //return;
+            return;
 #endif
-
 
             //Server server = new Server("127.0.0.1", 1234);
             Server server = new Server("0.0.0.0", 1234);

@@ -1,17 +1,24 @@
 ﻿<Properties StartupConfiguration="{B66DF2C2-269B-4AAE-AE97-FB8313DCAE23}|Default">
   <MonoDevelop.Ide.ItemProperties.Serv4Fish3 PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Controller/GameController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Controller/RoomController.cs">
     <Files>
-      <File FileName="Program.cs" Line="33" Column="13" />
-      <File FileName="Controller/RoomController.cs" Line="29" Column="55" />
-      <File FileName="ServerSide/Client.cs" Line="116" Column="33" />
-      <File FileName="Controller/GameController.cs" Line="75" Column="13" NotebookId="1" />
+      <File FileName="ServerSide/Room.cs" Line="227" Column="31" />
+      <File FileName="Controller/UserController.cs" Line="35" Column="67" />
+      <File FileName="DAO/WalletDAO.cs" Line="45" Column="32" />
+      <File FileName="Model/Wallet.cs" Line="18" Column="1" />
+      <File FileName="ServerSide/Client.cs" Line="56" Column="9" />
+      <File FileName="Model/User.cs" Line="16" Column="9" />
+      <File FileName="Controller/RoomController.cs" Line="23" Column="18" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint enabled="false" file="/Users/apple/Serv4Fish/Serv4Fish3/ServerSide/Room.cs" relfile="ServerSide/Room.cs" line="335" column="17" />
+      <Breakpoint enabled="false" file="/Users/apple/Serv4Fish/Serv4Fish3/ServerSide/Room.cs" relfile="ServerSide/Room.cs" line="338" column="17" />
+      <Breakpoint enabled="false" file="/Users/apple/Serv4Fish/Serv4Fish3/ServerSide/Room.cs" relfile="ServerSide/Room.cs" line="336" column="17" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MultiItemStartupConfigurations />
 </Properties>

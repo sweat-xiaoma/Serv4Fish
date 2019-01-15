@@ -45,6 +45,7 @@ namespace Serv4Fish3.Controller
             }
 
             object[] parameters = new object[] { data, client, this.server };
+            /*
             Console.WriteLine("[" + DateTime.Now + "] " + "[ControllerManager - 处理] " +
                 "\n\tController: {0} " +
                 "\n\tmethod: {1} " +
@@ -52,6 +53,7 @@ namespace Serv4Fish3.Controller
                 controller,
                 methodName,
                 data);
+                */
             object re = methodInfo.Invoke(controller, parameters);
             if (re == null || string.IsNullOrEmpty(re as string))
             {

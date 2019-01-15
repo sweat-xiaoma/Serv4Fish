@@ -1,4 +1,4 @@
-﻿#define DEBUG_VIEW
+﻿//#define DEBUG_VIEW
 
 using System;
 using System.Collections;
@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using Serv4Fish3.Model;
 using System.Text;
 using FishCommon3;
-using System.Threading;
 
 namespace Serv4Fish3.ServerSide
 {
@@ -18,8 +17,19 @@ namespace Serv4Fish3.ServerSide
         End
     }
 
+    public class FishData
+    {
+        public int hp; // 血量
+        public int coin; // 金币
+    }
+
+
     public class Room
     {
+        //List<FishData> fishList = new List<FishData>();
+
+        Dictionary<string, FishData> fishDic = new Dictionary<string, FishData>();
+
         public const int MaxPeople = 4;
         //public const int MaxPeople = 1;
 
@@ -109,6 +119,13 @@ namespace Serv4Fish3.ServerSide
 
         public void QuitRoom(Client client)
         {
+            //Console.WriteLine("127 QuitRoom");
+
+            //// 退出时保存钱包
+            //client.SaveMoneySQL();
+
+
+
             // 退出的人 是否是房主
             bool quitIsMaster = client.isMaster == 1;
 
@@ -153,10 +170,10 @@ namespace Serv4Fish3.ServerSide
         //public void Close()
         void DestroyRoom()
         {
-            foreach (Client client in clientArray)
-            {
-                client.Room = null;
-            }
+            //foreach (Client client in clientArray)
+            //{
+            //    client.Room = null;
+            //}
             server.RemoveRoom(this);
         }
 
@@ -217,7 +234,6 @@ namespace Serv4Fish3.ServerSide
                 if (client != null && client != excludeClient)
                 {
 #if DEBUG_VIEW
-                    //client.GetUser().Username 
                     sb.Append(client.GetUser().Username + ",");
 #endif 
                     server.SendResponse(client, actionCode, data);
@@ -258,6 +274,72 @@ namespace Serv4Fish3.ServerSide
         //        }
         //    }
         //}
+
+        public void AddFish(string guid, FishData fishData)
+        {
+            if (fishDic.ContainsKey(guid))
+            {
+                fishDic.Remove(guid);
+            }
+
+            fishDic.Add(guid, fishData);
+#if DEBUG_VIEW
+            Console.WriteLine("鱼+1，鱼数量: " + fishDic.Count);
+#endif
+        }
+
+        public void HitFish(Client client, string guid, int damage)
+        {
+            if (fishDic.ContainsKey(guid))
+            {
+                FishData findFish = fishDic[guid];
+                findFish.hp -= damage;
+
+                if (findFish.hp <= 0)
+                {
+                    int killCorner = client.GetUser().Corner;
+                    // 广播 鱼死了,发钱
+                    string data2 = killCorner + "|" + guid + "|" + findFish.coin;
+                    this.BroadcastMessage(null, ActionCode.FishDead, data2);
+
+
+                    //client
+
+                    fishDic.Remove(guid); // 移除掉
+
+#if DEBUG_VIEW
+                    Console.WriteLine("鱼死 鱼减少， 鱼数量: " + fishDic.Count);
+#endif
+                }
+#if DEBUG_VIEW
+                else
+                {
+                    //Console.WriteLine("鱼没死 " + "  : " + guid);
+                    Console.WriteLine("鱼没死 guid:{0} hp:{1} damage:{2}",
+                    guid, findFish.hp, damage);
+                }
+#endif
+            }
+#if DEBUG_VIEW
+            else
+            {
+                Console.WriteLine("没找到鱼" + guid);
+            }
+#endif
+        }
+
+        public void FishOutByClient(Client client, string guid)
+        {
+            if (fishDic.ContainsKey(guid))
+            {
+                FishData findData = fishDic[guid];
+                fishDic.Remove(guid); // 出屏了。 移除掉。 
+#if DEBUG_VIEW
+                Console.WriteLine("出屏 鱼减少， 鱼数量: " + fishDic.Count);
+#endif
+            }
+        }
+
     }
 
 }

@@ -17,9 +17,12 @@ namespace FishCommon3
         Move, // 角色移动
         Shoot, // 射击
         Rotate, // 旋转
-        FishSync, // 鱼的同步
+        //FishSync, // 鱼的同步
         FishGenerate, // 鱼的生成
-
+        FishHit, // 打到鱼
+        FishDead, // 鱼被打死
+        //FishBonus, // 鱼掉钱 （暂时和上一个合并）
+        FishOutScreen, // 鱼游出屏幕
 
     }
 }
