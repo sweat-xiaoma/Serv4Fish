@@ -38,10 +38,17 @@ namespace Serv4Fish3.Controller
 
         public string Shoot(string data, Client client, Server server)
         {
-
             Room room = client.Room;
             if (room != null)
-                room.BroadcastMessage(client, ActionCode.Shoot, data); // 直接转发
+            {
+                // 玩家 - 扣钱 (广播 同步金币)
+                client.GetWallet().Money -= client.GetUser().Cost;
+                string data48 = client.GetUser().Corner + "|" + client.GetWallet().Money;
+                room.BroadcastMessage(null, ActionCode.UpdateMoney, data48);
+
+                // 直接转发
+                room.BroadcastMessage(client, ActionCode.Shoot, data);
+            }
             return "";
         }
 

@@ -121,11 +121,6 @@ namespace Serv4Fish3.ServerSide
         {
             //Console.WriteLine("127 QuitRoom");
 
-            //// 退出时保存钱包
-            //client.SaveMoneySQL();
-
-
-
             // 退出的人 是否是房主
             bool quitIsMaster = client.isMaster == 1;
 
@@ -294,9 +289,7 @@ namespace Serv4Fish3.ServerSide
             {
                 FishData findFish = fishDic[fishguid];
 
-                int damage = client.GetUser().Cost;
-
-                findFish.hp -= damage;
+                findFish.hp -= client.GetUser().Cost;
 
                 if (findFish.hp <= 0)
                 {
@@ -305,8 +298,10 @@ namespace Serv4Fish3.ServerSide
                     string data2 = killCorner + "|" + fishguid + "|" + findFish.coin;
                     this.BroadcastMessage(null, ActionCode.FishDead, data2);
 
-
-                    //client
+                    // 玩家 - 加钱 (广播 同步金币)
+                    client.GetWallet().Money += findFish.coin;
+                    string data316 = client.GetUser().Corner + "|" + client.GetWallet().Money;
+                    this.BroadcastMessage(null, ActionCode.UpdateMoney, data316);
 
                     fishDic.Remove(fishguid); // 移除掉
 

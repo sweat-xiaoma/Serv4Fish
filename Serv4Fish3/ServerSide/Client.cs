@@ -65,15 +65,15 @@ namespace Serv4Fish3.ServerSide
             return user;
         }
 
-        //public Wallet GetWallet()
-        //{
-        //    return wallet;
-        //}
+        public Wallet GetWallet()
+        {
+            return wallet;
+        }
 
         public void SaveMoneySQL()
         {
             WalletDAO walletDAO = new WalletDAO();
-            walletDAO.UpdateWalletMoney(mySqlConn, wallet.Username, wallet.Money);
+            walletDAO.UpdateWalletMoney(mySqlConn, wallet.Username, wallet.OldMoney, wallet.Money);
         }
 
         public Room Room
@@ -138,7 +138,12 @@ namespace Serv4Fish3.ServerSide
         void Close()
         {
             Console.WriteLine("[" + DateTime.Now + "] " + "用户[{0}]断开连接", this.clientAddress);
+            // 退出时保存钱包
+            this.SaveMoneySQL();
+
+            // 关闭 sql 连接
             ConnectHelper.CloseConnection(this.mySqlConn);
+
 
             if (clientSocket != null)
                 clientSocket.Close();

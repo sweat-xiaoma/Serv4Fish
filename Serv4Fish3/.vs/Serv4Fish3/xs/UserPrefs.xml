@@ -1,18 +1,24 @@
 ﻿<Properties StartupConfiguration="{B66DF2C2-269B-4AAE-AE97-FB8313DCAE23}|Default">
   <MonoDevelop.Ide.ItemProperties.Serv4Fish3 PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Controller/GameController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="ServerSide/Server.cs">
     <Files>
-      <File FileName="Controller/RoomController.cs" Line="8" Column="49" />
-      <File FileName="Controller/GameController.cs" Line="90" Column="2" />
+      <File FileName="ServerSide/Server.cs" Line="53" Column="72" />
+      <File FileName="ServerSide/Client.cs" Line="36" Column="32" />
+      <File FileName="ServerSide/Room.cs" Line="302" Column="33" />
+      <File FileName="Controller/UserController.cs" Line="35" Column="24" />
+      <File FileName="Controller/GameController.cs" Line="85" Column="21" />
+      <File FileName="Controller/DefaultController.cs" Line="1" Column="1" />
+      <File FileName="Controller/ControllerManager.cs" Line="22" Column="10" />
+      <File FileName="Controller/RoomController.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
+      <Breakpoint enabled="false" file="/Users/apple/Serv4Fish/Serv4Fish3/ServerSide/Room.cs" relfile="ServerSide/Room.cs" line="333" column="17" />
       <Breakpoint enabled="false" file="/Users/apple/Serv4Fish/Serv4Fish3/ServerSide/Room.cs" relfile="ServerSide/Room.cs" line="338" column="17" />
-      <Breakpoint enabled="false" file="/Users/apple/Serv4Fish/Serv4Fish3/ServerSide/Room.cs" relfile="ServerSide/Room.cs" line="341" column="17" />
-      <Breakpoint enabled="false" file="/Users/apple/Serv4Fish/Serv4Fish3/ServerSide/Room.cs" relfile="ServerSide/Room.cs" line="339" column="17" />
+      <Breakpoint enabled="false" file="/Users/apple/Serv4Fish/Serv4Fish3/ServerSide/Room.cs" relfile="ServerSide/Room.cs" line="334" column="17" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MultiItemStartupConfigurations />

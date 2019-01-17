@@ -12,10 +12,10 @@ namespace Serv4Fish3.ServerSide
 {
     public class Server
     {
-        private IPEndPoint ipEndPoint;
-        private Socket serverSocket;
-        private List<Client> clientList = new List<Client>();
-        private List<Room> roomList = new List<Room>();
+        IPEndPoint ipEndPoint;
+        Socket serverSocket;
+        List<Client> clientList = new List<Client>();
+        List<Room> roomList = new List<Room>();
 
         ControllerManager controllerManager;
 
@@ -91,6 +91,11 @@ namespace Serv4Fish3.ServerSide
         public List<Room> ListRoom()
         {
             return roomList;
+        }
+
+        public List<Client> ListClient()
+        {
+            return clientList;
         }
 
         //public Room GetRoomById(int id)

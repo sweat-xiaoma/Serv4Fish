@@ -52,9 +52,9 @@ namespace Serv4Fish3.Controller
                 client.GetUser().Cost -= 5; // 减倍数
             }
 
-            if (client.GetUser().Cost < 0)
+            if (client.GetUser().Cost < 10)
             {
-                client.GetUser().Cost = 0;
+                client.GetUser().Cost = 10;
             }
 
             string re = client.GetUser().Corner + "|" + client.GetUser().Cost;

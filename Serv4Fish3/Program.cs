@@ -19,131 +19,30 @@ namespace Serv4Fish3
     {
         public static void Main(string[] args)
         {
-            //Console.WriteLine("Hello World! 10");
-
-            //int[] arr1 = { 10, 20, 30 };
-            //int[] arr2 = { 100, 200, 300 };
-            //int[] arr3 = { 7, 8, 9 };
-
-            //int[] re = arr1.Concat(arr2).ToArray<int>()
-            //               .Concat(arr3).ToArray<int>();
-            //Console.WriteLine(re.Length);
-
-            //Console.ReadLine();
-
-            //int[] arr = { 100, 200, 300, 400 };
-            //foreach (var item in arr)
-            //{
-            //    //UnityEngine.Debug.Log(item);
-            //    Console.WriteLine(item);
-            //}
-
-            ////return;
-
-            //string user = "a|b|c";
-            //string[] strs = user.Split('|');
-            //Console.WriteLine(strs[0]);
-            //Console.WriteLine(strs[1]);
-
-            //Console.WriteLine("------ 2 ------");
-            //string user2 = "a|";
-            //string[] strs2 = user2.Split('|');
-            //Console.WriteLine(strs2[0]);
-
-            //Console.WriteLine("------ 3 ------");
-            //string user3 = "A|B";
-            //string[] strs3 = user3.Split('|');
-            //Console.WriteLine(strs3[0]);
-            //Console.WriteLine(strs3[1]);
-
-            //return;
-
 #if DEBUG_VIEW
             return;
-
-            //Dictionary<string, int> testDic = new Dictionary<string, int>();
-            //testDic.Add("a", 1000);
-            //testDic.Add("b", 2000);
-            //string guid1 = "a";
-            //if (testDic.ContainsKey(guid1))
-            //{
-            //    Console.WriteLine(testDic[guid1]);
-            //}
-
-            //string guid2 = "c";
-            //if (testDic.ContainsKey(guid2))
-            //{
-            //    Console.WriteLine(testDic[guid2]);
-            //}
-
-            int a = 100;
-            a -= 5;
-            a -= 5;
-            Console.WriteLine(a);
-            return;
-
-
-            //PersonMc personMc = new PersonMc();
-            //Console.WriteLine(DateTime.Now.Millisecond);
-            //Thread.Sleep(20);
-            //Console.WriteLine(DateTime.Now.Millisecond);
-            //Thread.Sleep(20);
-            //Console.WriteLine(DateTime.Now.Millisecond);
-            //Thread.Sleep(20);
-            //Console.WriteLine(DateTime.Now.Millisecond);
-
-
-            //debugSql();
-
-            //Console.WriteLine(Guid.NewGuid());
-            //Console.WriteLine(Guid.NewGuid());
-            //Console.WriteLine(Guid.NewGuid());
-
-            //Console.WriteLine(DateTime.Now.Second);
-            //Console.WriteLine(DateTime.Now.Second);
-            //Console.WriteLine(DateTime.Now.Second);
-
-            //Console.WriteLine(DateTime.Now.Ticks);
-            //Console.WriteLine(DateTime.Now.Ticks);
-            //Console.WriteLine(DateTime.Now.Ticks);
-
-            //Console.WriteLine(DateTime.Now.ToUniversalTime());
-            //Console.WriteLine(DateTime.Now.ToUniversalTime());
-            //Console.WriteLine(DateTime.Now.ToUniversalTime());
-
-            //Console.WriteLine(DateTime.Now.ToUniversalTime().Ticks);
-            //Console.WriteLine(DateTime.Now.ToUniversalTime().Ticks);
-            //Console.WriteLine(DateTime.Now.ToUniversalTime().Ticks);
-
-            return;
 #endif
-
             //Server server = new Server("127.0.0.1", 1234);
             Server server = new Server("0.0.0.0", 1234);
             server.Start();
-            //Console.ReadLine();
+            Console.WriteLine("< 输入 print 回车, 查看服务状态~ > ");
+            Console.WriteLine("< 输入 quit/exit 回车, 关闭服务~ > ");
+
             while (true)
             {
                 string str = Console.ReadLine();
                 switch (str)
                 {
                     case "print":
-                        //Console.WriteLine(server.ListRoom());
-                        List<Room> rooms = server.ListRoom();
-                        foreach (Room room in rooms)
-                        {
-
-                        }
-
-
+                        Console.WriteLine("当钱活跃房间数： " + server.ListRoom().Count);
+                        Console.WriteLine("当前在线人数：" + server.ListClient().Count);
                         break;
 
                     case "quit":
                     case "exit":
-                        break;
+                        return;
                 }
             }
-
         }
 
 

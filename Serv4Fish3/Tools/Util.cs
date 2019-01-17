@@ -46,5 +46,10 @@ namespace Serv4Fish3.Tools
             }
             return decode;
         }
+
+        public static long TimeInterval1970()
+        {
+            return (DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000000;
+        }
     }
 }
