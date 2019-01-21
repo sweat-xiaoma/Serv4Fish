@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
-using System.Collections;
 using System.Collections.Generic;
-//using Serv4Fish.Common_framework_2_0;
 using FishCommon3;
 using Serv4Fish3.Controller;
-
+using System.Timers;
+using Serv4Fish3.Tools;
 
 namespace Serv4Fish3.ServerSide
 {
@@ -19,10 +18,8 @@ namespace Serv4Fish3.ServerSide
 
         ControllerManager controllerManager;
 
-        //public Server() { }
         public Server(string ipStr, int port)
         {
-            //ipEndPoint = new IPEndPoint(IPAddress.Parse(ipStr), port);
             controllerManager = new ControllerManager(this);
             SetIpAndPort(ipStr, port);
         }
@@ -31,6 +28,8 @@ namespace Serv4Fish3.ServerSide
             ipEndPoint = new IPEndPoint(IPAddress.Parse(ipStr), port);
         }
 
+        // 心跳计时器
+        Timer heartbeatTimer = new Timer(1000);
 
         public void Start()
         {
@@ -40,6 +39,41 @@ namespace Serv4Fish3.ServerSide
             serverSocket.Listen(0);
             serverSocket.BeginAccept(AcceptCallback, null);
             Console.WriteLine("[" + DateTime.Now + "] " + "服务启动成功～");
+
+
+            this.heartbeatTimer.Elapsed += this.HeartbeatTimer_Elapsed;
+            this.heartbeatTimer.AutoReset = false;
+            this.heartbeatTimer.Enabled = true;
+
+            Console.WriteLine("[" + DateTime.Now + "] " + "开启心跳检查～");
+        }
+
+        void HeartbeatTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            // 处理心跳
+            this.HeartBeat();
+            heartbeatTimer.Start();
+        }
+
+        void HeartBeat()
+        {
+
+
+            // 发给客户端, 客户端收到 返回一个在 User 中, 如果 上次收到的时间到这次 差距过大, 表示掉线了
+            // todo 先只给房主发
+            foreach (Client client in this.clientList)
+            {
+                if (client.isMaster == 1)
+                {
+                    // 返回时间超过的客户端 踢掉
+                    long timeNow = Util.GetTimeStamp();
+                    if (client.LastTickTime < timeNow - 20) // 20 秒超时
+                    {
+                        //lock
+                    }
+                    client.Send(ActionCode.HeartBeatServ, "a");
+                }
+            }
         }
 
         void AcceptCallback(IAsyncResult ar)
@@ -97,16 +131,6 @@ namespace Serv4Fish3.ServerSide
         {
             return clientList;
         }
-
-        //public Room GetRoomById(int id)
-        //{
-        //    foreach (Room room in roomList)
-        //    {
-        //        if (room.GetId() == id) // 找到了要查询的房间房主id
-        //            return room;
-        //    }
-        //    return null;
-        //}
 
         // 快速游戏 （进入最近的一个有空座位的房间）
         public Room JoinRoomFast(Client client)

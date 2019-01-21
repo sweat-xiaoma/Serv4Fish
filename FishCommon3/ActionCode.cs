@@ -25,5 +25,6 @@ namespace FishCommon3
         FishOutScreen, // 鱼游出屏幕
         ChangeCost, // 改变消耗
         UpdateMoney, // 更新金币显示
+        HeartBeatServ, // 服务端发起心跳
     }
 }

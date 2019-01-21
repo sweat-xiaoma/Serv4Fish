@@ -2,6 +2,7 @@
 using Serv4Fish3.ServerSide;
 using Serv4Fish3.DAO;
 using Serv4Fish3.Model;
+using Serv4Fish3.Tools;
 
 namespace Serv4Fish3.Controller
 {
@@ -63,6 +64,17 @@ namespace Serv4Fish3.Controller
             if (room != null)
                 room.BroadcastMessage(null, ActionCode.ChangeCost, re);
 
+            return "";
+        }
+
+
+        // 客户端接收到服务器的心跳之后 调用这个
+        public string HeartBeatServ(string data, Client client, Server server)
+        {
+            if (data == "b")
+            {
+                client.LastTickTime = Util.GetTimeStamp();
+            }
             return "";
         }
     }

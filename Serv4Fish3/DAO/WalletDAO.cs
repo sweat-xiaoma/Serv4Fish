@@ -43,13 +43,6 @@ namespace Serv4Fish3.DAO
         }
 
 
-        /// <summary>
-        /// Updates the wallet money.
-        /// </summary>
-        /// <param name="conn">Conn.</param>
-        /// <param name="username">Username.</param>
-        /// <param name="oldmoney"> 旧余额 </param>
-        /// <param name="newmoney"> 新余额 </param>
         public void UpdateWalletMoney(MySqlConnection conn, string username, int oldmoney, int newmoney)
         {
             //Wallet walletnew = this.GetWalletByUsername(conn, username);
@@ -58,17 +51,19 @@ namespace Serv4Fish3.DAO
             //    Console.WriteLine("[" + DateTime.Now + "] " + "[UpdateWalletMoney] 获取钱包出现异常 username: " + username);
             //    return;
             //}
-
-
+            Console.WriteLine("54!");
+            Console.WriteLine(conn);
             string sqlstr = string.Format("UPDATE `wallet` set `money`= {0} WHERE username = {1};", newmoney, username);
+            Console.WriteLine("56!");
 
             MySqlCommand command = new MySqlCommand(sqlstr, conn);
-
+            Console.WriteLine("58!");
+            Console.WriteLine(command);
             int re = command.ExecuteNonQuery(); // 返回受影响的行数，为int值。可以根据返回的值进行判断是否成功。
-
+            Console.WriteLine("61!");
+            Console.WriteLine(re);
             //if (re > 0) // 操作成功
             //else // 操作失败
-
 
             // 插入一条日志
             int changeNumber = newmoney - oldmoney;
@@ -77,6 +72,8 @@ namespace Serv4Fish3.DAO
                 username, Util.TimeInterval1970(), changeNumber, newmoney, "捕鱼游戏场景~", 2333);
 
             MySqlCommand command85 = new MySqlCommand(sqlstr72, conn);
+            Console.WriteLine("73!");
+            Console.WriteLine(command85);
             command85.ExecuteNonQuery();
         }
     }

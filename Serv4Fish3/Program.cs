@@ -1,4 +1,4 @@
-﻿//#define DEBUG_VIEW
+﻿#define DEBUG_VIEW
 using System;
 using System.Linq;
 using Serv4Fish3.ServerSide;
@@ -11,7 +11,12 @@ using System.Text;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
-using Protobuf;
+//using Protobuf;
+using FishCommon3;
+using FishProto3;
+using System.IO;
+using Google.Protobuf;
+using System.Diagnostics;
 
 namespace Serv4Fish3
 {
@@ -20,6 +25,26 @@ namespace Serv4Fish3
         public static void Main(string[] args)
         {
 #if DEBUG_VIEW
+
+            List<string> clients = new List<string>();
+            clients.Add("a");
+            clients.Add("b");
+            clients.Add("c");
+            clients.Add("d");
+            clients.Add("e");
+            foreach (string client in clients)
+            {
+                if (client == "d")
+                    clients.Remove(client);
+            }
+
+            Console.WriteLine(clients);
+            return;
+
+            //DebugBalabala.Test();
+            Console.WriteLine(Util.GetTimeStamp());
+
+            Console.ReadLine();
             return;
 #endif
             //Server server = new Server("127.0.0.1", 1234);

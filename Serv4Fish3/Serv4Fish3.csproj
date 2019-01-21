@@ -69,7 +69,9 @@
     <Compile Include="Tools\Util.cs" />
     <Compile Include="Tools\Coroutine\A.cs" />
     <Compile Include="Tools\Coroutine\PBTest.cs" />
-    <Compile Include="ServerSide\PersonMc.cs" />
+    <Compile Include="Tools\Log.cs" />
+    <Compile Include="Tools\FishProto3.cs" />
+    <Compile Include="DebugBalabala.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FishCommon3\FishCommon3.csproj">

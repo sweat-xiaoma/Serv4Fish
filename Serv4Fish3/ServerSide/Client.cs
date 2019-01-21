@@ -12,6 +12,7 @@ namespace Serv4Fish3.ServerSide
     public class Client
     {
         string clientAddress;
+        public long LastTickTime;
         Socket clientSocket;
         Server server;
         Message msg = new Message();
@@ -72,7 +73,12 @@ namespace Serv4Fish3.ServerSide
 
         public void SaveMoneySQL()
         {
+            Console.WriteLine("75!");
+            Console.WriteLine(mySqlConn.State);
             WalletDAO walletDAO = new WalletDAO();
+            Console.WriteLine("78!");
+            Console.WriteLine(wallet == null);
+            Console.WriteLine("80!");
             walletDAO.UpdateWalletMoney(mySqlConn, wallet.Username, wallet.OldMoney, wallet.Money);
         }
 
@@ -95,7 +101,11 @@ namespace Serv4Fish3.ServerSide
 
         public void Start()
         {
-            if (clientSocket == null || !clientSocket.Connected) return;
+            if (clientSocket == null || !clientSocket.Connected)
+                return;
+
+            this.IsClosed = false;
+
             clientSocket.BeginReceive(msg.Data, msg.StartIndex, msg.RemainSize, SocketFlags.None, ReceiveCallback, null);
         }
 
@@ -108,15 +118,16 @@ namespace Serv4Fish3.ServerSide
                 {
                     Close();
                 }
-
+                Console.WriteLine(count);
                 msg.ReadMessage(count, OnProcessMessage);
-
                 Start();
             }
             catch (Exception ex)
             {
-                Console.WriteLine("[" + DateTime.Now + "] " + "[Client ReceiveCallback]" + ex.Message);
-                Close();
+                Console.WriteLine("[" + DateTime.Now + "] " + "[Client ReceiveCallback] 异常 " + ex.Message);
+
+                if (!IsClosed)
+                    Close();
             }
         }
 
@@ -135,9 +146,12 @@ namespace Serv4Fish3.ServerSide
             server.HandleRequest(requestCode, actionCode, data, this);
         }
 
+        bool IsClosed = false; // 连接已断开，初始化时设置为 true
+
         void Close()
         {
             Console.WriteLine("[" + DateTime.Now + "] " + "用户[{0}]断开连接", this.clientAddress);
+
             // 退出时保存钱包
             this.SaveMoneySQL();
 
@@ -152,6 +166,8 @@ namespace Serv4Fish3.ServerSide
                 room.QuitRoom(this); // 用户退出 检测关闭房间
 
             server.RemoveClient(this);
+
+            this.IsClosed = true;
 
         }
 
