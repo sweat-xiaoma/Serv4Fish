@@ -73,6 +73,7 @@ namespace Serv4Fish3.Controller
         {
             if (data == "b")
             {
+                // 更新一下最后一次 心跳时间
                 client.LastTickTime = Util.GetTimeStamp();
             }
             return "";

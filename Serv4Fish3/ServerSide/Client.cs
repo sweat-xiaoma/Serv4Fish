@@ -12,13 +12,12 @@ namespace Serv4Fish3.ServerSide
     public class Client
     {
         string clientAddress;
-        public long LastTickTime;
+        public long LastTickTime = Util.GetTimeStamp();
         Socket clientSocket;
         Server server;
         Message msg = new Message();
         MySqlConnection mySqlConn;
         User user;
-        //Result result;
         Wallet wallet;
         // 是否是房主 // 房主是每个房间的第一个客户端[负责发鱼 和 鱼的帧同步]
         public int isMaster = 0;
@@ -33,11 +32,9 @@ namespace Serv4Fish3.ServerSide
             }
         }
 
-        //public void SetUserData(User user, Result result)
         public void SetUserData(User user, Wallet wallet)
         {
             this.user = user;
-            //this.result = result;
             this.wallet = wallet;
 
         }
@@ -46,7 +43,6 @@ namespace Serv4Fish3.ServerSide
         {
             if (this.user == null)
                 return "";
-            //return user.Id + "," + user.Username + "," + result.Totalresult + "," + result.Winresult;
             return user.Username + ","
                 + user.Nickname + ","
                 + user.Corner + ","
@@ -73,13 +69,15 @@ namespace Serv4Fish3.ServerSide
 
         public void SaveMoneySQL()
         {
-            Console.WriteLine("75!");
+            Console.WriteLine("SaveMoneySQL 75!" + this.clientAddress);
             Console.WriteLine(mySqlConn.State);
             WalletDAO walletDAO = new WalletDAO();
-            Console.WriteLine("78!");
+            Console.WriteLine("SaveMoneySQL 78!" + this.clientAddress);
             Console.WriteLine(wallet == null);
-            Console.WriteLine("80!");
-            walletDAO.UpdateWalletMoney(mySqlConn, wallet.Username, wallet.OldMoney, wallet.Money);
+            Console.WriteLine("SaveMoneySQL 80!" + this.clientAddress);
+
+            if (wallet != null)
+                walletDAO.UpdateWalletMoney(mySqlConn, wallet.Username, wallet.OldMoney, wallet.Money);
         }
 
         public Room Room
@@ -118,7 +116,7 @@ namespace Serv4Fish3.ServerSide
                 {
                     Close();
                 }
-                Console.WriteLine(count);
+                //Console.WriteLine("EndReceive Count:" + count);
                 msg.ReadMessage(count, OnProcessMessage);
                 Start();
             }
@@ -183,10 +181,19 @@ namespace Serv4Fish3.ServerSide
             clientSocket.Send(bytes);
         }
 
-        //public bool IsRoomOwner()
-        //{
-        //    return room.IsRoomOwner(this);
-        //}
+        public void HeartBeat()
+        {
+            long timeNow = Util.GetTimeStamp();
+            if (this.LastTickTime < timeNow - 20) // 20 秒超时
+            {
+                Console.WriteLine("心跳超时, 关闭连接");
+                this.Close();
+            }
+            else // 继续发心跳
+            {
+                this.Send(ActionCode.HeartBeatServ, "a");
+            }
+        }
 
 
     }

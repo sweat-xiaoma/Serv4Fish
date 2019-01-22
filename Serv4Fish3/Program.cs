@@ -26,25 +26,70 @@ namespace Serv4Fish3
         {
 #if DEBUG_VIEW
 
-            List<string> clients = new List<string>();
-            clients.Add("a");
-            clients.Add("b");
-            clients.Add("c");
-            clients.Add("d");
-            clients.Add("e");
-            foreach (string client in clients)
-            {
-                if (client == "d")
-                    clients.Remove(client);
-            }
 
-            Console.WriteLine(clients);
+
+            /*
+                android 长时间连接断开 
+                       
+                [2019/1/22 13:39:44] [Client ReceiveCallback] 异常 Exception has been thrown by the target of an invocation.
+            */
+
+
+            /*
+                断开时的 as 输出
+
+                (Filename: ./Runtime/Export/Debug.bindings.h Line: 45)
+            2019-01-22 13:39:44.778 27275-27298/? I/Unity: [socket] [GameFacade - 发送] actionCode: FishGenerate data: 94960|12|20|0|14|7|3|-20|0|0
+
+                (Filename: ./Runtime/Export/Debug.bindings.h Line: 45)
+            2019-01-22 13:39:45.238 27275-27298/? E/Unity: SocketException: The socket has been shut down
+                  at System.Net.Sockets.Socket.Send (System.Byte[] buffer, System.Int32 offset, System.Int32 size, System.Net.Sockets.SocketFlags socketFlags) [0x00016] in <d2089eb4d5454c27b77bed2594d4c554>:0 
+                  at System.Net.Sockets.Socket.Send (System.Byte[] buffer) [0x00000] in <d2089eb4d5454c27b77bed2594d4c554>:0 
+                  at ClientManager.SendRequest (FishCommon3.RequestCode requestCode, FishCommon3.ActionCode actionCode, System.String data) [0x00016] in <fa7b54e951804731bd08ed546ae90aba>:0 
+                  at GameFacade.SendRequest (FishCommon3.RequestCode requestCode, FishCommon3.ActionCode actionCode, System.String data) [0x00034] in <fa7b54e951804731bd08ed546ae90aba>:0 
+                  at BaseRequest.SendRequest (System.String data) [0x00006] in <fa7b54e951804731bd08ed546ae90aba>:0 
+                  at FishOutScreenRequest.SendRequestMod (System.String data) [0x00000] in <fa7b54e951804731bd08ed546ae90aba>:0 
+                  at PlayerManager.FishOutScreen (System.String guid) [0x00000] in <fa7b54e951804731bd08ed546ae90aba>:0 
+                  at G
+            2019-01-22 13:39:45.244 27275-27298/? I/Unity: [socket] [GameFacade - 发送] actionCode: FishGenerate data: 95021|6|5|1|8|3|3|0|-13|1
+
+                (Filename: ./Runtime/Export/Debug.bindings.h Line: 45)
+
+
+            2019-01-22 13:39:45.257 27275-27298/? I/Unity: MakeFishes~~ 01/22/2019 13:39:45
+
+                (Filename: ./Runtime/Export/Debug.bindings.h Line: 45) 
+
+
+                        */
+
+
+
+
+
+
             return;
-
-            //DebugBalabala.Test();
-            Console.WriteLine(Util.GetTimeStamp());
-
+            DebugBalabala.Test();
             Console.ReadLine();
+            return;
+            //Console.WriteLine(Util.GetTimeStamp());
+
+            //DateTime DateTime1970 = new DateTime(1970, 1, 1);
+            //TimeSpan ts = DateTime.UtcNow - DateTime1970;
+            ////return Convert.ToInt64(ts.TotalSeconds);
+            //Console.WriteLine(ts.TotalMilliseconds);
+
+            //Console.WriteLine(DateTime.Now.Millisecond);
+            //Console.WriteLine(DateTime.Now.Millisecond);
+            ////Console.WriteLine(DateTime.UtcNow.Millisecond);
+            ////Console.WriteLine(DateTime.Now);
+            //DateTime now = DateTime.Now;
+            ////now.Millisecond
+            //Console.WriteLine(now);
+            //Console.WriteLine(now.Hour + now.Minute + now.Second + now.Millisecond + "");
+            //Console.WriteLine(now.Hour + now.Minute + now.Second + now.Millisecond);
+            //Console.ReadLine();
+
             return;
 #endif
             //Server server = new Server("127.0.0.1", 1234);
@@ -59,7 +104,7 @@ namespace Serv4Fish3
                 switch (str)
                 {
                     case "print":
-                        Console.WriteLine("当钱活跃房间数： " + server.ListRoom().Count);
+                        Console.WriteLine("当前活跃房间数： " + server.ListRoom().Count);
                         Console.WriteLine("当前在线人数：" + server.ListClient().Count);
                         break;
 

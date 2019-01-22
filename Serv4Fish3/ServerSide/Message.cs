@@ -48,6 +48,8 @@ namespace Serv4Fish3.ServerSide
         {
             startIndex += newDataAmount;
 
+            //Console.WriteLine("读取接收 长度:" + newDataAmount);
+
             while (true)
             {
                 if (startIndex <= 4) return; // 长度字节都不完整
@@ -65,6 +67,13 @@ namespace Serv4Fish3.ServerSide
                     string strData = Encoding.UTF8.GetString(data, 12, count - 8);
 
                     processDataCallback(requestCode, actionCode, strData);
+
+                    //if (newDataAmount > 100)
+                    if (actionCode == ActionCode.FishGenerate)
+                    {
+                        //Console.WriteLine("长数据: " + strData);
+                        Console.WriteLine("生成: " + strData);
+                    }
 
                     // 把已解析完成的数据抛弃，把剩余的数据往前移动
                     Array.Copy(data, count + 4, data, 0, startIndex - 4 - count);

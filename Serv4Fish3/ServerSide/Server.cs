@@ -41,11 +41,11 @@ namespace Serv4Fish3.ServerSide
             Console.WriteLine("[" + DateTime.Now + "] " + "服务启动成功～");
 
 
-            this.heartbeatTimer.Elapsed += this.HeartbeatTimer_Elapsed;
-            this.heartbeatTimer.AutoReset = false;
-            this.heartbeatTimer.Enabled = true;
+            //this.heartbeatTimer.Elapsed += this.HeartbeatTimer_Elapsed;
+            //this.heartbeatTimer.AutoReset = false;
+            //this.heartbeatTimer.Enabled = true;
 
-            Console.WriteLine("[" + DateTime.Now + "] " + "开启心跳检查～");
+            //Console.WriteLine("[" + DateTime.Now + "] " + "开启心跳检查～");
         }
 
         void HeartbeatTimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -57,23 +57,25 @@ namespace Serv4Fish3.ServerSide
 
         void HeartBeat()
         {
-
-
-            // 发给客户端, 客户端收到 返回一个在 User 中, 如果 上次收到的时间到这次 差距过大, 表示掉线了
-            // todo 先只给房主发
+            //// 发给客户端, 客户端收到 返回一个在 User 中, 如果 上次收到的时间到这次 差距过大, 表示掉线了
+            //// todo 先只给房主发
             foreach (Client client in this.clientList)
             {
                 if (client.isMaster == 1)
                 {
-                    // 返回时间超过的客户端 踢掉
-                    long timeNow = Util.GetTimeStamp();
-                    if (client.LastTickTime < timeNow - 20) // 20 秒超时
-                    {
-                        //lock
-                    }
-                    client.Send(ActionCode.HeartBeatServ, "a");
+                    //// 返回时间超过的客户端 踢掉
+                    //long timeNow = Util.GetTimeStamp();
+                    //if (client.LastTickTime < timeNow - 20) // 20 秒超时
+                    //{
+                    //    //lock
+                    //}
+                    //client.Send(ActionCode.HeartBeatServ, "a");
+                    client.HeartBeat();
                 }
+
             }
+
+
         }
 
         void AcceptCallback(IAsyncResult ar)

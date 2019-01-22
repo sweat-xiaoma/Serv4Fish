@@ -5,25 +5,60 @@ using FishProto3;
 using Google.Protobuf;
 using System.Timers;
 using Serv4Fish3.Tools;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace Serv4Fish3
 {
     public class DebugBalabala
     {
-        static Timer heartbeatTimer = new Timer(1000f);
+        //static Timer heartbeatTimer = new Timer(1000f);
 
         public static void Test()
         {
+
+
+            //Task<Int32> t = new Task<Int32>(n => Sum((Int32)n), 1000000000);
+            //t.Start();
+            //Task cwt = t.ContinueWith(task => Console.WriteLine("The sum is: " + task.Result));
+            //return;
+            //Task.Factory.StartNew(() =>
+            //});
+            //Console.WriteLine("22: " + DateTime.Now);
+            Console.WriteLine("22: " + DateTime.Now + DateTime.Now.Millisecond);
+
+            /*
+//for（int i = 0;i<100000;i++) 改为
+Parallel.For(0, 100000, i => 
+            */
+
+            /*
+Task<Int32> t = new Task<Int32>(n => Sum((Int32)n), 1000000000);
+//  可以在以后某个时间启动任务
+t.Start();
+// ContinueWith 返回一个 Task，但一般都不再关心这个对象
+Task cwt = t.ContinueWith(task => Console.WriteLine("The sum is: " + task.Result))
+            */
+
+
+            Task t = new Task(() =>
+            {
+                Thread.Sleep(1000);
+                Console.WriteLine("26: " + DateTime.Now + DateTime.Now.Millisecond);
+            });
+            Console.WriteLine(t.Status);
+            t.Wait(1000);
+            t.Start();
+            return;
+
+
 
             //Console.WriteLine();
             //heartbeatTimer.Elapsed += HeartbeatTimer_Elapsed;
             //heartbeatTimer.AutoReset = false;
             //heartbeatTimer.Enabled = true;
             //Console.WriteLine("20");
-
-
-
-            return;
+            //return;
             //string dic = AppDomain.CurrentDomain.BaseDirectory;
             //Console.WriteLine(dic);
             //Console.WriteLine(File.Exists(dic));
@@ -55,34 +90,34 @@ namespace Serv4Fish3
             //Console.ReadLine();
             //return;
 
-            Stopwatch stopWatch = new Stopwatch();
-            stopWatch.Start();
+            //Stopwatch stopWatch = new Stopwatch();
+            //stopWatch.Start();
 
-            for (int i = 0; i < 100000; i++)
-            {
-                PersonMc p1 = new PersonMc();
-                p1.Age = 18;
-                p1.Name = "TomTomTomTomTom";
-                p1.Hobbies.Add("吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭");
-                p1.Hobbies.Add("睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉");
+            //for (int i = 0; i < 100000; i++)
+            //{
+            //    PersonMc p1 = new PersonMc();
+            //    p1.Age = 18;
+            //    p1.Name = "TomTomTomTomTom";
+            //    p1.Hobbies.Add("吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭");
+            //    p1.Hobbies.Add("睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉");
 
-                byte[] databytes = p1.ToByteArray();
-                //UnityEngine.Debug.Log(databytes);
+            //    byte[] databytes = p1.ToByteArray();
+            //    //UnityEngine.Debug.Log(databytes);
 
-                IMessage imPerson = new PersonMc();
-                PersonMc personDe = new PersonMc();
-                personDe = (PersonMc)imPerson.Descriptor.Parser.ParseFrom(databytes);
-                //Console.WriteLine("p1.bytearray length:" + databytes.Length);
+            //    IMessage imPerson = new PersonMc();
+            //    PersonMc personDe = new PersonMc();
+            //    personDe = (PersonMc)imPerson.Descriptor.Parser.ParseFrom(databytes);
+            //    //Console.WriteLine("p1.bytearray length:" + databytes.Length);
 
-                //Console.WriteLine(personDe.Name);
-                int age = personDe.Age;
-                string name = personDe.Name;
-            }
+            //    //Console.WriteLine(personDe.Name);
+            //    int age = personDe.Age;
+            //    string name = personDe.Name;
+            //}
 
 
 
-            stopWatch.Stop();
-            Console.WriteLine("pb用时: " + stopWatch.Elapsed + "秒");
+            //stopWatch.Stop();
+            //Console.WriteLine("pb用时: " + stopWatch.Elapsed + "秒");
 
 
 
@@ -105,23 +140,23 @@ namespace Serv4Fish3
             //byte[] b2 = { 16, 18, 26, 6 };
             //byte[] b3 = { 26, 6 };
 
-            Stopwatch stopWatch2 = new Stopwatch();
-            stopWatch2.Start();
-            for (int i = 0; i < 100000; i++)
-            {
-                string data = "18,TomTomTomTomTom,吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭" +
-                    "|睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉";
-                byte[] databytesStr = Encoding.UTF8.GetBytes(data);
-                //string[] strs = 
+            //Stopwatch stopWatch2 = new Stopwatch();
+            //stopWatch2.Start();
+            //for (int i = 0; i < 100000; i++)
+            //{
+            //    string data = "18,TomTomTomTomTom,吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭吃饭" +
+            //        "|睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉";
+            //    byte[] databytesStr = Encoding.UTF8.GetBytes(data);
+            //    //string[] strs = 
 
-                string strData = Encoding.UTF8.GetString(databytesStr);
-                string[] strs = strData.Split(',');
-                int age = int.Parse(strs[0]);
-                string name = strs[1];
-            }
-            //Console.WriteLine("stringdata length:" + databytesStr.Length);
-            stopWatch2.Stop();
-            Console.WriteLine("byte 用时: " + stopWatch2.Elapsed + "秒");
+            //    string strData = Encoding.UTF8.GetString(databytesStr);
+            //    string[] strs = strData.Split(',');
+            //    int age = int.Parse(strs[0]);
+            //    string name = strs[1];
+            //}
+            ////Console.WriteLine("stringdata length:" + databytesStr.Length);
+            //stopWatch2.Stop();
+            //Console.WriteLine("byte 用时: " + stopWatch2.Elapsed + "秒");
 
             /*
             49 -- 1
@@ -143,17 +178,17 @@ namespace Serv4Fish3
             return;
         }
 
-        static void HeartbeatTimer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            // 处理心跳
-            HeartBeat();
-            heartbeatTimer.Start();
-        }
+        //static void HeartbeatTimer_Elapsed(object sender, ElapsedEventArgs e)
+        //{
+        //    // 处理心跳
+        //    HeartBeat();
+        //    heartbeatTimer.Start();
+        //}
 
-        static void HeartBeat()
-        {
-            Console.WriteLine("Now: " + DateTime.Now);
-        }
+        //static void HeartBeat()
+        //{
+        //    Console.WriteLine("Now: " + DateTime.Now);
+        //}
 
     }
 }

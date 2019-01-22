@@ -2,15 +2,16 @@
   <MonoDevelop.Ide.ItemProperties.Serv4Fish3 PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Program.cs">
     <Files>
-      <File FileName="Program.cs" Line="30" Column="27" />
-      <File FileName="DebugBalabala.cs" Line="18" Column="33" />
-      <File FileName="Controller/UserController.cs" Line="75" Column="14" />
-      <File FileName="ServerSide/Server.cs" Line="91" Column="10" NotebookId="1" />
-      <File FileName="ServerSide/Client.cs" Line="91" Column="16" NotebookId="1" />
+      <File FileName="ServerSide/Server.cs" Line="54" Column="30" />
+      <File FileName="ServerSide/Client.cs" Line="184" Column="30" />
+      <File FileName="Program.cs" Line="15" Column="19" />
+      <File FileName="DebugBalabala.cs" Line="17" Column="34" />
+      <File FileName="Tools/Util.cs" Line="61" Column="1" />
+      <File FileName="ServerSide/Message.cs" Line="83" Column="18" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint enabled="false" file="/Users/apple/Serv4Fish/Serv4Fish3/ServerSide/Room.cs" relfile="ServerSide/Room.cs" line="333" column="17" />
