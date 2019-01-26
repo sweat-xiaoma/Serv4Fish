@@ -41,11 +41,13 @@ namespace Serv4Fish3.ServerSide
             Console.WriteLine("[" + DateTime.Now + "] " + "服务启动成功～");
 
 
-            //this.heartbeatTimer.Elapsed += this.HeartbeatTimer_Elapsed;
-            //this.heartbeatTimer.AutoReset = false;
-            //this.heartbeatTimer.Enabled = true;
+            this.heartbeatTimer.Elapsed += this.HeartbeatTimer_Elapsed;
+            this.heartbeatTimer.AutoReset = false;
+            this.heartbeatTimer.Enabled = true;
+            Console.WriteLine("[" + DateTime.Now + "] " + "开启心跳检查～");
 
-            //Console.WriteLine("[" + DateTime.Now + "] " + "开启心跳检查～");
+
+
         }
 
         void HeartbeatTimer_Elapsed(object sender, ElapsedEventArgs e)

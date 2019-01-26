@@ -1,9 +1,6 @@
 ﻿//#define DEBUG_VIEW
-
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Serv4Fish3.Model;
 using System.Text;
 using FishCommon3;
 
@@ -26,12 +23,9 @@ namespace Serv4Fish3.ServerSide
 
     public class Room
     {
-        //List<FishData> fishList = new List<FishData>();
-
         Dictionary<string, FishData> fishDic = new Dictionary<string, FishData>();
 
-        public const int MaxPeople = 4;
-        //public const int MaxPeople = 1;
+        public const int MaxPeople = 4; // 1;
 
         Client[] clientArray = new Client[MaxPeople];
         RoomState state = RoomState.WaitingJoin;
@@ -49,13 +43,6 @@ namespace Serv4Fish3.ServerSide
             return state == RoomState.WaitingJoin;
         }
 
-        //// 第一个就是房主
-        //public bool IsRoomOwner(Client client)
-        //{
-        //    return client == clientArray[0];
-        //}
-
-        //public void AddClient(Client client)
         public void AddClient(Client client, int index)
         {
             // 判断是否有房主 没有房主的话 自己当房主
@@ -74,7 +61,6 @@ namespace Serv4Fish3.ServerSide
             {
                 client.isMaster = 1;
             }
-
 
             //clientList.Add(client);
             if (clientArray[index] == null)
@@ -100,27 +86,10 @@ namespace Serv4Fish3.ServerSide
             client.Room = null;
             //clientList.Remove(client);
             clientArray[index] = null;
-
-            //if (clientList.Count >= 2) // 最大人数
-            //{
-            //    state = RoomState.WaitingBattle; // 满员了 等待开始战斗
-            //}
-            //else
-            //{
-            //    state = RoomState.WaitingJoin;
-            //}
         }
-
-        //// 获取房主信息  第一个进房间的人（创建者）
-        //public string GetHouseOwnerData()
-        //{
-        //    return clientList[0].GetUserData();
-        //}
 
         public void QuitRoom(Client client)
         {
-            //Console.WriteLine("127 QuitRoom");
-
             // 退出的人 是否是房主
             bool quitIsMaster = client.isMaster == 1;
 
@@ -139,7 +108,6 @@ namespace Serv4Fish3.ServerSide
             }
             if (isEmpty)
             {
-                //server.RemoveRoom(this);
                 DestroyRoom();
             }
             else
@@ -161,25 +129,38 @@ namespace Serv4Fish3.ServerSide
             BroadcastMessage(client, ActionCode.UpdateRoom, GetRoomData());
         }
 
+        //public void StepOut(Client client)
+        //{
+        //    //if (client.)
+        //    foreach (Client item in this.clientArray)
+        //    {
+        //        //if (item == client && client.isMaster == 1)
+        //        if (item == client)
+        //        {
+        //            if (client.isMaster != 1)
+        //            {
+        //                // 暂离的用户不是房主 不用刷新房间了
+        //                return;
+        //            }
+        //            else
+        //            {
+        //                client.isMaster = 0; // 先把房主撤掉
+        //                // 选第一个人继续当房主
+        //                foreach (Client item2Master in this.clientArray)
+        //                {
+        //                    //if (client.)
+        //                }
+        //            }
+        //            break;
+        //        }
+        //    }
+        //}
+
         // 销毁房间
-        //public void Close()
         void DestroyRoom()
         {
-            //foreach (Client client in clientArray)
-            //{
-            //    client.Room = null;
-            //}
             server.RemoveRoom(this);
         }
-
-        //public int GetId()
-        //{
-        //    if (clientList.Count > 0)
-        //    {
-        //        return clientList[0].GetUserId();
-        //    }
-        //    return -1;
-        //}
 
         /// <summary>
         /// 获取一个空座位

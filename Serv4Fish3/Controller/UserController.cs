@@ -1,4 +1,5 @@
-﻿using FishCommon3;
+﻿using System;
+using FishCommon3;
 using Serv4Fish3.ServerSide;
 using Serv4Fish3.DAO;
 using Serv4Fish3.Model;
@@ -67,15 +68,26 @@ namespace Serv4Fish3.Controller
             return "";
         }
 
+        //// 客户端接收到服务器的心跳之后 调用这个
+        //public string HeartBeatServ(string data, Client client, Server server)
+        //{
+        //    if (data == "b")
+        //    {
+        //        // 更新一下最后一次 心跳时间
+        //        client.LastTickTime = Util.GetTimeStamp();
+        //    }
+        //    return "";
+        //}
 
-        // 客户端接收到服务器的心跳之后 调用这个
-        public string HeartBeatServ(string data, Client client, Server server)
+        // 接收到客户端 响应的心跳
+        public string PongFromClient(string data, Client client, Server server)
         {
-            if (data == "b")
+            if (data == "c")
             {
-                // 更新一下最后一次 心跳时间
                 client.LastTickTime = Util.GetTimeStamp();
             }
+            System.Console.WriteLine("收到了{0} 客户端发来的pong {1} ",
+                        client.ipaddress, DateTime.Now);
             return "";
         }
     }

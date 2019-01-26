@@ -11,7 +11,7 @@ namespace Serv4Fish3.ServerSide
 {
     public class Client
     {
-        string clientAddress;
+        public string ipaddress;
         public long LastTickTime = Util.GetTimeStamp();
         Socket clientSocket;
         Server server;
@@ -69,12 +69,12 @@ namespace Serv4Fish3.ServerSide
 
         public void SaveMoneySQL()
         {
-            Console.WriteLine("SaveMoneySQL 75!" + this.clientAddress);
+            Console.WriteLine("SaveMoneySQL 75!" + this.ipaddress);
             Console.WriteLine(mySqlConn.State);
             WalletDAO walletDAO = new WalletDAO();
-            Console.WriteLine("SaveMoneySQL 78!" + this.clientAddress);
+            Console.WriteLine("SaveMoneySQL 78!" + this.ipaddress);
             Console.WriteLine(wallet == null);
-            Console.WriteLine("SaveMoneySQL 80!" + this.clientAddress);
+            Console.WriteLine("SaveMoneySQL 80!" + this.ipaddress);
 
             if (wallet != null)
                 walletDAO.UpdateWalletMoney(mySqlConn, wallet.Username, wallet.OldMoney, wallet.Money);
@@ -91,8 +91,8 @@ namespace Serv4Fish3.ServerSide
             this.clientSocket = socket;
             this.server = server;
 
-            this.clientAddress = clientSocket.RemoteEndPoint.ToString();
-            Console.WriteLine("[" + DateTime.Now + "] " + "新用户[{0}]连接", this.clientAddress);
+            this.ipaddress = clientSocket.RemoteEndPoint.ToString();
+            Console.WriteLine("[" + DateTime.Now + "] " + "新用户[{0}]连接", this.ipaddress);
 
             mySqlConn = ConnectHelper.Connect(); // 每个用户 keep 一个 sql 连接。
         }
@@ -148,7 +148,7 @@ namespace Serv4Fish3.ServerSide
 
         void Close()
         {
-            Console.WriteLine("[" + DateTime.Now + "] " + "用户[{0}]断开连接", this.clientAddress);
+            Console.WriteLine("[" + DateTime.Now + "] " + "用户[{0}]断开连接", this.ipaddress);
 
             // 退出时保存钱包
             this.SaveMoneySQL();
@@ -183,16 +183,17 @@ namespace Serv4Fish3.ServerSide
 
         public void HeartBeat()
         {
-            long timeNow = Util.GetTimeStamp();
-            if (this.LastTickTime < timeNow - 20) // 20 秒超时
-            {
-                Console.WriteLine("心跳超时, 关闭连接");
-                this.Close();
-            }
-            else // 继续发心跳
-            {
-                this.Send(ActionCode.HeartBeatServ, "a");
-            }
+            //long timeNow = Util.GetTimeStamp();
+            //if (this.LastTickTime < timeNow - 20) // 20 秒超时
+            //{
+            //    Console.WriteLine("心跳超时, 关闭连接");
+            //    this.Close();
+            //}
+            //else // 继续发心跳
+            //{
+            Console.WriteLine("发出心跳: " + DateTime.Now);
+            this.Send(ActionCode.PingFromServ, "a");
+            //}
         }
 
 

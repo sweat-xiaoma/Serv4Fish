@@ -13,7 +13,6 @@ namespace Serv4Fish3.Controller
 
         }
 
-
         public string JoinRoom(string data, Client client, Server server)
         {
             // 快速游戏
@@ -23,6 +22,12 @@ namespace Serv4Fish3.Controller
             room.BroadcastMessage(client, ActionCode.UpdateRoom, roomData);
             return ((int)ReturnCode.Success).ToString() + "-" + roomData;
         }
+
+        //public string StepOutRoom(string data, Client client, Server server)
+        //{
+        //    //Room room = server.
+
+        //}
 
         //public string QuitRoom(string data, Client client, Server server)
         //{

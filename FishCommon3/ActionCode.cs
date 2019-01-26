@@ -25,6 +25,14 @@ namespace FishCommon3
         FishOutScreen, // 鱼游出屏幕
         ChangeCost, // 改变消耗
         UpdateMoney, // 更新金币显示
-        HeartBeatServ, // 服务端发起心跳
+        //HeartBeatServ, // 服务端发起心跳
+        StepOutRoom, // 暂时离开房间
+
+        PingFromServ, // 服务端 -> Client
+        PongFromClient,
+
+        PingFromClient, // 客户端 -> Server // ------ 暂时没用
+        PongFromServ,
+
     }
 }

@@ -1,4 +1,4 @@
-﻿#define DEBUG_VIEW
+﻿//#define DEBUG_VIEW
 using System;
 using System.Linq;
 using Serv4Fish3.ServerSide;
@@ -20,6 +20,11 @@ using System.Diagnostics;
 
 namespace Serv4Fish3
 {
+    class Yao
+    {
+
+    }
+
     class MainClass
     {
         public static void Main(string[] args)
@@ -27,6 +32,21 @@ namespace Serv4Fish3
 #if DEBUG_VIEW
 
 
+            int a = 100;
+            int b = 100;
+            Console.WriteLine(a.Equals(b));
+
+
+            //Client client1 = new Client()
+            Yao yao1 = new Yao();
+            Yao yao2 = new Yao();
+            Console.WriteLine(yao1.Equals(yao2));
+
+
+            string str1 = "a";
+            string str2 = "a";
+            Console.WriteLine(str1.Equals(str2));
+            return;
 
             /*
                 android 长时间连接断开 
