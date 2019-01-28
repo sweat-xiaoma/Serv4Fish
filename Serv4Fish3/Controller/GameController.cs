@@ -57,23 +57,23 @@ namespace Serv4Fish3.Controller
         //    return "";
         //}
 
-        public string FishGenerate(string data, Client client, Server server)
-        {
-            string[] strs = data.Split('|');
+        //public string FishGenerate(string data, Client client, Server server)
+        //{
+        //    string[] strs = data.Split('|');
 
-            FishData fishData = new FishData();
-            fishData.hp = int.Parse(strs[1]);
-            fishData.coin = int.Parse(strs[2]);
+        //    FishData fishData = new FishData();
+        //    fishData.hp = int.Parse(strs[1]);
+        //    fishData.coin = int.Parse(strs[2]);
 
-            Room room = client.Room;
-            if (room != null)
-            {
-                room.AddFish(strs[0], fishData);
-                room.BroadcastMessage(client, ActionCode.FishGenerate, data); // 直接转发
-            }
+        //    Room room = client.Room;
+        //    if (room != null)
+        //    {
+        //        room.AddFish(strs[0], fishData);
+        //        room.BroadcastMessage(client, ActionCode.FishGenerate, data); // 直接转发
+        //    }
 
-            return "";
-        }
+        //    return "";
+        //}
 
         public string FishHit(string data, Client client, Server server)
         {

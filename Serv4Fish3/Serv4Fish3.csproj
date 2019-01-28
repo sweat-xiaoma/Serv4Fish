@@ -72,6 +72,8 @@
     <Compile Include="Tools\Log.cs" />
     <Compile Include="Tools\FishProto3.cs" />
     <Compile Include="DebugBalabala.cs" />
+    <Compile Include="DAO\FishDAO.cs" />
+    <Compile Include="Model\Fish.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FishCommon3\FishCommon3.csproj">

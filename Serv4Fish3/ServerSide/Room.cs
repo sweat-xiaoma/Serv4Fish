@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using FishCommon3;
+using Serv4Fish3.Model;
 
 namespace Serv4Fish3.ServerSide
 {
@@ -222,47 +223,19 @@ namespace Serv4Fish3.ServerSide
 
         }
 
-        //public void StartTimer()
-        //{
-        //    new Thread(RunTimer).Start();
-        //}
-
-        //void RunTimer()
-        //{
-        //    Thread.Sleep(1000); // 三秒倒计时前先等一秒
-        //    for (int i = 3; i > 0; i--)
-        //    {
-        //        BroadcastMessage(null, ActionCode.ShowTimer, i.ToString());
-        //        Thread.Sleep(1000);
-        //    }
-        //    BroadcastMessage(null, ActionCode.StartPlay, "ee");
-        //}
-
-
-        //// 更新房主，每次有人退出
-        //void UpdateMaster()
-        //{
-        //    foreach (Client client in clientArray)
-        //    {
-        //        if (client != null)
+        //public void AddFish(string fishguid, FishData fishData)
+        //        void AddFish(string fishguid, FishData fishData)
         //        {
+        //            if (fishDic.ContainsKey(fishguid))
+        //            {
+        //                fishDic.Remove(fishguid);
+        //            }
 
-        //        }
-        //    }
+        //            fishDic.Add(fishguid, fishData);
+        //#if DEBUG_VIEW
+        //                    Console.WriteLine("鱼+1，鱼数量: " + fishDic.Count);
+        //#endif
         //}
-
-        public void AddFish(string fishguid, FishData fishData)
-        {
-            if (fishDic.ContainsKey(fishguid))
-            {
-                fishDic.Remove(fishguid);
-            }
-
-            fishDic.Add(fishguid, fishData);
-#if DEBUG_VIEW
-            Console.WriteLine("鱼+1，鱼数量: " + fishDic.Count);
-#endif
-        }
 
         public void HitFish(Client client, string fishguid)
         {
@@ -318,6 +291,90 @@ namespace Serv4Fish3.ServerSide
 #endif
             }
         }
+
+        //float fishGenWaitTime = 0.5f; // 鱼和鱼的生成间隔
+
+        // 生成鱼
+        public void GenerateFishs(Fish fishvo)
+        {
+            Random random = new Random();
+            if (this.fishDic.Count < 50)
+            {
+                //生成鱼
+                int moveType = random.Next(0, 2); // 0 直走; 1转弯
+                int angOffset, angSpeed;
+
+                if (moveType == 0)
+                {
+                    angOffset = random.Next(-22, 22);
+                    GenFish111(fishvo, angOffset, 0);
+                }
+                else
+                {
+                    if (random.Next(0, 2) == 0)
+                    {
+                        angSpeed = random.Next(-15, -9);
+                    }
+                    else
+                    {
+                        angSpeed = random.Next(9, 15);
+                    }
+                    GenFish111(fishvo, 0, angSpeed);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gens the fish111.
+        /// </summary>
+        /// <param name="fishvo"> 鱼的静态数据.</param>
+        /// <param name="angOffset">直走倾斜角.</param>
+        /// <param name="angSpeed">转弯角速度.</param>
+        void GenFish111(Fish fishvo, int angOffset, int angSpeed)
+        {
+            Random random = new Random();
+
+            int genPosIndex = random.Next(0, 16); // 出生位置
+            int amount = random.Next(fishvo.Count_max / 2 + 1, fishvo.Count_max); // 这一批的鱼数量
+            int speed = random.Next(fishvo.Speed / 2, fishvo.Speed);
+
+            FishData fishData = new FishData();
+            fishData.hp = fishvo.Life;
+            fishData.coin = fishvo.Kill_bonus;
+
+            //string millisecond = DateTime.Now + "" + DateTime.Now.Millisecond;
+            string millisecond = Guid.NewGuid().ToString();
+            //Guid.
+            for (int i = 0; i < amount; i++)
+            {
+                // 毫秒加层数
+                string fishguid = millisecond + i;
+                if (fishDic.ContainsKey(fishguid))
+                {
+                    fishDic.Remove(fishguid);
+                }
+
+                fishDic.Add(fishguid, fishData);
+
+                Console.WriteLine(fishguid);
+            }
+
+
+            string data = millisecond + "|"  // 0
+                + fishvo.Life + "|"  // 1
+                + fishvo.Kill_bonus + "|"  // 2
+                + amount + "|"  // 3
+                + genPosIndex + "|"  // 4
+                + speed + "|"  // 5
+                + angOffset + "|"  // 6
+                + angSpeed + "|"  // 7
+                + fishvo.ID + "|"  // 8
+                ;
+
+            this.BroadcastMessage(null, ActionCode.FishGenerate, data);
+        }
+
+
 
     }
 

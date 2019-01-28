@@ -1,21 +1,20 @@
 ﻿<Properties StartupConfiguration="{B66DF2C2-269B-4AAE-AE97-FB8313DCAE23}|Default">
   <MonoDevelop.Ide.ItemProperties.Serv4Fish3 PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="ServerSide/Server.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="ServerSide/Room.cs">
     <Files>
-      <File FileName="ServerSide/Server.cs" Line="50" Column="13" />
-      <File FileName="Program.cs" Line="118" Column="34" />
-      <File FileName="Controller/RoomController.cs" Line="25" Column="1" />
-      <File FileName="../FishCommon3/ActionCode.cs" Line="35" Column="22" />
+      <File FileName="ServerSide/Server.cs" Line="90" Column="25" />
+      <File FileName="Program.cs" Line="1" Column="3" />
+      <File FileName="DAO/FishDAO.cs" Line="20" Column="40" />
+      <File FileName="Model/Fish.cs" Line="29" Column="57" />
+      <File FileName="ServerSide/Room.cs" Line="347" Column="24" NotebookId="1" />
+      <File FileName="Controller/GameController.cs" Line="69" Column="32" NotebookId="1" />
+      <File FileName="DebugBalabala.cs" Line="13" Column="2" NotebookId="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint enabled="false" file="/Users/apple/Serv4Fish/Serv4Fish3/ServerSide/Room.cs" relfile="ServerSide/Room.cs" line="314" column="17" />
-      <Breakpoint enabled="false" file="/Users/apple/Serv4Fish/Serv4Fish3/ServerSide/Room.cs" relfile="ServerSide/Room.cs" line="319" column="17" />
-      <Breakpoint enabled="false" file="/Users/apple/Serv4Fish/Serv4Fish3/ServerSide/Room.cs" relfile="ServerSide/Room.cs" line="315" column="17" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MultiItemStartupConfigurations />
 </Properties>

@@ -6,6 +6,10 @@ using FishCommon3;
 using Serv4Fish3.Controller;
 using System.Timers;
 using Serv4Fish3.Tools;
+using Serv4Fish3.Model;
+using Serv4Fish3.DAO;
+using MySql.Data.MySqlClient;
+using System.Threading;
 
 namespace Serv4Fish3.ServerSide
 {
@@ -13,6 +17,7 @@ namespace Serv4Fish3.ServerSide
     {
         IPEndPoint ipEndPoint;
         Socket serverSocket;
+        List<Fish> fishList;
         List<Client> clientList = new List<Client>();
         List<Room> roomList = new List<Room>();
 
@@ -29,9 +34,18 @@ namespace Serv4Fish3.ServerSide
         }
 
         // 心跳计时器
-        Timer heartbeatTimer = new Timer(1000);
+        System.Timers.Timer heartbeatTimer = new System.Timers.Timer(1000);
 
         public void Start()
+        {
+            initServSocket();
+            //initHeartBeat();
+            initFishStaticData();
+            //initGenerateFish();
+            initFishThread();
+        }
+
+        void initServSocket()
         {
             serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             //serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Udp);
@@ -39,16 +53,62 @@ namespace Serv4Fish3.ServerSide
             serverSocket.Listen(0);
             serverSocket.BeginAccept(AcceptCallback, null);
             Console.WriteLine("[" + DateTime.Now + "] " + "服务启动成功～");
+        }
 
-
+        void initHeartBeat()
+        {
             this.heartbeatTimer.Elapsed += this.HeartbeatTimer_Elapsed;
             this.heartbeatTimer.AutoReset = false;
             this.heartbeatTimer.Enabled = true;
             Console.WriteLine("[" + DateTime.Now + "] " + "开启心跳检查～");
-
-
-
         }
+
+        void initFishStaticData()
+        {
+            MySqlConnection mysqlConn = ConnectHelper.Connect();
+            FishDAO fishDAO = new FishDAO();
+            this.fishList = fishDAO.VerifyFishStaticData(mysqlConn);
+            ConnectHelper.CloseConnection(mysqlConn);
+
+            Console.WriteLine("fishcount: " + this.fishList.Count);
+            Console.WriteLine("[" + DateTime.Now + "] " + "加载鱼群静态数据成功~");
+        }
+
+        void initFishThread()
+        {
+            Thread thread = new Thread(generateFishWithDelay);
+            thread.Start();
+            Console.WriteLine("[" + DateTime.Now + "] " + "管理鱼群线程开始～");
+        }
+
+
+        void generateFishWithDelay()
+        {
+            //roomList
+
+            Random random = new Random();
+            while (true)
+            {
+                Thread.Sleep(TimeSpan.FromSeconds(0.5f));
+                //Console.WriteLine("检查进行发鱼" + DateTime.Now + ":" + DateTime.Now.Millisecond);
+
+                int randomIndex = random.Next(0, this.fishList.Count);
+                Fish fishvo = this.fishList[randomIndex];
+                //Console.WriteLine("97: " + this.roomList.Count);
+                foreach (Room item in this.roomList)
+                {
+                    try
+                    {
+                        item.GenerateFishs(fishvo);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("[" + DateTime.Now + "] generateFishWithDelay 异常 Exception: " + ex.Message);
+                    }
+                }
+            }
+        }
+
 
         void HeartbeatTimer_Elapsed(object sender, ElapsedEventArgs e)
         {

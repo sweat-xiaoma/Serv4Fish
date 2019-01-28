@@ -1,5 +1,6 @@
 ﻿//#define DEBUG_VIEW
 using System;
+using System.Diagnostics;
 using System.Linq;
 using Serv4Fish3.ServerSide;
 using Serv4Fish3.Controller;
@@ -29,7 +30,48 @@ namespace Serv4Fish3
     {
         public static void Main(string[] args)
         {
+            Console.WriteLine("------------------------");
+            Console.WriteLine("PID: " + Process.GetCurrentProcess().Id);
+            Console.WriteLine("------------------------");
+            Console.WriteLine("------------------------");
+
 #if DEBUG_VIEW
+            //DebugBalabala.Test();
+
+            //Stopwatch stopWatch = new Stopwatch();
+            //stopWatch.Start();
+
+            //for (int i = 0; i < 100000; i++)
+            //{
+            //    string guid = Guid.NewGuid().ToString();
+            //    Console.WriteLine(guid);
+            //}
+            //stopWatch.Stop();
+            //Console.WriteLine("pb用时: " + stopWatch.Elapsed + "秒");
+            //return;
+
+            Random random = new Random();
+            //for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 10; i++)
+            {
+                //Console.WriteLine(random.Next(10));
+                Console.WriteLine(random.Next(0, 2));
+                Console.WriteLine(random.Next(-22, 22));
+                Console.WriteLine(random.Next(-15, -9));
+                Console.WriteLine(random.Next(9, 15));
+            }
+
+
+            return;
+            int amount = 10;
+            for (int i = 0; i < amount; i++)
+            {
+                // 毫秒加层数
+                string fishguid = DateTime.Now + "" + DateTime.Now.Millisecond + "" + i;
+                Console.WriteLine(fishguid);
+            }
+            Console.ReadLine();
+            return;
 
 
             int a = 100;
