@@ -30,6 +30,12 @@ namespace Serv4Fish3.Model
             {
                 Console.WriteLine("[" + DateTime.Now + "] 读取静态数据配置错误, 数量错误: " + id);
             }
+
+            if (this.Speed <= 0 || this.Life <= 0 || this.Kill_bonus <= 0 || this.Count_max <= 0)
+            {
+                Console.WriteLine("[" + DateTime.Now + "] 读取静态数据配置错误, 设置不完整: " + id);
+            }
+
             if (this.Speed / 2 > this.Speed)
             {
                 Console.WriteLine("[" + DateTime.Now + "] 读取静态数据配置错误, 速度错误: " + id);

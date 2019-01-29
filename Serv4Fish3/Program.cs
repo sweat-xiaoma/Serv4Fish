@@ -36,125 +36,65 @@ namespace Serv4Fish3
             Console.WriteLine("------------------------");
 
 #if DEBUG_VIEW
-            //DebugBalabala.Test();
+            DateTime DateTime1970 = new DateTime(1970, 1, 1);
+            TimeSpan ts = DateTime.UtcNow - DateTime1970;
+            Console.WriteLine(ts.TotalSeconds);
+
+            TimeSpan ts2 = DateTime.Now - DateTime1970;
+            Console.WriteLine(ts2.TotalSeconds);
+
+            //Console.WriteLine(ts.GetHashCode());
+            //return Convert.ToInt64(ts.TotalSeconds);
+            //return Convert.ToInt64(ts.TotalMilliseconds);
+
+            return;
+            ////DebugBalabala.Test();
 
             //Stopwatch stopWatch = new Stopwatch();
             //stopWatch.Start();
-
             //for (int i = 0; i < 100000; i++)
             //{
-            //    string guid = Guid.NewGuid().ToString();
-            //    Console.WriteLine(guid);
+            //    //Console.WriteLine(Util.TimeInterval1970()); /
+            //    //long a = Util.TimeInterval1970();
+            //    string span1 = Util.GetTimeStamp().ToString();
             //}
             //stopWatch.Stop();
-            //Console.WriteLine("pb用时: " + stopWatch.Elapsed + "秒");
+            //Console.WriteLine("method1 用时: " + stopWatch.Elapsed + "秒");
+
+
+            //////Console.WriteLine(Util.GetTimeStamp());
+
+            ////Console.WriteLine(Util.TimeInterval1970());
+            ////Console.WriteLine(Util.GetTimeStamp());
+            ////Console.WriteLine(Util.GetTimeStamp());
+            ////return;
+
+            //Stopwatch stopWatch2 = new Stopwatch();
+            //stopWatch2.Start();
+            //for (int i = 0; i < 100000; i++)
+            //{
+            //    //Console.WriteLine(Util.GetTimeStamp()); 
+            //    //long a = Util.GetTimeStamp();
+            //    string span2 = Util.
+
+            //}
+            //stopWatch2.Stop();
+            //Console.WriteLine("method2 用时: " + stopWatch2.Elapsed + "秒");
             //return;
 
-            Random random = new Random();
-            //for (int i = 0; i < 1000; i++)
-            for (int i = 0; i < 10; i++)
-            {
-                //Console.WriteLine(random.Next(10));
-                Console.WriteLine(random.Next(0, 2));
-                Console.WriteLine(random.Next(-22, 22));
-                Console.WriteLine(random.Next(-15, -9));
-                Console.WriteLine(random.Next(9, 15));
-            }
+            ////Stopwatch stopWatch = new Stopwatch();
+            ////stopWatch.Start();
 
+            ////for (int i = 0; i < 100000; i++)
+            ////{
+            ////    string guid = Guid.NewGuid().ToString();
+            ////    Console.WriteLine(guid);
+            ////}
+            ////stopWatch.Stop();
+            ////Console.WriteLine("pb用时: " + stopWatch.Elapsed + "秒");
+            //return;
 
-            return;
-            int amount = 10;
-            for (int i = 0; i < amount; i++)
-            {
-                // 毫秒加层数
-                string fishguid = DateTime.Now + "" + DateTime.Now.Millisecond + "" + i;
-                Console.WriteLine(fishguid);
-            }
-            Console.ReadLine();
-            return;
-
-
-            int a = 100;
-            int b = 100;
-            Console.WriteLine(a.Equals(b));
-
-
-            //Client client1 = new Client()
-            Yao yao1 = new Yao();
-            Yao yao2 = new Yao();
-            Console.WriteLine(yao1.Equals(yao2));
-
-
-            string str1 = "a";
-            string str2 = "a";
-            Console.WriteLine(str1.Equals(str2));
-            return;
-
-            /*
-                android 长时间连接断开 
-                       
-                [2019/1/22 13:39:44] [Client ReceiveCallback] 异常 Exception has been thrown by the target of an invocation.
-            */
-
-
-            /*
-                断开时的 as 输出
-
-                (Filename: ./Runtime/Export/Debug.bindings.h Line: 45)
-            2019-01-22 13:39:44.778 27275-27298/? I/Unity: [socket] [GameFacade - 发送] actionCode: FishGenerate data: 94960|12|20|0|14|7|3|-20|0|0
-
-                (Filename: ./Runtime/Export/Debug.bindings.h Line: 45)
-            2019-01-22 13:39:45.238 27275-27298/? E/Unity: SocketException: The socket has been shut down
-                  at System.Net.Sockets.Socket.Send (System.Byte[] buffer, System.Int32 offset, System.Int32 size, System.Net.Sockets.SocketFlags socketFlags) [0x00016] in <d2089eb4d5454c27b77bed2594d4c554>:0 
-                  at System.Net.Sockets.Socket.Send (System.Byte[] buffer) [0x00000] in <d2089eb4d5454c27b77bed2594d4c554>:0 
-                  at ClientManager.SendRequest (FishCommon3.RequestCode requestCode, FishCommon3.ActionCode actionCode, System.String data) [0x00016] in <fa7b54e951804731bd08ed546ae90aba>:0 
-                  at GameFacade.SendRequest (FishCommon3.RequestCode requestCode, FishCommon3.ActionCode actionCode, System.String data) [0x00034] in <fa7b54e951804731bd08ed546ae90aba>:0 
-                  at BaseRequest.SendRequest (System.String data) [0x00006] in <fa7b54e951804731bd08ed546ae90aba>:0 
-                  at FishOutScreenRequest.SendRequestMod (System.String data) [0x00000] in <fa7b54e951804731bd08ed546ae90aba>:0 
-                  at PlayerManager.FishOutScreen (System.String guid) [0x00000] in <fa7b54e951804731bd08ed546ae90aba>:0 
-                  at G
-            2019-01-22 13:39:45.244 27275-27298/? I/Unity: [socket] [GameFacade - 发送] actionCode: FishGenerate data: 95021|6|5|1|8|3|3|0|-13|1
-
-                (Filename: ./Runtime/Export/Debug.bindings.h Line: 45)
-
-
-            2019-01-22 13:39:45.257 27275-27298/? I/Unity: MakeFishes~~ 01/22/2019 13:39:45
-
-                (Filename: ./Runtime/Export/Debug.bindings.h Line: 45) 
-
-
-                        */
-
-
-
-
-
-
-            return;
-            DebugBalabala.Test();
-            Console.ReadLine();
-            return;
-            //Console.WriteLine(Util.GetTimeStamp());
-
-            //DateTime DateTime1970 = new DateTime(1970, 1, 1);
-            //TimeSpan ts = DateTime.UtcNow - DateTime1970;
-            ////return Convert.ToInt64(ts.TotalSeconds);
-            //Console.WriteLine(ts.TotalMilliseconds);
-
-            //Console.WriteLine(DateTime.Now.Millisecond);
-            //Console.WriteLine(DateTime.Now.Millisecond);
-            ////Console.WriteLine(DateTime.UtcNow.Millisecond);
-            ////Console.WriteLine(DateTime.Now);
-            //DateTime now = DateTime.Now;
-            ////now.Millisecond
-            //Console.WriteLine(now);
-            //Console.WriteLine(now.Hour + now.Minute + now.Second + now.Millisecond + "");
-            //Console.WriteLine(now.Hour + now.Minute + now.Second + now.Millisecond);
-            //Console.ReadLine();
-
-            return;
 #endif
-            //Server server = new Server("127.0.0.1", 1234);
             Server server = new Server("0.0.0.0", 1234);
             server.Start();
             Console.WriteLine("< 输入 print 回车, 查看服务状态~ > ");
@@ -168,6 +108,12 @@ namespace Serv4Fish3
                     case "print":
                         Console.WriteLine("当前活跃房间数： " + server.ListRoom().Count);
                         Console.WriteLine("当前在线人数：" + server.ListClient().Count);
+                        //for (int i = 0; i < max; i++)
+                        foreach (Room room in server.ListRoom())
+                        {
+                            Console.WriteLine("room: " + room.GetHashCode());
+                            Console.WriteLine("fishCount: " + room.fishDic.Count);
+                        }
                         break;
 
                     case "quit":
@@ -193,9 +139,6 @@ namespace Serv4Fish3
 
             data = data.Replace("-", "+");
             data = data.Replace("_", "/");
-
-            //string re = Util.DecodeBase64(Encoding.UTF8, data);
-            //return re;
 
             return data;
         }

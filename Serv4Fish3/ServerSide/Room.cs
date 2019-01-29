@@ -3,17 +3,18 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using FishCommon3;
+using Serv4Fish3.Tools;
 using Serv4Fish3.Model;
 
 namespace Serv4Fish3.ServerSide
 {
-    enum RoomState
-    {
-        WaitingJoin, // 等待人齐
-        WaitingBattle, // 等待开战
-        Battle, // 
-        End
-    }
+    //enum RoomState
+    //{
+    //    WaitingJoin, // 等待人齐
+    //    WaitingBattle, // 等待开战
+    //    Battle, // 
+    //    End
+    //}
 
     public class FishData
     {
@@ -24,12 +25,14 @@ namespace Serv4Fish3.ServerSide
 
     public class Room
     {
-        Dictionary<string, FishData> fishDic = new Dictionary<string, FishData>();
+        //Dictionary<string, FishData> fishDic = new Dictionary<string, FishData>();
+        //public Dictionary<string, FishData> fishDic = new Dictionary<string, FishData>();
+        public Dictionary<long, FishData> fishDic = new Dictionary<long, FishData>();
 
         public const int MaxPeople = 4; // 1;
 
         Client[] clientArray = new Client[MaxPeople];
-        RoomState state = RoomState.WaitingJoin;
+        //RoomState state = RoomState.WaitingJoin;
 
         Server server;
 
@@ -38,11 +41,11 @@ namespace Serv4Fish3.ServerSide
             this.server = server;
         }
 
-        // 房间等待加入
-        public bool IsWaitingJoin()
-        {
-            return state == RoomState.WaitingJoin;
-        }
+        //// 房间等待加入
+        //public bool IsWaitingJoin()
+        //{
+        //    return state == RoomState.WaitingJoin;
+        //}
 
         public void AddClient(Client client, int index)
         {
@@ -237,7 +240,7 @@ namespace Serv4Fish3.ServerSide
         //#endif
         //}
 
-        public void HitFish(Client client, string fishguid)
+        public void HitFish(Client client, long fishguid)
         {
             if (fishDic.ContainsKey(fishguid))
             {
@@ -280,7 +283,8 @@ namespace Serv4Fish3.ServerSide
 #endif
         }
 
-        public void FishOutByClient(Client client, string fishguid)
+        //public void FishOutByClient(Client client, string fishguid)
+        public void FishOutByClient(Client client, long fishguid)
         {
             if (fishDic.ContainsKey(fishguid))
             {
@@ -294,9 +298,29 @@ namespace Serv4Fish3.ServerSide
 
         //float fishGenWaitTime = 0.5f; // 鱼和鱼的生成间隔
 
+        public int fishGenLoop;
+
         // 生成鱼
         public void GenerateFishs(Fish fishvo)
         {
+            //fishGenLoop++;
+            //if (fishGenLoop > 500)
+            //{
+            //    long now = Util.GetTimeStamp() - 2000;
+            //    // 每五百波清理一次 防止意外没清理掉的死鱼.
+            //    //foreach (key fish in this.fishDic)
+            //    foreach (long key in this.fishDic.Keys)
+            //    {
+            //        if (key < now) // 很老的鱼了
+            //        {
+
+            //        }
+
+            //        //if(key < now)
+            //    }
+            //}
+
+
             Random random = new Random();
             if (this.fishDic.Count < 50)
             {
@@ -343,22 +367,22 @@ namespace Serv4Fish3.ServerSide
             fishData.coin = fishvo.Kill_bonus;
 
             //string millisecond = DateTime.Now + "" + DateTime.Now.Millisecond;
-            string millisecond = Guid.NewGuid().ToString();
-            //Guid.
+            //string millisecond = Guid.NewGuid().ToString();
+            long millisecond = Util.GetTimeStamp();
+
             for (int i = 0; i < amount; i++)
             {
                 // 毫秒加层数
-                string fishguid = millisecond + i;
+                //string fishguid = (millisecond + i).ToString();
+                long fishguid = millisecond + i;
                 if (fishDic.ContainsKey(fishguid))
                 {
                     fishDic.Remove(fishguid);
                 }
 
                 fishDic.Add(fishguid, fishData);
-
-                Console.WriteLine(fishguid);
+                //Console.WriteLine(fishguid);
             }
-
 
             string data = millisecond + "|"  // 0
                 + fishvo.Life + "|"  // 1

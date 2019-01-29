@@ -69,12 +69,12 @@ namespace Serv4Fish3.ServerSide
 
         public void SaveMoneySQL()
         {
-            Console.WriteLine("SaveMoneySQL 75!" + this.ipaddress);
-            Console.WriteLine(mySqlConn.State);
+            //Console.WriteLine("SaveMoneySQL 75!" + this.ipaddress);
+            //Console.WriteLine(mySqlConn.State);
             WalletDAO walletDAO = new WalletDAO();
-            Console.WriteLine("SaveMoneySQL 78!" + this.ipaddress);
-            Console.WriteLine(wallet == null);
-            Console.WriteLine("SaveMoneySQL 80!" + this.ipaddress);
+            //Console.WriteLine("SaveMoneySQL 78!" + this.ipaddress);
+            //Console.WriteLine(wallet == null);
+            //Console.WriteLine("SaveMoneySQL 80!" + this.ipaddress);
 
             if (wallet != null)
                 walletDAO.UpdateWalletMoney(mySqlConn, wallet.Username, wallet.OldMoney, wallet.Money);

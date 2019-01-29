@@ -80,7 +80,8 @@ namespace Serv4Fish3.Controller
             Room room = client.Room;
 
             string[] strs = data.Split('|');
-            string fishguid = strs[0];
+            //string fishguid = strs[0];
+            long fishguid = long.Parse(strs[0]);
             //int damage = int.Parse(strs[1]);
             room.HitFish(client, fishguid); // 后续操作交给 Room 处理。
             return "";
@@ -89,7 +90,9 @@ namespace Serv4Fish3.Controller
         public string FishOutScreen(string data, Client client, Server server)
         {
             Room room = client.Room;
-            room.FishOutByClient(client, data);
+            long fishguid = long.Parse(data);
+            room.FishOutByClient(client, fishguid);
+
 
             return "";
         }
