@@ -15,39 +15,58 @@ namespace Serv4Fish3
     {
         //static Timer heartbeatTimer = new Timer(1000f);
 
+
+        public static int PreCannonLv(int currLv)
+        {
+            int preLv = 0;
+            if (currLv <= 10)
+                preLv = 1;
+            else if (currLv <= 100)
+                preLv = currLv - 10;
+            else if (currLv <= 1000)
+                preLv = currLv - 50;
+            else if (currLv <= 10000)
+                preLv = currLv - 100;
+
+            return preLv;
+        }
+
         public static void Test()
         {
+            //if (AsyncLocalValueChangedArgs )
+            int lv = 1;
+            int nextLv = 0;
 
-            MySqlConnection conn = new MySqlConnection("Database=lgl_fish;Data Source=192.168.0.160;port=3306;user=lgl;pwd=lgl0303");
-            conn.Open();
-
-            MySqlDataReader reader = null;
-            try
+            for (int i = 0; i < 10000; i++)
             {
-
-                MySqlCommand cmd = new MySqlCommand("select * from game_fishes", conn);
-                reader = cmd.ExecuteReader();
-
-                while (reader.Read())
+                if (lv <= 1)
                 {
-                    //string fishname = reader.GetString("name");
-                    string fishname = reader.GetString("nameaaaaa");
-                    Console.WriteLine(fishname);
+                    nextLv = 10;
+                }
+                else if (lv < 100)
+                {
+                    nextLv = lv + 10;
+                }
+                else if (lv < 1000)
+                {
+                    nextLv = lv + 50;
+                }
+                else if (lv < 10000)
+                {
+                    nextLv = lv + 100;
+                }
+                //Console.WriteLine(lv);
+                else
+                {
+                    continue;
                 }
 
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("[" + DateTime.Now + "] " + "[VerifyFishStaticData] 出现异常" + ex.Message);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-                if (conn != null)
-                    conn.Close();
+                Console.WriteLine("currLv: " + lv + "  nextLv: " + nextLv
+                        + " preLv:" + PreCannonLv(lv));
+                lv = nextLv;
             }
 
+            return;
 
 
 

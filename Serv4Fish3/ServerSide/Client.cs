@@ -46,7 +46,7 @@ namespace Serv4Fish3.ServerSide
             return user.Username + ","
                 + user.Nickname + ","
                 + user.Corner + ","
-                + user.Cost + ","
+                + user.CannonLvCurr + ","
                 + wallet.Money + ","
                 + wallet.Diamond + ","
                 + this.isMaster;
@@ -67,17 +67,32 @@ namespace Serv4Fish3.ServerSide
             return wallet;
         }
 
-        public void SaveMoneySQL()
+        public void SaveSQL()
         {
-            //Console.WriteLine("SaveMoneySQL 75!" + this.ipaddress);
-            //Console.WriteLine(mySqlConn.State);
             WalletDAO walletDAO = new WalletDAO();
-            //Console.WriteLine("SaveMoneySQL 78!" + this.ipaddress);
-            //Console.WriteLine(wallet == null);
-            //Console.WriteLine("SaveMoneySQL 80!" + this.ipaddress);
-
+            Console.WriteLine("[73]开始保存钱包数据");
+            Console.WriteLine(mySqlConn);
+            Console.WriteLine(wallet);
             if (wallet != null)
-                walletDAO.UpdateWalletMoney(mySqlConn, wallet.Username, wallet.OldMoney, wallet.Money);
+            {
+                if (wallet != null)
+                    walletDAO.UpdateWalletMoney(mySqlConn,
+                                                wallet.Username,
+                                                wallet.OldMoney,
+                                                wallet.Money,
+                                                wallet.OldDiamond,
+                                                wallet.Diamond);
+            }
+            Console.WriteLine("[83]开始保存用户数据");
+            Console.WriteLine(mySqlConn);
+            Console.WriteLine(user);
+            UserDAO userDAO = new UserDAO();
+            if (userDAO != null)
+            {
+                if (user != null)
+                    userDAO.UpdateUser(mySqlConn, user.Username, user.CannonLvOpen);
+            }
+
         }
 
         public Room Room
@@ -151,7 +166,7 @@ namespace Serv4Fish3.ServerSide
             Console.WriteLine("[" + DateTime.Now + "] " + "用户[{0}]断开连接", this.ipaddress);
 
             // 退出时保存钱包
-            this.SaveMoneySQL();
+            this.SaveSQL();
 
             // 关闭 sql 连接
             ConnectHelper.CloseConnection(this.mySqlConn);

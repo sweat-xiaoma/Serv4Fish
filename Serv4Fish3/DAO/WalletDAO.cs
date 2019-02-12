@@ -43,24 +43,56 @@ namespace Serv4Fish3.DAO
         }
 
 
-        public void UpdateWalletMoney(MySqlConnection conn, string username, int oldmoney, int newmoney)
+        public void UpdateWalletMoney(MySqlConnection conn, string username,
+                int oldMoney, int newMoney,
+                int oldDiamond, int newDiamond)
         {
-            //Console.WriteLine(conn);
-            string sqlstr = string.Format("UPDATE `wallet` set `money`= {0} WHERE username = {1};", newmoney, username);
 
-            MySqlCommand command = new MySqlCommand(sqlstr, conn);
-            int re = command.ExecuteNonQuery(); // 返回受影响的行数，为int值。可以根据返回的值进行判断是否成功。
-            //if (re > 0) // 操作成功
-            //else // 操作失败
+            try
+            {
+                string sqlstr = string.Format("UPDATE `wallet` set `money`= {0}, `diamond`={1} WHERE username = {2};", newMoney, newDiamond, username);
 
-            // 插入一条日志
-            int changeNumber = newmoney - oldmoney;
-            // 字段说明                                                用户名      操作时间    变化值     新余额     备注说明    
-            string sqlstr72 = string.Format("INSERT INTO money_log (`username`, `w_time`, `number`, `remain`, `remark`, `type`) VALUES('{0}', '{1}', '{2}', '{3}', '{4}', '{5}')",
-                username, Util.TimeInterval1970(), changeNumber, newmoney, "捕鱼游戏场景~", 2333);
+                MySqlCommand command = new MySqlCommand(sqlstr, conn);
+                int re = command.ExecuteNonQuery(); // 返回受影响的行数，为int值。可以根据返回的值进行判断是否成功。
+                if (re > 0) // 操作成功 
+                {
+                    // 插入一条日志(money)
+                    int changeNumber = newMoney - oldMoney;
+                    if (changeNumber != 0)
+                    {
+                        // 字段说明                                                用户名      操作时间    变化值     新余额     备注说明
+                        string sqlstr64 = string.Format("INSERT INTO money_log (`username`, `w_time`, `number`, `remain`, `remark`, `type`) " +
+                                                                                "VALUES('{0}', '{1}', '{2}', '{3}', '{4}', '{5}')",
+                                                        username, Util.TimeInterval1970(), changeNumber, newMoney, "捕鱼游戏场景~金币变动", 2333);
 
-            MySqlCommand command85 = new MySqlCommand(sqlstr72, conn);
-            command85.ExecuteNonQuery();
+                        MySqlCommand command68 = new MySqlCommand(sqlstr64, conn);
+                        command68.ExecuteNonQuery();
+                    }
+
+                    // 插入一条日志(money)
+                    int changeNumberDiamond = newDiamond - oldDiamond;
+                    if (changeNumberDiamond != 0)
+                    {
+                        // 字段说明                                                用户名      操作时间    变化值     新余额     备注说明
+                        string sqlstr77 = string.Format("INSERT INTO diamond_log (`username`, `w_time`, `number`, `remain`, `remark`, `type`) " +
+                                                                                "VALUES('{0}', '{1}', '{2}', '{3}', '{4}', '{5}')",
+                                                        username, Util.TimeInterval1970(), changeNumberDiamond, newDiamond, "捕鱼游戏场景~钻石变动~", 2333);
+
+                        MySqlCommand command81 = new MySqlCommand(sqlstr77, conn);
+                        command81.ExecuteNonQuery();
+                    }
+                }
+                //else // 操作失败
+
+            }
+            catch (Exception ex)
+            {
+                //Console.WriteLine("玩家退出时保存钱包数据异常: " + ex.Message);
+                Console.WriteLine("[" + DateTime.Now + "] WalletDAO UpdateWalletMoney 异常: " + ex.Message);
+            }
         }
+
+
+
     }
 }

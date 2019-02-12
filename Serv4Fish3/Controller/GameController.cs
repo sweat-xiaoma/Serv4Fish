@@ -42,7 +42,7 @@ namespace Serv4Fish3.Controller
             if (room != null)
             {
                 // 玩家 - 扣钱 (广播 同步金币)
-                client.GetWallet().Money -= client.GetUser().Cost;
+                client.GetWallet().Money -= client.GetUser().CannonLvCurr;
                 string data48 = client.GetUser().Corner + "|" + client.GetWallet().Money;
                 room.BroadcastMessage(null, ActionCode.UpdateMoney, data48);
 

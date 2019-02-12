@@ -96,8 +96,8 @@ namespace Serv4Fish3.ServerSide
 
                 //Console.WriteLine("检查进行发鱼" + DateTime.Now + ":" + DateTime.Now.Millisecond);
 
-                //int randomIndex = random.Next(0, this.fishList.Count);
-                int randomIndex = 10; // todo test
+                int randomIndex = random.Next(0, this.fishList.Count);
+                //int randomIndex = 10; // todo test
                 Fish fishvo = this.fishList[randomIndex];
                 //Console.WriteLine("97: " + this.roomList.Count);
                 foreach (Room item in this.roomList)

@@ -49,8 +49,7 @@ namespace Serv4Fish3.Tools
 
         public static long TimeInterval1970()
         {
-            //return (DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000000;
-            return (DateTime.Now.ToUniversalTime().Ticks - 621355968000000000);
+            return (DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000000;
         }
 
         static DateTime DateTime1970 = new DateTime(1970, 1, 1);
@@ -58,12 +57,8 @@ namespace Serv4Fish3.Tools
         {
             TimeSpan ts = DateTime.UtcNow - DateTime1970;
 
-            //Console.WriteLine(ts.GetHashCode());
-            //return Convert.ToInt64(ts.TotalSeconds);
             return Convert.ToInt64(ts.TotalMilliseconds);
         }
 
     }
 }
-
-//说学校需要一个 入职通知书.

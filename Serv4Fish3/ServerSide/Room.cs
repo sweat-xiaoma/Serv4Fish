@@ -246,7 +246,7 @@ namespace Serv4Fish3.ServerSide
             {
                 FishData findFish = fishDic[fishguid];
 
-                findFish.hp -= client.GetUser().Cost;
+                findFish.hp -= client.GetUser().CannonLvCurr;
 
                 if (findFish.hp <= 0)
                 {
@@ -303,22 +303,31 @@ namespace Serv4Fish3.ServerSide
         // 生成鱼
         public void GenerateFishs(Fish fishvo)
         {
-            //fishGenLoop++;
-            //if (fishGenLoop > 500)
-            //{
-            //    long now = Util.GetTimeStamp() - 2000;
-            //    // 每五百波清理一次 防止意外没清理掉的死鱼.
-            //    //foreach (key fish in this.fishDic)
-            //    foreach (long key in this.fishDic.Keys)
-            //    {
-            //        if (key < now) // 很老的鱼了
-            //        {
+            //Console.WriteLine("fishGenLoop: " + this.fishGenLoop + " Time: " + DateTime.Now + ":" + DateTime.Now.Millisecond);
 
-            //        }
+            fishGenLoop++;
+            //if (fishGenLoop > 100) // 100*.5 = 50秒
+            if (fishGenLoop > 25) // 50*.5 = 25秒 .
+            {
+                //Console.WriteLine("清理老鱼!");
+                fishGenLoop = 0;
+                long now = Util.GetTimeStamp() - 100;
 
-            //        //if(key < now)
-            //    }
-            //}
+                List<long> oldFishs = new List<long>();
+                // 每五百波清理一次 防止意外没清理掉的死鱼.
+                foreach (long key in this.fishDic.Keys)
+                {
+                    if (key < now) // 很老的鱼了
+                    {
+                        oldFishs.Add(key);
+                    }
+                }
+
+                for (int i = 0; i < oldFishs.Count; i++)
+                {
+                    this.fishDic.Remove(oldFishs[i]);
+                }
+            }
 
 
             Random random = new Random();
@@ -346,6 +355,7 @@ namespace Serv4Fish3.ServerSide
                     GenFish111(fishvo, 0, angSpeed);
                 }
             }
+
         }
 
         /// <summary>
@@ -377,11 +387,12 @@ namespace Serv4Fish3.ServerSide
                 long fishguid = millisecond + i;
                 if (fishDic.ContainsKey(fishguid))
                 {
-                    fishDic.Remove(fishguid);
+                    fishDic[fishguid] = fishData;
                 }
-
-                fishDic.Add(fishguid, fishData);
-                //Console.WriteLine(fishguid);
+                else
+                {
+                    fishDic.Add(fishguid, fishData);
+                }
             }
 
             string data = millisecond + "|"  // 0
@@ -396,6 +407,19 @@ namespace Serv4Fish3.ServerSide
                 ;
 
             this.BroadcastMessage(null, ActionCode.FishGenerate, data);
+
+
+            ////Console.WriteLine("鱼数量：" + fishDic.Count);
+            //Console.WriteLine("BroadFISH:" + this.fishDic.Count
+            //        + " Time:" + System.DateTime.Now + System.DateTime.Now.Millisecond);
+            //foreach (long fishguid in this.fishDic.Keys)
+            //{
+            //    Console.WriteLine("fishguid: " + fishguid);
+            //}
+
+            //Console.WriteLine("-----------------------");
+
+
         }
 
 

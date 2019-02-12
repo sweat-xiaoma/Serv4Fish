@@ -36,19 +36,19 @@ namespace Serv4Fish3
             Console.WriteLine("------------------------");
 
 #if DEBUG_VIEW
-            DateTime DateTime1970 = new DateTime(1970, 1, 1);
-            TimeSpan ts = DateTime.UtcNow - DateTime1970;
-            Console.WriteLine(ts.TotalSeconds);
+            //DateTime DateTime1970 = new DateTime(1970, 1, 1);
+            //TimeSpan ts = DateTime.UtcNow - DateTime1970;
+            //Console.WriteLine(ts.TotalSeconds);
 
-            TimeSpan ts2 = DateTime.Now - DateTime1970;
-            Console.WriteLine(ts2.TotalSeconds);
+            //TimeSpan ts2 = DateTime.Now - DateTime1970;
+            //Console.WriteLine(ts2.TotalSeconds);
 
             //Console.WriteLine(ts.GetHashCode());
             //return Convert.ToInt64(ts.TotalSeconds);
             //return Convert.ToInt64(ts.TotalMilliseconds);
 
+            DebugBalabala.Test();
             return;
-            ////DebugBalabala.Test();
 
             //Stopwatch stopWatch = new Stopwatch();
             //stopWatch.Start();
@@ -211,32 +211,6 @@ namespace Serv4Fish3
             string reascii = Util.DecodeBase64(Encoding.ASCII, re);
             Console.WriteLine(reascii);
 
-            return;
-            ////string[] strs = new string[4];
-            //Client[] clients = new Client[4];
-            //Console.WriteLine(clients[1] == null);
-            //Console.WriteLine(clients[1]);
-            //return;
-
-            //string guid = "YAvIe2cQdf74sd8m3t-Ogehkvwf6E7zWx_5q4j_TNFopiUl8Tso6O1bMvwMkmQ0T_fvTc8VtHc04yXm7EGs0-_fYUW3byLxlMPmOCbAr5MH4dTFfuUW-Pz7Vt8rOQSrnh5Y4i_SA7tRreDndnSPlUy2Q3Joj3Ymogiv9GnInQnK-7HeRWWi6_eJY8WHwOasid1n0_hIPy9CvF-tHpPIKzHlDlpISGe-04FLxhBmnVXaSzcRdDZmoVDb7A1QNRXyR8QYrWtcL-gR0w2J-LM2oe4cU0hzqF8utmkGi11O2cA6KNxbnop0YiKKw0BH-2t_Cw7DivxzOfV5bHIqoSBOV2g";
-
-            MySqlConnection connection = new MySqlConnection(ConnectHelper.CONNECTION_STRING);
-            connection.Open();
-            MySqlCommand command = new MySqlCommand("select username from user where guid = @guid", connection);
-            command.Parameters.AddWithValue("guid", guid);
-
-            MySqlDataReader reader = command.ExecuteReader();
-            if (reader.Read())
-            {
-                int id = reader.GetInt32("id");
-                string username = reader.GetString("username");
-                string nickname = reader.GetString("nickname");
-                User user = new User(id, username, nickname);
-                Console.WriteLine(id);
-                Console.WriteLine(username);
-                Console.WriteLine(user.Username);
-            }
-            reader.Close();
             return;
         }
 
