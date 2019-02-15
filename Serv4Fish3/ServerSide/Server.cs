@@ -84,22 +84,18 @@ namespace Serv4Fish3.ServerSide
 
         void generateFishWithDelay()
         {
-            //roomList
-
             Random random = new Random();
             while (true)
             {
-                Thread.Sleep(TimeSpan.FromSeconds(0.5f));
+                //Thread.Sleep(TimeSpan.FromSeconds(0.5f));
+                Thread.Sleep(TimeSpan.FromSeconds(0.1f));
                 //Thread.Sleep(TimeSpan.FromSeconds(50));
-
-
-
                 //Console.WriteLine("检查进行发鱼" + DateTime.Now + ":" + DateTime.Now.Millisecond);
-
                 int randomIndex = random.Next(0, this.fishList.Count);
                 //int randomIndex = 10; // todo test
                 Fish fishvo = this.fishList[randomIndex];
                 //Console.WriteLine("97: " + this.roomList.Count);
+                //lock (this.roomList)
                 foreach (Room item in this.roomList)
                 {
                     try
@@ -108,6 +104,7 @@ namespace Serv4Fish3.ServerSide
                     }
                     catch (Exception ex)
                     {
+                        Console.WriteLine("count: " + this.roomList.Count);
                         Console.WriteLine("[" + DateTime.Now + "] generateFishWithDelay 异常 Exception: " + ex.Message);
                     }
                 }
@@ -184,6 +181,7 @@ namespace Serv4Fish3.ServerSide
 
         public void RemoveRoom(Room room)
         {
+            //lock (roomList)
             if (roomList != null && room != null)
             {
                 Console.WriteLine("[" + DateTime.Now + "] " + "销毁空房间 [{0}] ", room.GetHashCode());

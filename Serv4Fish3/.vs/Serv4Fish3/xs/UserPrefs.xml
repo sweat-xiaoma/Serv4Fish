@@ -1,10 +1,10 @@
 ﻿<Properties StartupConfiguration="{B66DF2C2-269B-4AAE-AE97-FB8313DCAE23}|Default">
   <MonoDevelop.Ide.ItemProperties.Serv4Fish3 PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="ServerSide/Room.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="ServerSide/Server.cs">
     <Files>
-      <File FileName="ServerSide/Room.cs" Line="429" Column="24" />
-      <File FileName="ServerSide/Server.cs" Line="162" Column="31" />
-      <File FileName="Program.cs" Line="112" Column="1" />
+      <File FileName="ServerSide/Client.cs" Line="179" Column="28" />
+      <File FileName="ServerSide/Room.cs" Line="157" Column="25" />
+      <File FileName="ServerSide/Server.cs" Line="186" Column="10" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

@@ -74,6 +74,12 @@
     <Compile Include="DebugBalabala.cs" />
     <Compile Include="DAO\FishDAO.cs" />
     <Compile Include="Model\Fish.cs" />
+    <Compile Include="Tools\ObjectPool\IDistributorMc.cs" />
+    <Compile Include="Tools\ObjectPool\IObjectMc.cs" />
+    <Compile Include="Tools\ObjectPool\DistributorMc.cs" />
+    <Compile Include="Tools\ObjectPool\GeneratorMc.cs" />
+    <Compile Include="Tools\ObjectPool\ObjectMcType.cs" />
+    <Compile Include="Tools\ObjectPool\FishData.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FishCommon3\FishCommon3.csproj">
@@ -86,6 +92,7 @@
     <Folder Include="DAO\" />
     <Folder Include="Model\" />
     <Folder Include="Tools\Coroutine\" />
+    <Folder Include="Tools\ObjectPool\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -18,6 +18,7 @@ using FishProto3;
 using System.IO;
 using Google.Protobuf;
 using System.Diagnostics;
+using Serv4Fish3.Tools.ObjectPool;
 
 namespace Serv4Fish3
 {
@@ -25,10 +26,22 @@ namespace Serv4Fish3
     {
         public static void Main(string[] args)
         {
+            //          System.NotImplementedException: The method or operation is not implemented.
+            //at Serv4Fish3.Tools.ObjectPool.A.set_hashCode(System.Int32 value)[0x00000] in < f899c5f40aa2481d853d90e8973029e5 >:0
+            //at Serv4Fish3.MainClass.Main(System.String[] args)[0x00005] in < f899c5f40aa2481d853d90e8973029e5 >:0
+
+
+            //A a = new A();
+            //a.hashCode = 1000;
+            //Console.WriteLine(a.hashCode);
+
+            //return;
+
             Console.WriteLine("------------------------");
             Console.WriteLine("PID: " + Process.GetCurrentProcess().Id);
             Console.WriteLine("------------------------");
             Console.WriteLine("------------------------");
+
 
 #if DEBUG_VIEW
             //DateTime DateTime1970 = new DateTime(1970, 1, 1);

@@ -7,29 +7,21 @@ using FishCommon3;
 using Serv4Fish3.Tools;
 using Serv4Fish3.Model;
 using System.Collections.Concurrent;
+using Serv4Fish3.Tools.ObjectPool;
 
 
 namespace Serv4Fish3.ServerSide
 {
-    //enum RoomState
+    //public class FishData
     //{
-    //    WaitingJoin, // 等待人齐
-    //    WaitingBattle, // 等待开战
-    //    Battle, // 
-    //    End
+    //    public int hp; // 血量
+    //    public int coin; // 金币
     //}
-
-    public class FishData
-    {
-        public int hp; // 血量
-        public int coin; // 金币
-    }
-
 
     public class Room
     {
         //Dictionary<long, FishData> fishDic = new Dictionary<long, FishData>();
-        ConcurrentDictionary<long, FishData> fishDic = new ConcurrentDictionary<long, FishData>();
+        ConcurrentDictionary<long, FishData> fishCDic = new ConcurrentDictionary<long, FishData>();
 
 
         public const int MaxPeople = 4; // 1;
@@ -42,6 +34,29 @@ namespace Serv4Fish3.ServerSide
         public Room(Server server)
         {
             this.server = server;
+
+            // 初始化对象池
+            this.InitDistributorAndGenerator();
+        }
+
+        DistributorMc _objDistributor;
+        GeneratorMc _objGenerator;
+
+        void InitDistributorAndGenerator()
+        {
+            if (this._objDistributor == null)
+            {
+                this._objDistributor = new DistributorMc();
+            }
+            if (this._objGenerator == null)
+            {
+                this._objGenerator = new GeneratorMc(this._objDistributor);
+            }
+        }
+
+        void DestroyDistributorAndGenerator()
+        {
+            this._objDistributor.clear();
         }
 
         //// 房间等待加入
@@ -115,6 +130,13 @@ namespace Serv4Fish3.ServerSide
             }
             if (isEmpty)
             {
+                Console.WriteLine("133...");
+
+
+                // 清空对象池
+                this.DestroyDistributorAndGenerator();
+
+
                 DestroyRoom();
             }
             else
@@ -135,33 +157,6 @@ namespace Serv4Fish3.ServerSide
             // 广播给房间内其他人 我走了～再见。
             BroadcastMessage(client, ActionCode.UpdateRoom, GetRoomData());
         }
-
-        //public void StepOut(Client client)
-        //{
-        //    //if (client.)
-        //    foreach (Client item in this.clientArray)
-        //    {
-        //        //if (item == client && client.isMaster == 1)
-        //        if (item == client)
-        //        {
-        //            if (client.isMaster != 1)
-        //            {
-        //                // 暂离的用户不是房主 不用刷新房间了
-        //                return;
-        //            }
-        //            else
-        //            {
-        //                client.isMaster = 0; // 先把房主撤掉
-        //                // 选第一个人继续当房主
-        //                foreach (Client item2Master in this.clientArray)
-        //                {
-        //                    //if (client.)
-        //                }
-        //            }
-        //            break;
-        //        }
-        //    }
-        //}
 
         // 销毁房间
         void DestroyRoom()
@@ -234,7 +229,7 @@ namespace Serv4Fish3.ServerSide
             {
                 generateIndex++;
                 Console.WriteLine("[" + DateTime.Now + "] " + "房间[{0}]内广播消息[{1}]给[{2}]   ->  [{3}]", this.GetHashCode(), actionCode, sb, data);
-                Console.WriteLine("出生: " + generateIndex);
+                Console.WriteLine("出生: " + generateIndex + "  count:" + this.fishCDic.Count);
             }
 
 
@@ -256,10 +251,10 @@ namespace Serv4Fish3.ServerSide
             Console.WriteLine("245 -------------------------");
             Console.WriteLine(fishguid);
 #endif
-            if (fishDic.ContainsKey(fishguid))
+            if (fishCDic.ContainsKey(fishguid))
             {
 
-                FishData findFish = fishDic[fishguid];
+                FishData findFish = fishCDic[fishguid];
 
                 findFish.hp -= client.GetUser().CannonLvCurr;
 
@@ -287,11 +282,11 @@ namespace Serv4Fish3.ServerSide
                     //lock (fishDic)
                     //fishDic.Remove(fishguid); // 移除掉
                     //fishDic.TryRemove(fishguid);
-                    FishData fishData;
-                    if (!fishDic.TryRemove(fishguid, out fishData))
+                    if (!fishCDic.TryRemove(fishguid, out FishData fishData))
                     {
                         Console.WriteLine("杀死鱼 tryRemove1 失败" + fishguid);
                     }
+                    fishData.dispose(); // todo new
 
                     //#if DEBUG_VIEW
                     //                    Console.WriteLine("鱼死 鱼减少， 鱼数量: " + fishDic.Count);
@@ -309,27 +304,27 @@ namespace Serv4Fish3.ServerSide
             else
             {
 #if DEBUGVIEW0214
-                Console.WriteLine(" !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 没找到鱼: " + fishguid + " !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                Console.WriteLine(" !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 没找到鱼: " + fishguid + " ~ " + fishCDic.Count);
 #endif
             }
         }
 
         public void FishOutByClient(Client client, long fishguid)
         {
-            if (fishDic.ContainsKey(fishguid))
+            if (fishCDic.ContainsKey(fishguid))
             {
-                FishData findData = fishDic[fishguid];
+                FishData findData = fishCDic[fishguid];
                 ////todo test  
                 //lock (fishDic)
                 //fishDic.Remove(fishguid); // 出屏了。 移除掉。 
                 //#if DEBUG_VIEW
                 //                Console.WriteLine("出屏 鱼减少， 鱼数量: " + fishDic.Count);
                 //#endif
-                FishData fishData;
-                if (!fishDic.TryRemove(fishguid, out fishData))
+                if (!fishCDic.TryRemove(fishguid, out FishData fishData))
                 {
                     Console.WriteLine("出屏 tryRemove2 失败" + fishguid);
                 }
+                fishData.dispose(); // todo new
             }
         }
 
@@ -345,13 +340,11 @@ namespace Serv4Fish3.ServerSide
 
             List<long> oldFishs = new List<long>();
             // 清理一次 防止意外没清理掉的死鱼.
-            foreach (long key in this.fishDic.Keys)
+            foreach (long key in this.fishCDic.Keys)
             {
                 if (key < now) // 很老的鱼了
                 {
                     oldFishs.Add(key);
-
-
                 }
             }
 
@@ -361,11 +354,11 @@ namespace Serv4Fish3.ServerSide
                 //lock (this.fishDic)
                 //this.fishDic.Remove(oldFishs[i]);
 
-                FishData fishData;
-                if (!fishDic.TryRemove(oldFishs[i], out fishData))
+                if (!fishCDic.TryRemove(oldFishs[i], out FishData fishData))
                 {
                     Console.WriteLine("很老的鱼了 tryRemove3 失败" + oldFishs[i]);
                 }
+                fishData.dispose(); // todo new
             }
         }
 
@@ -382,28 +375,74 @@ namespace Serv4Fish3.ServerSide
             }
 
             Random random = new Random();
-            if (this.fishDic.Count < 50)
+            if (this.fishCDic.Count < 50)
             {
                 //生成鱼
                 int moveType = random.Next(0, 2); // 0 直走; 1转弯
-                int angOffset, angSpeed;
+                                                  // todo test
+                                                  //moveType = 1; // 转弯
+                moveType = 0; // 直走
+                int angOffset = 0, angSpeed = 0;
 
+                int genPosIndex = random.Next(0, 16); // 出生位置
                 if (moveType == 0)
                 {
-                    angOffset = random.Next(-22, 22);
-                    GenFish111(fishvo, angOffset, 0);
+                    switch (genPosIndex)
+                    {
+                        case 0:
+                        case 2:
+                            angOffset = random.Next(10, 30);
+                            break;
+                        case 1:
+                        case 3:
+                            angOffset = random.Next(-30, -10);
+                            break;
+                        case 4:
+                        case 9:
+                            angOffset = random.Next(-20, -5);
+                            break;
+                        case 5:
+                        case 8:
+                            angOffset = random.Next(-10, 10);
+                            break;
+                        case 6:
+                        case 7:
+                            angOffset = random.Next(-5, 20);
+                            break;
+                        case 10:
+                        case 15:
+                            angOffset = random.Next(-20, 50);
+                            break;
+                        case 11:
+                        case 14:
+                            angOffset = random.Next(-40, 30);
+                            break;
+                        case 12:
+                        case 13:
+                            angOffset = random.Next(-50, 20);
+                            break;
+
+
+                    }
+                    GenFish111(fishvo, genPosIndex, angOffset, 0);
                 }
                 else
                 {
                     if (random.Next(0, 2) == 0)
                     {
-                        angSpeed = random.Next(-15, -9);
+                        //    angSpeed = random.Next(-15, -9);
+                        angSpeed = 5;
                     }
                     else
                     {
-                        angSpeed = random.Next(9, 15);
+                        angSpeed = -5;
+                        //    angSpeed = random.Next(9, 15);
                     }
-                    GenFish111(fishvo, 0, angSpeed);
+                    //todo test start
+                    genPosIndex = 0;
+                    //todo test end
+
+                    GenFish111(fishvo, genPosIndex, 0, angSpeed);
                 }
             }
 
@@ -415,15 +454,16 @@ namespace Serv4Fish3.ServerSide
         /// <param name="fishvo"> 鱼的静态数据.</param>
         /// <param name="angOffset">直走倾斜角.</param>
         /// <param name="angSpeed">转弯角速度.</param>
-        void GenFish111(Fish fishvo, int angOffset, int angSpeed)
+        void GenFish111(Fish fishvo, int genPosIndex, int angOffset, int angSpeed)
         {
             Random random = new Random();
 
-            int genPosIndex = random.Next(0, 16); // 出生位置
             int amount = random.Next(fishvo.Count_max / 2 + 1, fishvo.Count_max); // 这一批的鱼数量
             int speed = random.Next(fishvo.Speed / 2, fishvo.Speed);
 
-            FishData fishData = new FishData();
+            //FishData fishData = new FishData();
+            // todo generator
+            FishData fishData = this._objGenerator.getObj(ObjectMcType.FISH) as FishData;
             //fishData.hp = fishvo.Life;
             //todo test
             fishData.hp = 10;
@@ -441,20 +481,21 @@ namespace Serv4Fish3.ServerSide
                 //string fishguid = (millisecond + i).ToString();
                 long fishguid = millisecond + i;
                 Console.WriteLine(fishguid + " ---- " + i + "/" + amount);
-                if (fishDic.ContainsKey(fishguid))
+                if (fishCDic.ContainsKey(fishguid))
                 {
                     Console.WriteLine("已经包含: " + fishguid);
-                    fishDic[fishguid] = fishData;
+                    //fishCDic[fishguid] = fishData;
+                    // todo test
+                    fishCDic.TryUpdate(fishguid, fishData, null);
                 }
                 else
                 {
                     //fishDic.Add(fishguid, fishData);
-                    if (!fishDic.TryAdd(fishguid, fishData))
+                    if (!fishCDic.TryAdd(fishguid, fishData))
                     {
                         Console.WriteLine("新增鱼失败 tryRemove3 失败" + fishguid);
                     }
                 }
-
             }
 
             string data = millisecond + "|"  // 0
@@ -470,22 +511,6 @@ namespace Serv4Fish3.ServerSide
 
             this.BroadcastMessage(null, ActionCode.FishGenerate, data);
 
-
-            ////Console.WriteLine("鱼数量：" + fishDic.Count);
-            //Console.WriteLine("BroadFISH:" + this.fishDic.Count
-            //        + " Time:" + System.DateTime.Now + System.DateTime.Now.Millisecond);
-            //foreach (long fishguid in this.fishDic.Keys)
-            //{
-            //    Console.WriteLine("fishguid: " + fishguid);
-            //}
-
-            //Console.WriteLine("-----------------------");
-
-
         }
-
-
-
     }
-
 }
