@@ -21,11 +21,6 @@ using System.Diagnostics;
 
 namespace Serv4Fish3
 {
-    class Yao
-    {
-
-    }
-
     class MainClass
     {
         public static void Main(string[] args)
@@ -98,6 +93,7 @@ namespace Serv4Fish3
             Server server = new Server("0.0.0.0", 1234);
             server.Start();
             Console.WriteLine("< 输入 print 回车, 查看服务状态~ > ");
+            Console.WriteLine("< 输入 clear 回车, 清除控制台~ > ");
             Console.WriteLine("< 输入 quit/exit 回车, 关闭服务~ > ");
 
             while (true)
@@ -112,13 +108,17 @@ namespace Serv4Fish3
                         foreach (Room room in server.ListRoom())
                         {
                             Console.WriteLine("room: " + room.GetHashCode());
-                            Console.WriteLine("fishCount: " + room.fishDic.Count);
+                            //Console.WriteLine("fishCount: " + room.fishDic.Count);
+
                         }
                         break;
 
                     case "quit":
                     case "exit":
                         return;
+                    case "clear":
+                        Console.Clear();
+                        break;
                 }
             }
         }
@@ -164,8 +164,6 @@ namespace Serv4Fish3
             yield return new WaitForSeconds(5);
             Console.WriteLine("再等五秒" + " [" + DateTime.Now + "]");
             Console.WriteLine(DateTime.Now.Millisecond);
-
-
         }
 
         //static IEnumerator Test02()

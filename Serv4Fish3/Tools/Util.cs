@@ -59,6 +59,5 @@ namespace Serv4Fish3.Tools
 
             return Convert.ToInt64(ts.TotalMilliseconds);
         }
-
     }
 }
