@@ -80,6 +80,7 @@
     <Compile Include="Tools\ObjectPool\GeneratorMc.cs" />
     <Compile Include="Tools\ObjectPool\ObjectMcType.cs" />
     <Compile Include="Tools\ObjectPool\FishData.cs" />
+    <Compile Include="Tools\Defines.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FishCommon3\FishCommon3.csproj">

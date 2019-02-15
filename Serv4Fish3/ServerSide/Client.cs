@@ -165,6 +165,10 @@ namespace Serv4Fish3.ServerSide
         {
             Console.WriteLine("[" + DateTime.Now + "] " + "用户[{0}]断开连接", this.ipaddress);
 
+
+            if (this.room != null)
+                room.QuitRoom(this); // 用户退出 检测关闭房间
+
             // 退出时保存钱包
             this.SaveSQL();
 
@@ -175,8 +179,8 @@ namespace Serv4Fish3.ServerSide
             if (clientSocket != null)
                 clientSocket.Close();
 
-            if (this.room != null)
-                room.QuitRoom(this); // 用户退出 检测关闭房间
+            //if (this.room != null)
+            //room.QuitRoom(this); // 用户退出 检测关闭房间
 
             server.RemoveClient(this);
 
@@ -196,20 +200,20 @@ namespace Serv4Fish3.ServerSide
             clientSocket.Send(bytes);
         }
 
-        public void HeartBeat()
-        {
-            //long timeNow = Util.GetTimeStamp();
-            //if (this.LastTickTime < timeNow - 20) // 20 秒超时
-            //{
-            //    Console.WriteLine("心跳超时, 关闭连接");
-            //    this.Close();
-            //}
-            //else // 继续发心跳
-            //{
-            Console.WriteLine("发出心跳: " + DateTime.Now);
-            this.Send(ActionCode.PingFromServ, "a");
-            //}
-        }
+        //public void HeartBeat()
+        //{
+        //    //long timeNow = Util.GetTimeStamp();
+        //    //if (this.LastTickTime < timeNow - 20) // 20 秒超时
+        //    //{
+        //    //    Console.WriteLine("心跳超时, 关闭连接");
+        //    //    this.Close();
+        //    //}
+        //    //else // 继续发心跳
+        //    //{
+        //    Console.WriteLine("发出心跳: " + DateTime.Now);
+        //    this.Send(ActionCode.PingFromServ, "a");
+        //    //}
+        //}
 
 
     }

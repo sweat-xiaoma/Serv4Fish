@@ -33,8 +33,8 @@ namespace Serv4Fish3.ServerSide
             ipEndPoint = new IPEndPoint(IPAddress.Parse(ipStr), port);
         }
 
-        // 心跳计时器
-        System.Timers.Timer heartbeatTimer = new System.Timers.Timer(1000);
+        //// 心跳计时器
+        //System.Timers.Timer heartbeatTimer = new System.Timers.Timer(1000);
 
         public void Start()
         {
@@ -55,13 +55,13 @@ namespace Serv4Fish3.ServerSide
             Console.WriteLine("[" + DateTime.Now + "] " + "服务启动成功～");
         }
 
-        void initHeartBeat()
-        {
-            this.heartbeatTimer.Elapsed += this.HeartbeatTimer_Elapsed;
-            this.heartbeatTimer.AutoReset = false;
-            this.heartbeatTimer.Enabled = true;
-            Console.WriteLine("[" + DateTime.Now + "] " + "开启心跳检查～");
-        }
+        //void initHeartBeat()
+        //{
+        //    this.heartbeatTimer.Elapsed += this.HeartbeatTimer_Elapsed;
+        //    this.heartbeatTimer.AutoReset = false;
+        //    this.heartbeatTimer.Enabled = true;
+        //    Console.WriteLine("[" + DateTime.Now + "] " + "开启心跳检查～");
+        //}
 
         void initFishStaticData()
         {
@@ -81,21 +81,18 @@ namespace Serv4Fish3.ServerSide
             Console.WriteLine("[" + DateTime.Now + "] " + "管理鱼群线程开始～");
         }
 
-
         void generateFishWithDelay()
         {
             Random random = new Random();
             while (true)
             {
-                //Thread.Sleep(TimeSpan.FromSeconds(0.5f));
-                Thread.Sleep(TimeSpan.FromSeconds(0.1f));
-                //Thread.Sleep(TimeSpan.FromSeconds(50));
-                //Console.WriteLine("检查进行发鱼" + DateTime.Now + ":" + DateTime.Now.Millisecond);
+                Thread.Sleep(TimeSpan.FromSeconds(Defines.GENERATE_RATE));
+                //Thread.Sleep(TimeSpan.FromSeconds(0.1f));
+                if (this.fishList.Count == 0)
+                    continue;
                 int randomIndex = random.Next(0, this.fishList.Count);
                 //int randomIndex = 10; // todo test
                 Fish fishvo = this.fishList[randomIndex];
-                //Console.WriteLine("97: " + this.roomList.Count);
-                //lock (this.roomList)
                 foreach (Room item in this.roomList)
                 {
                     try
@@ -104,43 +101,41 @@ namespace Serv4Fish3.ServerSide
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine("count: " + this.roomList.Count);
                         Console.WriteLine("[" + DateTime.Now + "] generateFishWithDelay 异常 Exception: " + ex.Message);
                     }
                 }
-            }
-        }
-
-
-        void HeartbeatTimer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            // 处理心跳
-            this.HeartBeat();
-            heartbeatTimer.Start();
-        }
-
-        void HeartBeat()
-        {
-            //// 发给客户端, 客户端收到 返回一个在 User 中, 如果 上次收到的时间到这次 差距过大, 表示掉线了
-            //// todo 先只给房主发
-            foreach (Client client in this.clientList)
-            {
-                if (client.isMaster == 1)
-                {
-                    //// 返回时间超过的客户端 踢掉
-                    //long timeNow = Util.GetTimeStamp();
-                    //if (client.LastTickTime < timeNow - 20) // 20 秒超时
-                    //{
-                    //    //lock
-                    //}
-                    //client.Send(ActionCode.HeartBeatServ, "a");
-                    client.HeartBeat();
-                }
 
             }
-
-
         }
+
+
+        //void HeartbeatTimer_Elapsed(object sender, ElapsedEventArgs e)
+        //{
+        //    // 处理心跳
+        //    this.HeartBeat();
+        //    heartbeatTimer.Start();
+        //}
+
+        //void HeartBeat()
+        //{
+        //    //// 发给客户端, 客户端收到 返回一个在 User 中, 如果 上次收到的时间到这次 差距过大, 表示掉线了
+        //    //// todo 先只给房主发
+        //    foreach (Client client in this.clientList)
+        //    {
+        //        if (client.isMaster == 1)
+        //        {
+        //            //// 返回时间超过的客户端 踢掉
+        //            //long timeNow = Util.GetTimeStamp();
+        //            //if (client.LastTickTime < timeNow - 20) // 20 秒超时
+        //            //{
+        //            //    //lock
+        //            //}
+        //            //client.Send(ActionCode.HeartBeatServ, "a");
+        //            client.HeartBeat();
+        //        }
+
+        //    }
+        //}
 
         void AcceptCallback(IAsyncResult ar)
         {
@@ -181,12 +176,12 @@ namespace Serv4Fish3.ServerSide
 
         public void RemoveRoom(Room room)
         {
-            //lock (roomList)
-            if (roomList != null && room != null)
-            {
-                Console.WriteLine("[" + DateTime.Now + "] " + "销毁空房间 [{0}] ", room.GetHashCode());
-                roomList.Remove(room);
-            }
+            lock (roomList)
+                if (roomList != null && room != null)
+                {
+                    Console.WriteLine("[" + DateTime.Now + "] " + "销毁空房间 [{0}] ", room.GetHashCode());
+                    roomList.Remove(room);
+                }
         }
 
         public List<Room> ListRoom()

@@ -54,10 +54,10 @@ namespace Serv4Fish3.Tools.ObjectPool
 
         public void clear()
         {
-            foreach (IObjectMc item in this._IdlePool.Values)
-            {
-                item.del();
-            }
+            //foreach (IObjectMc item in this._IdlePool.Values)
+            //{
+            //    item.del();
+            //}
 
             this._IdlePool = null;
             this._IdlePool = new Dictionary<int, IObjectMc>();

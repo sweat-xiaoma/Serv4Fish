@@ -1,10 +1,16 @@
 ﻿<Properties StartupConfiguration="{B66DF2C2-269B-4AAE-AE97-FB8313DCAE23}|Default">
   <MonoDevelop.Ide.ItemProperties.Serv4Fish3 PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="ServerSide/Server.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="../FishCommon3/ActionCode.cs">
     <Files>
-      <File FileName="ServerSide/Client.cs" Line="179" Column="28" />
-      <File FileName="ServerSide/Room.cs" Line="157" Column="25" />
-      <File FileName="ServerSide/Server.cs" Line="186" Column="10" />
+      <File FileName="ServerSide/Client.cs" Line="113" Column="10" />
+      <File FileName="ServerSide/Room.cs" Line="275" Column="21" />
+      <File FileName="ServerSide/Server.cs" Line="89" Column="72" />
+      <File FileName="Tools/ObjectPool/IObjectMc.cs" Line="17" Column="14" />
+      <File FileName="Tools/ObjectPool/FishData.cs" Line="25" Column="21" />
+      <File FileName="../FishCommon3/ActionCode.cs" Line="28" Column="33" />
+      <File FileName="Controller/RoomController.cs" Line="74" Column="63" NotebookId="1" />
+      <File FileName="Tools/Defines.cs" Line="8" Column="49" NotebookId="1" />
+      <File FileName="../FishCommon3/ReturnCode.cs" Line="7" Column="14" NotebookId="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

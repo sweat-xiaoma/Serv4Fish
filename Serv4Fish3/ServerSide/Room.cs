@@ -130,13 +130,6 @@ namespace Serv4Fish3.ServerSide
             }
             if (isEmpty)
             {
-                Console.WriteLine("133...");
-
-
-                // 清空对象池
-                this.DestroyDistributorAndGenerator();
-
-
                 DestroyRoom();
             }
             else
@@ -161,7 +154,11 @@ namespace Serv4Fish3.ServerSide
         // 销毁房间
         void DestroyRoom()
         {
+            Console.WriteLine("164 DestroyRoom~~");
             server.RemoveRoom(this);
+
+            // 清空对象池
+            this.DestroyDistributorAndGenerator();
         }
 
         /// <summary>
@@ -365,7 +362,11 @@ namespace Serv4Fish3.ServerSide
         // 生成鱼
         public void GenerateFishs(Fish fishvo)
         {
-            //Console.WriteLine("fishGenLoop: " + this.fishGenLoop + " Time: " + DateTime.Now + ":" + DateTime.Now.Millisecond);
+            if (this.iceLeft > 0) // 冰冻中
+            {
+                this.iceLeft--;
+                return;
+            }
 
             fishGenLoop++;
             if (fishGenLoop > 100) // 100*.5 = 50秒
@@ -510,7 +511,23 @@ namespace Serv4Fish3.ServerSide
                 ;
 
             this.BroadcastMessage(null, ActionCode.FishGenerate, data);
+        }
 
+        //public bool icing;
+        //public float ic
+        public int iceLeft; // 剩余冰冻时间 
+
+        public bool StartFrozen()
+        {
+            //if (this.icing == false)
+            if (this.iceLeft <= 0)
+            {
+                //this.icing = true;
+                this.iceLeft = Defines.SKILL_ICE_DURATION;
+                return true;
+            }
+
+            return false;
         }
     }
 }

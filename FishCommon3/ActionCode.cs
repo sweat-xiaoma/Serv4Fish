@@ -36,6 +36,7 @@ namespace FishCommon3
         PongFromServ,
 
         UpgradeCannon, // 升级火炮
+        GameSkill, // 技能
 
 
 
