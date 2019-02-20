@@ -21,22 +21,24 @@ namespace Serv4Fish3.ServerSide
     public class Room
     {
         //Dictionary<long, FishData> fishDic = new Dictionary<long, FishData>();
-        ConcurrentDictionary<long, FishData> fishCDic = new ConcurrentDictionary<long, FishData>();
-
-
+        //ConcurrentDictionary<long, FishData> fishCDic = new ConcurrentDictionary<long, FishData>();
+        ConcurrentDictionary<string, FishData> fishCDic = new ConcurrentDictionary<string, FishData>();
+        public int iceLeft; // 剩余冰冻时间 
         public const int MaxPeople = 4; // 1;
-
         Client[] clientArray = new Client[MaxPeople];
-        //RoomState state = RoomState.WaitingJoin;
-
         Server server;
+        // 房间的场景号
+        public readonly SceneIndex SceneIndex;
+        int fishguidprefix = 0;
 
-        public Room(Server server)
+        public Room(Server server, SceneIndex sceneIndex)
         {
             this.server = server;
+            this.SceneIndex = sceneIndex;
 
             // 初始化对象池
             this.InitDistributorAndGenerator();
+            this.fishguidprefix = this.GetHashCode();
         }
 
         DistributorMc _objDistributor;
@@ -108,6 +110,17 @@ namespace Serv4Fish3.ServerSide
             client.Room = null;
             //clientList.Remove(client);
             clientArray[index] = null;
+        }
+
+
+        public Client GetClient(int corner)
+        {
+            foreach (Client item in this.clientArray)
+            {
+                if (item != null && item.GetUser().Corner == corner)
+                    return item;
+            }
+            return null;
         }
 
         public void QuitRoom(Client client)
@@ -195,10 +208,10 @@ namespace Serv4Fish3.ServerSide
             return sb.ToString();
         }
 
-        //todo test
-        int generateIndex;
-        //todo test
-        int deadIndex;
+        ////todo test
+        //int generateIndex;
+        ////todo test
+        //int deadIndex;
 
         /// <summary>
         /// 房内广播
@@ -216,52 +229,56 @@ namespace Serv4Fish3.ServerSide
 #if DEBUG_VIEW
                     sb.Append(client.GetUser().Username + ",");
 #endif 
-                    server.SendResponse(client, actionCode, data);
+                    server.SendResponse2Client(client, actionCode, data);
                 }
             }
 
 #if DEBUG_VIEW
 
-            if (actionCode == ActionCode.FishGenerate)
-            {
-                generateIndex++;
-                Console.WriteLine("[" + DateTime.Now + "] " + "房间[{0}]内广播消息[{1}]给[{2}]   ->  [{3}]", this.GetHashCode(), actionCode, sb, data);
-                Console.WriteLine("出生: " + generateIndex + "  count:" + this.fishCDic.Count);
-            }
+            //if (actionCode == ActionCode.FishGenerate)
+            //{
+            //    generateIndex++;
+            //    Console.WriteLine("[" + DateTime.Now + "] " + "房间[{0}]内广播消息[{1}]给[{2}]   ->  [{3}]", this.GetHashCode(), actionCode, sb, data);
+            //    Console.WriteLine("出生: " + generateIndex + "  count:" + this.fishCDic.Count);
+            //}
 
 
-            if (actionCode == ActionCode.FishDead)
-            {
-                deadIndex++;
-                Console.WriteLine("[" + DateTime.Now + "] 死亡" + data);
-                Console.WriteLine("死亡: " + deadIndex);
-            }
+            //if (actionCode == ActionCode.FishDead)
+            //{
+            //    deadIndex++;
+            //    Console.WriteLine("[" + DateTime.Now + "] 死亡" + data);
+            //    Console.WriteLine("死亡: " + deadIndex);
+            //}
+
+
+            ////todo test start
+            //Console.WriteLine("[" + DateTime.Now + "] [广播] ActionCode: {0} data: {1}", actionCode, data);
+            ////todo test end
 #endif
 
         }
 
-        public void HitFish(Client client, long fishguid)
+        public void HitFish(Client client, string fishguid)
         {
-#if DEBUGVIEW0214
-            Console.WriteLine("");
-            Console.WriteLine("");
-            Console.WriteLine("245 -------------------------");
-            Console.WriteLine(fishguid);
-#endif
+            //#if DEBUGVIEW0214
+            //            Console.WriteLine("");
+            //            Console.WriteLine("");
+            //            Console.WriteLine("245 -------------------------");
+            //            Console.WriteLine(fishguid);
+            //#endif
             if (fishCDic.ContainsKey(fishguid))
             {
-
                 FishData findFish = fishCDic[fishguid];
-
                 findFish.hp -= client.GetUser().CannonLvCurr;
-
 #if DEBUGVIEW0214
-                Console.WriteLine("包含鱼: " + fishguid + " hp:" + findFish.hp);
+                Console.WriteLine("包含鱼: " + fishguid + " coin:" + findFish.coin + " hp:" + findFish.hp);
 #endif
 
                 if (findFish.hp <= 0)
                 {
 #if DEBUGVIEW0214
+                    Console.WriteLine("kill by corner: " + client.GetUser().Corner
+                             + " hashcode: " + client.GetHashCode());
                     Console.WriteLine("移除鱼: " + fishguid);
 #endif
 
@@ -306,71 +323,35 @@ namespace Serv4Fish3.ServerSide
             }
         }
 
-        public void FishOutByClient(Client client, long fishguid)
+        public void FishOutByClient(Client client, string fishguid)
         {
             if (fishCDic.ContainsKey(fishguid))
             {
                 FishData findData = fishCDic[fishguid];
-                ////todo test  
-                //lock (fishDic)
-                //fishDic.Remove(fishguid); // 出屏了。 移除掉。 
-                //#if DEBUG_VIEW
-                //                Console.WriteLine("出屏 鱼减少， 鱼数量: " + fishDic.Count);
-                //#endif
                 if (!fishCDic.TryRemove(fishguid, out FishData fishData))
                 {
                     Console.WriteLine("出屏 tryRemove2 失败" + fishguid);
                 }
-                fishData.dispose(); // todo new
+                fishData.dispose();
             }
         }
-
-        //float fishGenWaitTime = 0.5f; // 鱼和鱼的生成间隔
-
-        public int fishGenLoop;
-
-        void CheckOldFish()
-        {
-            //Console.WriteLine("清理老鱼!");
-            fishGenLoop = 0;
-            long now = Util.GetTimeStamp() - 100;
-
-            List<long> oldFishs = new List<long>();
-            // 清理一次 防止意外没清理掉的死鱼.
-            foreach (long key in this.fishCDic.Keys)
-            {
-                if (key < now) // 很老的鱼了
-                {
-                    oldFishs.Add(key);
-                }
-            }
-
-            for (int i = 0; i < oldFishs.Count; i++)
-            {
-                ////todo test线程问题
-                //lock (this.fishDic)
-                //this.fishDic.Remove(oldFishs[i]);
-
-                if (!fishCDic.TryRemove(oldFishs[i], out FishData fishData))
-                {
-                    Console.WriteLine("很老的鱼了 tryRemove3 失败" + oldFishs[i]);
-                }
-                fishData.dispose(); // todo new
-            }
-        }
-
         // 生成鱼
         public void GenerateFishs(Fish fishvo)
         {
             if (this.iceLeft > 0) // 冰冻中
             {
                 this.iceLeft--;
+                if (this.iceLeft <= 0)
+                {
+                    Console.WriteLine("解冻~");
+                    // 广播解冻
+                    this.BroadcastMessage(null, ActionCode.SkillFrozenOver, "aa");
+                }
                 return;
             }
 
             fishGenLoop++;
             if (fishGenLoop > 100) // 100*.5 = 50秒
-            //if (fishGenLoop > 25) // 50*.5 = 25秒 .
             {
                 CheckOldFish();
             }
@@ -422,8 +403,6 @@ namespace Serv4Fish3.ServerSide
                         case 13:
                             angOffset = random.Next(-50, 20);
                             break;
-
-
                     }
                     GenFish111(fishvo, genPosIndex, angOffset, 0);
                 }
@@ -446,8 +425,8 @@ namespace Serv4Fish3.ServerSide
                     GenFish111(fishvo, genPosIndex, 0, angSpeed);
                 }
             }
-
         }
+
 
         /// <summary>
         /// Gens the fish111.
@@ -462,26 +441,20 @@ namespace Serv4Fish3.ServerSide
             int amount = random.Next(fishvo.Count_max / 2 + 1, fishvo.Count_max); // 这一批的鱼数量
             int speed = random.Next(fishvo.Speed / 2, fishvo.Speed);
 
-            //FishData fishData = new FishData();
             // todo generator
-            FishData fishData = this._objGenerator.getObj(ObjectMcType.FISH) as FishData;
-            //fishData.hp = fishvo.Life;
-            //todo test
-            fishData.hp = 10;
-            fishData.coin = fishvo.Kill_bonus;
-
-            //string millisecond = DateTime.Now + "" + DateTime.Now.Millisecond;
-            //string millisecond = Guid.NewGuid().ToString();
-            long millisecond = Util.GetTimeStamp();
-
+            this.fishguidprefix++;
             Console.WriteLine("");
             Console.WriteLine("");
             for (int i = 0; i < amount; i++)
             {
+                FishData fishData = this._objGenerator.getObj(ObjectMcType.FISH) as FishData;
+                fishData.hp = fishvo.Life;
+                //todo test
+                //fishData.hp = 10;
+                fishData.coin = fishvo.Kill_bonus;
+                fishData.birthTime = Util.GetTimeStamp;
                 // 毫秒加层数
-                //string fishguid = (millisecond + i).ToString();
-                long fishguid = millisecond + i;
-                Console.WriteLine(fishguid + " ---- " + i + "/" + amount);
+                string fishguid = this.fishguidprefix + "" + i;
                 if (fishCDic.ContainsKey(fishguid))
                 {
                     Console.WriteLine("已经包含: " + fishguid);
@@ -499,7 +472,7 @@ namespace Serv4Fish3.ServerSide
                 }
             }
 
-            string data = millisecond + "|"  // 0
+            string data = this.fishguidprefix + "|"  // 0
                 + fishvo.Life + "|"  // 1
                 + fishvo.Kill_bonus + "|"  // 2
                 + amount + "|"  // 3
@@ -513,21 +486,72 @@ namespace Serv4Fish3.ServerSide
             this.BroadcastMessage(null, ActionCode.FishGenerate, data);
         }
 
-        //public bool icing;
-        //public float ic
-        public int iceLeft; // 剩余冰冻时间 
+        void joinRoomFishes()
+        {
+            string guid = "";
+            int kill_bonus = 1;
+            int speed = 2;
+            float angle = 0f;
+            int angSpeed = 4;
+            int angOffset = 3;
+            string data = guid + "|"
+                + kill_bonus + "|"
+                + speed + "|"
+                + angle + "|"
+                + angSpeed + "|"
+                + angOffset + "|"
+                ;
+        }
 
         public bool StartFrozen()
         {
-            //if (this.icing == false)
             if (this.iceLeft <= 0)
             {
-                //this.icing = true;
                 this.iceLeft = Defines.SKILL_ICE_DURATION;
+                Console.WriteLine("开始冷冻~~");
                 return true;
             }
 
             return false;
         }
+
+
+
+        public int fishGenLoop;
+
+        void CheckOldFish()
+        {
+            //Console.WriteLine("清理老鱼!");
+            fishGenLoop = 0;
+            long old = Util.GetTimeStamp - 100;
+            //long old = Util.GetTimeStamp - 10;
+
+            List<string> oldFishs = new List<string>();
+            // 清理一次 防止意外没清理掉的死鱼.
+            foreach (KeyValuePair<string, FishData> item in this.fishCDic)
+            {
+                if (item.Value.birthTime < old)
+                {
+                    oldFishs.Add(item.Key);
+                }
+            }
+
+            Console.WriteLine("清理老鱼: " + oldFishs.Count);
+
+            for (int i = 0; i < oldFishs.Count; i++)
+            {
+                ////todo test线程问题
+                //lock (this.fishDic)
+                //this.fishDic.Remove(oldFishs[i]);
+
+                if (!fishCDic.TryRemove(oldFishs[i], out FishData fishData))
+                {
+                    Console.WriteLine("很老的鱼了 tryRemove3 失败" + oldFishs[i]);
+                }
+                fishData.dispose(); // todo new
+            }
+        }
+
+
     }
 }

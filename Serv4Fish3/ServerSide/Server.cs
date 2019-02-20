@@ -92,6 +92,8 @@ namespace Serv4Fish3.ServerSide
                     continue;
                 int randomIndex = random.Next(0, this.fishList.Count);
                 //int randomIndex = 10; // todo test
+                //randomIndex = 17;
+                //randomIndex = random.Next(16, 18);
                 Fish fishvo = this.fishList[randomIndex];
                 foreach (Room item in this.roomList)
                 {
@@ -105,6 +107,7 @@ namespace Serv4Fish3.ServerSide
                     }
                 }
 
+                //Thread.Sleep(TimeSpan.FromSeconds(30f));
             }
         }
 
@@ -154,8 +157,9 @@ namespace Serv4Fish3.ServerSide
                 clientList.Remove(client);
         }
 
-        public void SendResponse(Client client, ActionCode actionCode, string data)
+        public void SendResponse2Client(Client client, ActionCode actionCode, string data)
         {
+            //Console.WriteLine(client.GetHashCode());
             client.Send(actionCode, data);
         }
 
@@ -165,14 +169,13 @@ namespace Serv4Fish3.ServerSide
         }
 
         //public void CreateRoom(Client client)
-        Room CreateRoom(Client client)
+        Room CreateRoom(Client client, SceneIndex sceneIndex)
         {
-            Room room = new Room(this);
+            Room room = new Room(this, sceneIndex);
             room.AddClient(client, 0); // 创建的空房间 玩家坐在 0 号座位上
             roomList.Add(room);
             return room;
         }
-
 
         public void RemoveRoom(Room room)
         {
@@ -195,24 +198,28 @@ namespace Serv4Fish3.ServerSide
         }
 
         // 快速游戏 （进入最近的一个有空座位的房间）
-        public Room JoinRoomFast(Client client)
+        public Room JoinRoomFast(Client client, SceneIndex sceneIndex)
         {
             foreach (Room item in roomList)
             {
-                int seat = item.EmptySeat();
-                if (seat != -1) // 找到空位了坐下
+                if (item.SceneIndex == sceneIndex)
                 {
-                    item.AddClient(client, seat);
-                    return item;
+                    int seat = item.EmptySeat();
+                    if (seat != -1) // 找到空位了坐下
+                    {
+                        Console.WriteLine("用户坐下: " + seat);
+                        item.AddClient(client, seat);
+                        return item;
+                    }
                 }
             }
 
             // 没有空房间，创建一个
-            Room room = this.CreateRoom(client);
+            Room room = this.CreateRoom(client, sceneIndex);
             return room;
         }
 
-        // 用户重复连接 // todo 用guid检测登陆过期
+        // 用户重复连接 用guid检测登陆过期
         public bool CheckUserRepeat(string username)
         {
             foreach (Client client in clientList)

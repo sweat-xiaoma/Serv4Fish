@@ -9,6 +9,10 @@ namespace Serv4Fish3.Controller
 {
     public class UserController : BaseController
     {
+        const int Scene_Open1 = 1;
+        const int Scene_Open2 = 30;
+        const int Scene_Open3 = 60;
+
         public UserController()
         {
             requestCode = RequestCode.User;
@@ -16,30 +20,60 @@ namespace Serv4Fish3.Controller
 
         public string Login(string data, Client client, Server server)
         {
-            string[] strs = data.Split(',');
+            Console.WriteLine("Login hashcode: " + client.GetHashCode());
+            string[] strs = data.Split('|');
             string guid = strs[0];
+            SceneIndex gameindex = (SceneIndex)int.Parse(strs[1]);
 
             if (!server.CheckUserRepeat(guid)) // 检测用户重复登陆
             {
                 return ((int)ReturnCode.Fail).ToString();
             }
-
             UserDAO userDAO = new UserDAO();
             User user = userDAO.VerifyUser(client.MySQlConn, guid);
+            //user.CannonLvOpen
             if (user == null)
             {
                 return ((int)ReturnCode.Notdfound).ToString();
             }
             else
             {
+                bool enterFail = true;
+                SceneIndex enterScene = gameindex; // 最后进入的场景
+                switch (gameindex)
+                {
+                    case SceneIndex.AUTO: // 快速游戏 优先进入高级场景
+                        enterFail = false;
+                        if (user.CannonLvOpen >= Scene_Open3)
+                            enterScene = SceneIndex.SCENE_3;
+                        else if (user.CannonLvOpen >= Scene_Open2)
+                            enterScene = SceneIndex.SCENE_2;
+                        else
+                            enterScene = SceneIndex.SCENE_1;
+
+                        break;
+                    case SceneIndex.SCENE_1: // 场景1
+                        enterFail = false;
+                        break;
+                    case SceneIndex.SCENE_2: // 场景2
+                        enterFail = user.CannonLvOpen < Scene_Open2;
+                        break;
+                    case SceneIndex.SCENE_3: // 场景3
+                        enterFail = user.CannonLvOpen < Scene_Open3;
+                        break;
+                }
+                if (enterFail)
+                    return ((int)ReturnCode.ERROR_A).ToString();
+
+                user.EnterScene = enterScene;
+
                 WalletDAO walletDAO = new WalletDAO();
                 Wallet wallet = walletDAO.GetWalletByUsername(client.MySQlConn, user.Username);
                 client.SetUserData(user, wallet); // 设置玩家信息
                 return ((int)ReturnCode.Success).ToString() + ","
                                                 + wallet.Money + ","
-                                                + wallet.Diamond;
-
-
+                                                + wallet.Diamond + ","
+                                                + user.CannonLvOpen;
             }
         }
 
@@ -87,23 +121,31 @@ namespace Serv4Fish3.Controller
         //    return "";
         //}
 
-        // 接收到客户端 响应的心跳
-        public string PongFromClient(string data, Client client, Server server)
-        {
-            if (data == "c")
-            {
-                client.LastTickTime = Util.GetTimeStamp();
-            }
-            System.Console.WriteLine("收到了{0} 客户端发来的pong {1} ",
-                        client.ipaddress, DateTime.Now);
-            return "";
-        }
+        //// 接收到客户端 响应的心跳
+        //public string PongFromClient(string data, Client client, Server server)
+        //{
+        //    if (data == "c")
+        //    {
+        //        client.LastTickTime = Util.GetTimeStamp();
+        //    }
+        //    System.Console.WriteLine("收到了{0} 客户端发来的pong {1} ",
+        //                client.ipaddress, DateTime.Now);
+        //    return "";
+        //}
 
         public string UpgradeCannon(string data, Client client, Server server)
         {
             if (data == "gg")
             {
                 int currLv = client.GetUser().CannonLvCurr;
+
+                if (currLv >= Defines.CANNON_LV_MAX)
+                {
+                    string data141 = ((int)ReturnCode.ERROR_A).ToString();
+                    server.SendResponse2Client(client, ActionCode.UpgradeCannon, data141);
+                    return "";
+                }
+
                 int nextlv = this.NextCannonLv(currLv);
                 int cost = nextlv / 5; // 等级除以5 作为升级消耗钻石数目
                 int userDiamond = client.GetWallet().Diamond;
@@ -112,7 +154,8 @@ namespace Serv4Fish3.Controller
                 {
                     // 钻石不足
                     string data114 = ((int)ReturnCode.Fail).ToString();
-                    server.SendResponse(client, ActionCode.UpgradeCannon, data114);
+                    server.SendResponse2Client(client, ActionCode.UpgradeCannon, data114);
+                    return "";
                 }
                 else
                 {
@@ -133,8 +176,8 @@ namespace Serv4Fish3.Controller
                         nextlv;
                     room.BroadcastMessage(null, ActionCode.ChangeCost, data132);
 
-                    string data136 = ((int)ReturnCode.Success).ToString();
-                    server.SendResponse(client, ActionCode.UpgradeCannon, data136);
+                    string data177 = (int)ReturnCode.Success + "," + nextlv;
+                    server.SendResponse2Client(client, ActionCode.UpgradeCannon, data177);
                 }
             }
             return "";
@@ -147,17 +190,21 @@ namespace Serv4Fish3.Controller
             {
                 nextLv = 10;
             }
-            else if (currLv < 100)
+            else if (currLv < Defines.CANNON_LV_MAX)
             {
                 nextLv = currLv + 10;
             }
-            else if (currLv < 1000)
+            //else if (currLv < 1000)
+            //{
+            //    nextLv = currLv + 50;
+            //}
+            //else if (currLv < 10000)
+            //{
+            //    nextLv = currLv + 100;
+            //}
+            else if (currLv >= Defines.CANNON_LV_MAX)
             {
-                nextLv = currLv + 50;
-            }
-            else if (currLv < 10000)
-            {
-                nextLv = currLv + 100;
+                nextLv = Defines.CANNON_LV_MAX;
             }
 
             return nextLv;
@@ -178,14 +225,14 @@ namespace Serv4Fish3.Controller
             {
                 preLv = currLv - 10;
             }
-            else if (currLv <= 1000)
-            {
-                preLv = currLv - 50;
-            }
-            else if (currLv <= 10000)
-            {
-                preLv = currLv - 100;
-            }
+            //else if (currLv <= 1000)
+            //{
+            //    preLv = currLv - 50;
+            //}
+            //else if (currLv <= 10000)
+            //{
+            //    preLv = currLv - 100;
+            //}
 
             return preLv;
         }

@@ -1,10 +1,13 @@
-﻿using System;
-namespace FishCommon3
+﻿namespace FishCommon3
 {
     public enum ReturnCode
     {
         Success,
         Fail,
-        Notdfound
+        Notdfound,
+
+        ERROR_A,
+        ERROR_B,
+        ERROR_C
     }
 }

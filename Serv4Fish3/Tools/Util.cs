@@ -52,12 +52,33 @@ namespace Serv4Fish3.Tools
             return (DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000000;
         }
 
-        static DateTime DateTime1970 = new DateTime(1970, 1, 1);
-        public static long GetTimeStamp()
+        static readonly DateTime DateTime1970 = new DateTime(1970, 1, 1);
+        /// <summary>
+        /// 返回时间戳(秒)
+        /// </summary>
+        /// <returns>The time stamp.</returns>
+        public static long GetTimeStamp
         {
-            TimeSpan ts = DateTime.UtcNow - DateTime1970;
+            //TimeSpan ts = DateTime.UtcNow - DateTime1970;
+            //return Convert.ToInt64(ts.TotalSeconds);
+            get
+            {
+                TimeSpan ts = DateTime.UtcNow - DateTime1970;
+                return Convert.ToInt64(ts.TotalSeconds);
+            }
+        }
 
-            return Convert.ToInt64(ts.TotalMilliseconds);
+        /// <summary>
+        /// 返回时间戳(毫秒)
+        /// </summary>
+        /// <returns>The time stamp ms.</returns>
+        public static long GetTimeStampMs
+        {
+            get
+            {
+                TimeSpan ts = DateTime.UtcNow - DateTime1970;
+                return Convert.ToInt64(ts.TotalMilliseconds);
+            }
         }
     }
 }

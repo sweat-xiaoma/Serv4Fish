@@ -30,8 +30,7 @@ namespace Serv4Fish3.Controller
 
         public void HandleRequest(RequestCode requestCode, ActionCode actionCode, string data, Client client)
         {
-            BaseController controller;
-            bool isGet = controllerDict.TryGetValue(requestCode, out controller);
+            bool isGet = controllerDict.TryGetValue(requestCode, out BaseController controller);
             if (!isGet)
             {
                 Console.WriteLine("[" + DateTime.Now + "] " + "无法得到[{0}] 所对应的 Controller，无法处理请求", requestCode); // 写日志
@@ -45,21 +44,19 @@ namespace Serv4Fish3.Controller
             }
 
             object[] parameters = new object[] { data, client, this.server };
-            /*
-            Console.WriteLine("[" + DateTime.Now + "] " + "[ControllerManager - 处理] " +
-                "\n\tController: {0} " +
-                "\n\tmethod: {1} " +
-                "\n\tdata: {2}",
-                controller,
-                methodName,
-                data);
-                */
+            //Console.WriteLine("[" + DateTime.Now + "] " + "[ControllerManager - 处理] " +
+            //"\n\tController: {0} " +
+            //"\n\tmethod: {1} " +
+            //"\n\tdata: {2}",
+            //controller,
+            //methodName,
+            //data);
             object re = methodInfo.Invoke(controller, parameters);
             if (re == null || string.IsNullOrEmpty(re as string))
             {
                 return;
             }
-            server.SendResponse(client, actionCode, re as string);
+            server.SendResponse2Client(client, actionCode, re as string);
 
         }
 

@@ -33,7 +33,7 @@
     <Compile Include="RequestCode.cs" />
     <Compile Include="ActionCode.cs" />
     <Compile Include="ReturnCode.cs" />
-    <Compile Include="RoleType.cs" />
+    <Compile Include="Enums.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

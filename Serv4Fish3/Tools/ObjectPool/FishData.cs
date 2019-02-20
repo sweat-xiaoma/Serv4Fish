@@ -5,13 +5,7 @@ namespace Serv4Fish3.Tools.ObjectPool
     {
         public int hp; // 血量
         public int coin; // 金币
-
-        //public int HashCode
-        //{
-        //    get => throw new NotImplementedException();
-        //    set => throw new NotImplementedException();
-        //}
-
+        public long birthTime; // 出生时间
 
         IDistributorMc _dis;
 
@@ -30,12 +24,16 @@ namespace Serv4Fish3.Tools.ObjectPool
 
         public void dispose()
         {
+            //Console.WriteLine("dispose 鱼: " + this.GetHashCode());
+
             this.IsIdle = true;
             this._dis.distribution(this);
         }
 
         public void reset()
         {
+            //Console.WriteLine("reset 鱼: " + this.GetHashCode());
+
             this.IsIdle = false;
             this._dis.distribution(this);
         }

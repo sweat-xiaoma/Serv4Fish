@@ -81,6 +81,9 @@
     <Compile Include="Tools\ObjectPool\ObjectMcType.cs" />
     <Compile Include="Tools\ObjectPool\FishData.cs" />
     <Compile Include="Tools\Defines.cs" />
+    <Compile Include="EmptyClassA.cs" />
+    <Compile Include="EmptyClassB.cs" />
+    <Compile Include="EmptyClassC.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FishCommon3\FishCommon3.csproj">

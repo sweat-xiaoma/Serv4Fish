@@ -12,7 +12,7 @@ namespace Serv4Fish3.ServerSide
     public class Client
     {
         public string ipaddress;
-        public long LastTickTime = Util.GetTimeStamp();
+        public long LastTickTime = Util.GetTimeStamp;
         Socket clientSocket;
         Server server;
         Message msg = new Message();
@@ -124,6 +124,16 @@ namespace Serv4Fish3.ServerSide
 
         void ReceiveCallback(IAsyncResult ar)
         {
+            ////todo test start
+            //int count111 = clientSocket.EndReceive(ar);
+            //if (count111 == 0)
+            //{
+            //    Close();
+            //}
+            //msg.ReadMessage(count111, OnProcessMessage);
+            //Start();
+            //return;
+            //todo test end
             try
             {
                 int count = clientSocket.EndReceive(ar);
@@ -131,13 +141,13 @@ namespace Serv4Fish3.ServerSide
                 {
                     Close();
                 }
-                //Console.WriteLine("EndReceive Count:" + count);
                 msg.ReadMessage(count, OnProcessMessage);
                 Start();
             }
             catch (Exception ex)
             {
                 Console.WriteLine("[" + DateTime.Now + "] " + "[Client ReceiveCallback] 异常 " + ex.Message);
+                Console.WriteLine("[StackTrace] " + ex.StackTrace);
 
                 if (!IsClosed)
                     Close();
@@ -160,6 +170,12 @@ namespace Serv4Fish3.ServerSide
         }
 
         bool IsClosed = false; // 连接已断开，初始化时设置为 true
+
+
+        public void ClientClose()
+        {
+            this.Close();
+        }
 
         void Close()
         {

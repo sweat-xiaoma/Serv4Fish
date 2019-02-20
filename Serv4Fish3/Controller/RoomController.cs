@@ -11,18 +11,45 @@ namespace Serv4Fish3.Controller
         public RoomController()
         {
             requestCode = RequestCode.Room;
-
         }
 
         public string JoinRoom(string data, Client client, Server server)
         {
+            //Console.WriteLine("JoinRoom hashcode: " + client.GetHashCode());
             // 快速游戏
-            Room room = server.JoinRoomFast(client);
-            string roomData = room.GetRoomData();
+            Room room = server.JoinRoomFast(client, client.GetUser().EnterScene);
+            string data22 = room.GetRoomData(); // 返回guid集合11111查询guid,对应的鱼的位置
+
             // 广播给其他客户端有人来了
-            room.BroadcastMessage(client, ActionCode.UpdateRoom, roomData);
-            return ((int)ReturnCode.Success).ToString() + "-" + roomData;
+            room.BroadcastMessage(client, ActionCode.UpdateRoom, data22);
+
+            //// 每个新玩家接收一次同步即可.
+            //room.BroadcastMessage(client, ActionCode.FishGenerateJoinRoomA, client.GetUser().Corner + "");
+
+            return ((int)ReturnCode.Success).ToString() + "," + (int)room.SceneIndex + "-" + data22;
         }
+
+        public string FishGenerateJoinRoomA(string data, Client client, Server server)
+        {
+            //return "";
+
+
+            //Console.WriteLine("--------- 33: " + data);
+            //string[] strs = data.Split('-');
+            string[] strs = data.Split('(');
+            int corner = int.Parse(strs[0]);
+            Client clientNew = client.Room.GetClient(corner);
+            if (!string.IsNullOrEmpty(strs[1]))
+                clientNew.Send(ActionCode.FishGenerateJoinRoomB, strs[1]);
+
+            return "";
+        }
+
+        //public string FishGenerateJoinRoom(string data, Client client, Server server)
+        //{
+
+
+        //}
 
         //public string StepOutRoom(string data, Client client, Server server)
         //{
@@ -56,47 +83,47 @@ namespace Serv4Fish3.Controller
 
         public string GameSkill(string data, Client client, Server server)
         {
-            int skillIndex = int.Parse(data);
+            GameSkillCode skillIndex = (GameSkillCode)int.Parse(data);
 
             Room room = client.Room;
-            int costDiamond = 0;
-            if (skillIndex == 1)
+            if (skillIndex == FishCommon3.GameSkillCode.FROZEN)
             {
-                costDiamond = 100;
                 bool re = room.StartFrozen();
                 if (re)
                 {
                     string data71 = (int)ReturnCode.Success + "|"
                          //+ 1 + "|" + client.GetUser().Corner + "|" + Defines.SKILL_ICE_DURATION;
                          + client.GetUser().Corner + "|"
-                         + 1 + "|"
-                         + Defines.SKILL_ICE_DURATION;
+                         + (int)GameSkillCode.FROZEN + "|"
+                         + Defines.SKILL_ICE_CD;
                     room.BroadcastMessage(null, ActionCode.GameSkill, data71);
                 }
                 else // 冰冻中 不能再冰冻
                 {
-                    string data79 = ((int)ReturnCode.Fail).ToString() + client.GetUser().Corner;
+                    string data79 = ((int)ReturnCode.Fail).ToString() + "|" + client.GetUser().Corner;
                     client.Send(ActionCode.GameSkill, data79);
+                }
+
+                // 扣钻石
+                int costDiamond = 100;
+                if (client.GetWallet().Diamond >= costDiamond)
+                {
+                    client.GetWallet().Diamond -= costDiamond;
+                    string data72 = client.GetUser().Corner + "|" + client.GetWallet().Diamond;
+                    room.BroadcastMessage(null, ActionCode.UpdateDiamond, data72);
+                }
+                else
+                {
+                    string data96 = ((int)ReturnCode.Fail).ToString() + client.GetUser().Corner;
+                    client.Send(ActionCode.GameSkill, data96);
                 }
             }
             //else if (skillIndex == 2)
             else
             {
-                costDiamond = 200;
+                //costDiamond = 200;
             }
 
-            // 扣钻石
-            if (client.GetWallet().Diamond >= costDiamond)
-            {
-                client.GetWallet().Diamond -= costDiamond;
-                string data72 = client.GetUser().Corner + "|" + client.GetWallet().Diamond;
-                room.BroadcastMessage(null, ActionCode.UpdateDiamond, data72);
-            }
-            else
-            {
-                string data96 = ((int)ReturnCode.Fail).ToString() + client.GetUser().Corner;
-                client.Send(ActionCode.GameSkill, data96);
-            }
 
             return "";
         }

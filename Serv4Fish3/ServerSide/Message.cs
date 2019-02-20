@@ -12,7 +12,8 @@ namespace Serv4Fish3.ServerSide
         //{
         //}
 
-        byte[] data = new byte[1024];
+        //byte[] data = new byte[1024];
+        byte[] data = new byte[10240];
         int startIndex = 0;
 
         public byte[] Data
@@ -66,14 +67,23 @@ namespace Serv4Fish3.ServerSide
                     // 3) 解析数据
                     string strData = Encoding.UTF8.GetString(data, 12, count - 8);
 
+
+
+                    //Console.WriteLine("[" + DateTime.Now + "] " +
+                    //    "[socket] [读取] Request: {0}  Action: {1}  data: {2}",
+                    //    requestCode,
+                    //    actionCode,
+                    //    strData
+                    //);
+
                     processDataCallback(requestCode, actionCode, strData);
 
                     //if (newDataAmount > 100)
-                    if (actionCode == ActionCode.FishGenerate)
-                    {
-                        //Console.WriteLine("长数据: " + strData);
-                        Console.WriteLine("生成: " + strData);
-                    }
+                    //if (actionCode == ActionCode.FishGenerate)
+                    //{
+                    //    //Console.WriteLine("长数据: " + strData);
+                    //    Console.WriteLine("生成: " + strData);
+                    //}
 
                     // 把已解析完成的数据抛弃，把剩余的数据往前移动
                     Array.Copy(data, count + 4, data, 0, startIndex - 4 - count);
