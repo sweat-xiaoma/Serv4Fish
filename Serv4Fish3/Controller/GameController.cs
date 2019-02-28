@@ -94,5 +94,16 @@ namespace Serv4Fish3.Controller
             room.FishOutByClient(client, data);
             return "";
         }
+
+        public string GameSkillFocusOnFish(string data, Client client, Server server)
+        {
+            Room room = client.Room;
+            string data101 = client.GetUser().Corner + "|" + data;
+            room.BroadcastMessage(client, ActionCode.GameSkillFocusOnFish, data101);
+
+            Console.WriteLine("接收到  瞄准: " + data101);
+            return "";
+        }
     }
+
 }

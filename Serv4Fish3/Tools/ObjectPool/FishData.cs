@@ -5,6 +5,7 @@ namespace Serv4Fish3.Tools.ObjectPool
     {
         public int hp; // 血量
         public int coin; // 金币
+        public int diamond; // 钻石
         public long birthTime; // 出生时间
 
         IDistributorMc _dis;

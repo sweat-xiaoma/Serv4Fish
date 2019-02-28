@@ -85,7 +85,7 @@ namespace Serv4Fish3.Controller
             if (data == "a") // 加+
             {
                 int nextLv = this.NextCannonLv(currLv);
-                if (nextLv > lvMax) // 尚未解锁
+                if (nextLv >= lvMax) // 尚未解锁
                 {
                     //client.GetUser().CannonLvCurr = nextLv;
                     client.GetUser().CannonLvCurr = 1;

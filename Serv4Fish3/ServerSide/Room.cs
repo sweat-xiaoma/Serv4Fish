@@ -9,19 +9,10 @@ using Serv4Fish3.Model;
 using System.Collections.Concurrent;
 using Serv4Fish3.Tools.ObjectPool;
 
-
 namespace Serv4Fish3.ServerSide
 {
-    //public class FishData
-    //{
-    //    public int hp; // 血量
-    //    public int coin; // 金币
-    //}
-
     public class Room
     {
-        //Dictionary<long, FishData> fishDic = new Dictionary<long, FishData>();
-        //ConcurrentDictionary<long, FishData> fishCDic = new ConcurrentDictionary<long, FishData>();
         ConcurrentDictionary<string, FishData> fishCDic = new ConcurrentDictionary<string, FishData>();
         public int iceLeft; // 剩余冰冻时间 
         public const int MaxPeople = 4; // 1;
@@ -111,7 +102,6 @@ namespace Serv4Fish3.ServerSide
             //clientList.Remove(client);
             clientArray[index] = null;
         }
-
 
         public Client GetClient(int corner)
         {
@@ -266,31 +256,56 @@ namespace Serv4Fish3.ServerSide
             //            Console.WriteLine("245 -------------------------");
             //            Console.WriteLine(fishguid);
             //#endif
+
+            //todo test start
+            Console.WriteLine("client Hashcode: " + client.GetHashCode());
+            //todo test end
             if (fishCDic.ContainsKey(fishguid))
             {
                 FishData findFish = fishCDic[fishguid];
+                Console.WriteLine("包含鱼: " + fishguid + " coin:" + findFish.coin + " 元hp:" + findFish.hp);
                 findFish.hp -= client.GetUser().CannonLvCurr;
 #if DEBUGVIEW0214
-                Console.WriteLine("包含鱼: " + fishguid + " coin:" + findFish.coin + " hp:" + findFish.hp);
+                Console.WriteLine("lvCurr: " + client.GetUser().CannonLvCurr);
+                Console.WriteLine("包含鱼: " + fishguid + " coin:" + findFish.coin + " 新hp:" + findFish.hp);
+                //Console.WriteLine("");
 #endif
-
                 if (findFish.hp <= 0)
                 {
 #if DEBUGVIEW0214
-                    Console.WriteLine("kill by corner: " + client.GetUser().Corner
-                             + " hashcode: " + client.GetHashCode());
+                    //Console.WriteLine("kill by corner: " + client.GetUser().Corner
+                    //+ " hashcode: " + client.GetHashCode());
                     Console.WriteLine("移除鱼: " + fishguid);
 #endif
 
                     int killCorner = client.GetUser().Corner;
-                    // 广播 鱼死了,发钱
-                    string data2 = killCorner + "|" + fishguid + "|" + findFish.coin;
-                    this.BroadcastMessage(null, ActionCode.FishDead, data2);
+                    //Console.WriteLine("打死了鱼: " + findFish.diamond + " hashCode: " + findFish.GetHashCode()
+                    //+ " HashCode: " + findFish.GetHashCode() % 2);
 
-                    // 玩家 - 加钱 (广播 同步金币)
-                    client.GetWallet().Money += findFish.coin;
-                    string data316 = client.GetUser().Corner + "|" + client.GetWallet().Money;
-                    this.BroadcastMessage(null, ActionCode.UpdateMoney, data316);
+                    string dataFishDead;
+                    // 随机一下发不发钻石
+                    if (findFish.diamond > 0 && findFish.GetHashCode() % 2 == 0)
+                    {
+                        // 发金币
+                        // 玩家 - 加钱 (广播 同步金币)
+                        client.GetWallet().Money += findFish.coin;
+                        string data294 = killCorner + "|" + client.GetWallet().Money;
+                        this.BroadcastMessage(null, ActionCode.UpdateMoney, data294);
+
+                        // 广播 鱼死了,发钱
+                        dataFishDead = killCorner + "|" + fishguid + "|" + "d" + "|" + findFish.coin;
+                    }
+                    else
+                    {
+                        // 发钻石
+                        client.GetWallet().Diamond += findFish.diamond;
+                        string data301 = killCorner + "|" + client.GetWallet().Diamond;
+                        this.BroadcastMessage(null, ActionCode.UpdateDiamond, data301);
+
+                        // 广播 鱼死了,发钱
+                        dataFishDead = killCorner + "|" + fishguid + "|" + "a" + "|" + findFish.coin;
+                    }
+                    this.BroadcastMessage(null, ActionCode.FishDead, dataFishDead);
 
                     //todo test  
                     //lock (fishDic)
@@ -453,21 +468,28 @@ namespace Serv4Fish3.ServerSide
                 //fishData.hp = 10;
                 fishData.coin = fishvo.Kill_bonus;
                 fishData.birthTime = Util.GetTimeStamp;
+                fishData.diamond = fishvo.Kill_bonus_Diamond;
                 // 毫秒加层数
                 string fishguid = this.fishguidprefix + "" + i;
-                if (fishCDic.ContainsKey(fishguid))
-                {
-                    Console.WriteLine("已经包含: " + fishguid);
-                    //fishCDic[fishguid] = fishData;
-                    // todo test
-                    fishCDic.TryUpdate(fishguid, fishData, null);
-                }
-                else
+                //if (fishCDic.ContainsKey(fishguid))
+                //{
+                //    Console.WriteLine("已经包含: " + fishguid);
+                //    //fishCDic[fishguid] = fishData;
+                //    // todo test
+                //    fishCDic.TryUpdate(fishguid, fishData, null);
+                //}
+                //else
+                if (!fishCDic.ContainsKey(fishguid))
                 {
                     //fishDic.Add(fishguid, fishData);
                     if (!fishCDic.TryAdd(fishguid, fishData))
                     {
                         Console.WriteLine("新增鱼失败 tryRemove3 失败" + fishguid);
+                    }
+                    else
+                    {
+                        Console.WriteLine("[产生新鱼] guid:{0} index:{1} hp:{2}",
+                                    fishguid, fishvo.ID, fishvo.Life);
                     }
                 }
             }
@@ -508,11 +530,42 @@ namespace Serv4Fish3.ServerSide
             if (this.iceLeft <= 0)
             {
                 this.iceLeft = Defines.SKILL_ICE_DURATION;
-                Console.WriteLine("开始冷冻~~");
                 return true;
             }
-
             return false;
+        }
+
+        //ConcurrentDictionary<int, int> FocusLeftCDic = new ConcurrentDictionary<int, int>();
+        //int[] focusLeft = new int[] { };
+
+        //public bool StartFocus(int corner)
+        //{
+        //    if (this.focusLeft[corner])
+        //    {
+        //        //this.FocusLeftCDic.add
+        //        if (FocusLeftCDic[corner] > 0)
+        //        {
+        //            return false;
+        //        }
+        //    }
+        //}
+
+
+        //ConcurrentDictionary<Client, int> FocusLeftCDic = new ConcurrentDictionary<Client, int>();
+
+
+        public void StartFocus(Client client)
+        {
+            //if (!FocusLeftCDic.TryGetValue(client, out int leftTime))
+            //{
+            //    //Console.WriteLine("");
+            //}
+            //leftTime--;
+            //if (leftTime < 0)
+            //{
+            //    this.FocusLeftCDic.TryRemove(client)
+            //}
+
         }
 
 

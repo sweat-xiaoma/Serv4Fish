@@ -37,13 +37,13 @@ namespace FishCommon3
 
         UpgradeCannon, // 升级火炮
         GameSkill, // 技能
+        GameSkillFocusOnFish, // 锁定某条鱼
 
         SkillFrozenOver, // 技能 -- 冷冻结束
 
         FishGenerateJoinRoomA, // 查询鱼的数据 同步给新加入的玩家
 
         FishGenerateJoinRoomB, // 新玩家接收老鱼的数据
-
 
     }
 }

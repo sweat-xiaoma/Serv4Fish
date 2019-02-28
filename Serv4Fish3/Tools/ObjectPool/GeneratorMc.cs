@@ -32,8 +32,6 @@
             {
                 case ObjectMcType.FISH:
                     return new FishData();
-                    //            case ObjType.COIN:
-                    //                return new Coin();
             }
             return null;
         }

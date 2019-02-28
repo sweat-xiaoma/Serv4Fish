@@ -10,17 +10,19 @@ namespace Serv4Fish3.Model
         public readonly int ID;
         public readonly int Life; // 生命值
         public readonly int Speed; // 游动速度
-        public readonly int Kill_bonus; // 奖励
+        public readonly int Kill_bonus; // 奖励金币
+        public readonly int Kill_bonus_Diamond; // 奖励钻石
         public readonly int Count_max; // 最多数量
         /** 静态数据 end **/
 
-        public Fish(int id, int life, int speed, int kill_bonus, int count_max)
+        public Fish(int id, int life, int speed, int kill_bonus, int count_max, int kill_bonus_d)
         {
             this.ID = id;
             this.Life = life;
             this.Speed = speed;
             this.Kill_bonus = kill_bonus;
             this.Count_max = count_max;
+            this.Kill_bonus_Diamond = kill_bonus_d;
 
 
             //if ()

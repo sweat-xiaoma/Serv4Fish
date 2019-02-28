@@ -86,7 +86,7 @@ namespace Serv4Fish3.Controller
             GameSkillCode skillIndex = (GameSkillCode)int.Parse(data);
 
             Room room = client.Room;
-            if (skillIndex == FishCommon3.GameSkillCode.FROZEN)
+            if (skillIndex == GameSkillCode.FROZEN)
             {
                 bool re = room.StartFrozen();
                 if (re)
@@ -114,14 +114,30 @@ namespace Serv4Fish3.Controller
                 }
                 else
                 {
-                    string data96 = ((int)ReturnCode.Fail).ToString() + client.GetUser().Corner;
+                    string data96 = ((int)ReturnCode.Fail).ToString() + "|" + client.GetUser().Corner;
                     client.Send(ActionCode.GameSkill, data96);
                 }
             }
-            //else if (skillIndex == 2)
-            else
+            else if (skillIndex == GameSkillCode.FOCUSON)
             {
-                //costDiamond = 200;
+                string data124 = (int)ReturnCode.Success + "|"
+                                + client.GetUser().Corner + "|"
+                                + (int)GameSkillCode.FOCUSON + "|"
+                                + Defines.SKILL_FOCUS_CD;
+                room.BroadcastMessage(null, ActionCode.GameSkill, data124);
+
+                int costMoney = 2000;
+                if (client.GetWallet().Money >= costMoney)
+                {
+                    client.GetWallet().Money -= costMoney;
+                    string data131 = client.GetUser().Corner + "|" + client.GetWallet().Money;
+                    room.BroadcastMessage(null, ActionCode.UpdateMoney, data131);
+                }
+                else
+                {
+                    string data136 = ((int)ReturnCode.Fail).ToString() + "|" + client.GetUser().Corner;
+                    client.Send(ActionCode.GameSkill, data136);
+                }
             }
 
 

@@ -70,7 +70,7 @@ namespace Serv4Fish3.ServerSide
             this.fishList = fishDAO.VerifyFishStaticData(mysqlConn);
             ConnectHelper.CloseConnection(mysqlConn);
 
-            Console.WriteLine("fishcount: " + this.fishList.Count);
+            //Console.WriteLine("fishcount: " + this.fishList.Count);
             Console.WriteLine("[" + DateTime.Now + "] " + "加载鱼群静态数据成功~");
         }
 
@@ -87,11 +87,11 @@ namespace Serv4Fish3.ServerSide
             while (true)
             {
                 Thread.Sleep(TimeSpan.FromSeconds(Defines.GENERATE_RATE));
+                //Thread.Sleep(TimeSpan.FromSeconds(Defines.GENERATE_RATE * 10));
                 //Thread.Sleep(TimeSpan.FromSeconds(0.1f));
                 if (this.fishList.Count == 0)
                     continue;
                 int randomIndex = random.Next(0, this.fishList.Count);
-                //int randomIndex = 10; // todo test
                 //randomIndex = 17;
                 //randomIndex = random.Next(16, 18);
                 Fish fishvo = this.fishList[randomIndex];
