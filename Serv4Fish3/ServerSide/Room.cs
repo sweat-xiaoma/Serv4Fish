@@ -219,7 +219,8 @@ namespace Serv4Fish3.ServerSide
 #if DEBUG_VIEW
                     sb.Append(client.GetUser().Username + ",");
 #endif 
-                    server.SendResponse2Client(client, actionCode, data);
+                    //server.SendResponse2Client(client, actionCode, data);
+                    client.Send(actionCode, data);
                 }
             }
 
@@ -283,24 +284,26 @@ namespace Serv4Fish3.ServerSide
                     //+ " HashCode: " + findFish.GetHashCode() % 2);
 
                     string dataFishDead;
+
+
                     // 随机一下发不发钻石
                     if (findFish.diamond > 0 && findFish.GetHashCode() % 2 == 0)
+                    {
+                        // 发钻石
+                        client.GetWallet().Diamond += findFish.diamond;
+                        string data301 = killCorner + "|" + client.GetWallet().Diamond;
+                        this.BroadcastMessage(null, ActionCode.UpdateDiamond, data301);
+
+                        // 广播 鱼死了,发钱
+                        dataFishDead = killCorner + "|" + fishguid + "|" + "d" + "|" + findFish.diamond;
+                    }
+                    else
                     {
                         // 发金币
                         // 玩家 - 加钱 (广播 同步金币)
                         client.GetWallet().Money += findFish.coin;
                         string data294 = killCorner + "|" + client.GetWallet().Money;
                         this.BroadcastMessage(null, ActionCode.UpdateMoney, data294);
-
-                        // 广播 鱼死了,发钱
-                        dataFishDead = killCorner + "|" + fishguid + "|" + "d" + "|" + findFish.coin;
-                    }
-                    else
-                    {
-                        // 发钻石
-                        client.GetWallet().Diamond += findFish.diamond;
-                        string data301 = killCorner + "|" + client.GetWallet().Diamond;
-                        this.BroadcastMessage(null, ActionCode.UpdateDiamond, data301);
 
                         // 广播 鱼死了,发钱
                         dataFishDead = killCorner + "|" + fishguid + "|" + "a" + "|" + findFish.coin;
@@ -535,41 +538,6 @@ namespace Serv4Fish3.ServerSide
             return false;
         }
 
-        //ConcurrentDictionary<int, int> FocusLeftCDic = new ConcurrentDictionary<int, int>();
-        //int[] focusLeft = new int[] { };
-
-        //public bool StartFocus(int corner)
-        //{
-        //    if (this.focusLeft[corner])
-        //    {
-        //        //this.FocusLeftCDic.add
-        //        if (FocusLeftCDic[corner] > 0)
-        //        {
-        //            return false;
-        //        }
-        //    }
-        //}
-
-
-        //ConcurrentDictionary<Client, int> FocusLeftCDic = new ConcurrentDictionary<Client, int>();
-
-
-        public void StartFocus(Client client)
-        {
-            //if (!FocusLeftCDic.TryGetValue(client, out int leftTime))
-            //{
-            //    //Console.WriteLine("");
-            //}
-            //leftTime--;
-            //if (leftTime < 0)
-            //{
-            //    this.FocusLeftCDic.TryRemove(client)
-            //}
-
-        }
-
-
-
         public int fishGenLoop;
 
         void CheckOldFish()
@@ -593,10 +561,6 @@ namespace Serv4Fish3.ServerSide
 
             for (int i = 0; i < oldFishs.Count; i++)
             {
-                ////todo test线程问题
-                //lock (this.fishDic)
-                //this.fishDic.Remove(oldFishs[i]);
-
                 if (!fishCDic.TryRemove(oldFishs[i], out FishData fishData))
                 {
                     Console.WriteLine("很老的鱼了 tryRemove3 失败" + oldFishs[i]);

@@ -80,5 +80,13 @@ namespace Serv4Fish3.Tools
                 return Convert.ToInt64(ts.TotalMilliseconds);
             }
         }
+
+        public static string TimeNow
+        {
+            get
+            {
+                return DateTime.Now + ":" + DateTime.Now.Millisecond;
+            }
+        }
     }
 }

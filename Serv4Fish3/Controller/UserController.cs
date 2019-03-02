@@ -25,19 +25,19 @@ namespace Serv4Fish3.Controller
             string guid = strs[0];
             SceneIndex gameindex = (SceneIndex)int.Parse(strs[1]);
 
-            if (!server.CheckUserRepeat(guid)) // 检测用户重复登陆
-            {
-                return ((int)ReturnCode.Fail).ToString();
-            }
             UserDAO userDAO = new UserDAO();
             User user = userDAO.VerifyUser(client.MySQlConn, guid);
-            //user.CannonLvOpen
             if (user == null)
             {
                 return ((int)ReturnCode.Notdfound).ToString();
             }
             else
             {
+                if (!server.CheckUserRepeat(user.Username)) // 检测用户重复登陆
+                {
+                    return ((int)ReturnCode.Fail).ToString();
+                }
+
                 bool enterFail = true;
                 SceneIndex enterScene = gameindex; // 最后进入的场景
                 switch (gameindex)
@@ -84,15 +84,15 @@ namespace Serv4Fish3.Controller
 
             if (data == "a") // 加+
             {
-                int nextLv = this.NextCannonLv(currLv);
-                if (nextLv >= lvMax) // 尚未解锁
+                if (currLv >= lvMax) // 尚未解锁
                 {
                     //client.GetUser().CannonLvCurr = nextLv;
                     client.GetUser().CannonLvCurr = 1;
                 }
                 else
                 {
-                    client.GetUser().CannonLvCurr = nextLv;
+                    //int nextLv = ;
+                    client.GetUser().CannonLvCurr = this.NextCannonLv(currLv);
                 }
             }
             else // 减-
@@ -137,16 +137,24 @@ namespace Serv4Fish3.Controller
         {
             if (data == "gg")
             {
-                int currLv = client.GetUser().CannonLvCurr;
+                int lvOpen = client.GetUser().CannonLvOpen;
 
-                if (currLv >= Defines.CANNON_LV_MAX)
+                if (lvOpen >= Defines.CANNON_LV_MAX)
                 {
+                    if (client.GetUser().CannonLvCurr < lvOpen)
+                    {
+                        client.GetUser().CannonLvCurr = lvOpen;
+                        string data148 = client.GetUser().Corner + "|" + lvOpen;
+                        client.Send(ActionCode.ChangeCost, data148);
+                    }
+
                     string data141 = ((int)ReturnCode.ERROR_A).ToString();
-                    server.SendResponse2Client(client, ActionCode.UpgradeCannon, data141);
+                    //server.SendResponse2Client(client, ActionCode.UpgradeCannon, data141);
+                    client.Send(ActionCode.UpgradeCannon, data141);
                     return "";
                 }
 
-                int nextlv = this.NextCannonLv(currLv);
+                int nextlv = this.NextCannonLv(lvOpen);
                 int cost = nextlv / 5; // 等级除以5 作为升级消耗钻石数目
                 int userDiamond = client.GetWallet().Diamond;
 
@@ -154,7 +162,8 @@ namespace Serv4Fish3.Controller
                 {
                     // 钻石不足
                     string data114 = ((int)ReturnCode.Fail).ToString();
-                    server.SendResponse2Client(client, ActionCode.UpgradeCannon, data114);
+                    //server.SendResponse2Client(client, ActionCode.UpgradeCannon, data114);
+                    client.Send(ActionCode.UpgradeCannon, data114);
                     return "";
                 }
                 else
@@ -177,7 +186,8 @@ namespace Serv4Fish3.Controller
                     room.BroadcastMessage(null, ActionCode.ChangeCost, data132);
 
                     string data177 = (int)ReturnCode.Success + "," + nextlv;
-                    server.SendResponse2Client(client, ActionCode.UpgradeCannon, data177);
+                    //server.SendResponse2Client(client, ActionCode.UpgradeCannon, data177);
+                    client.Send(ActionCode.UpgradeCannon, data177);
                 }
             }
             return "";

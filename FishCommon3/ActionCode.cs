@@ -17,16 +17,16 @@ namespace FishCommon3
         Move, // 角色移动
         Shoot, // 射击
         Rotate, // 旋转
-        //FishSync, // 鱼的同步
+        // FishSync, // 鱼的同步
         FishGenerate, // 鱼的生成
         FishHit, // 打到鱼
         FishDead, // 鱼被打死
-        //FishBonus, // 鱼掉钱 （暂时和上一个合并）
+        // FishBonus, // 鱼掉钱 （暂时和上一个合并）
         FishOutScreen, // 鱼游出屏幕
         ChangeCost, // 改变消耗
         UpdateMoney, // 更新金币显示
         UpdateDiamond, // 更新钻石显示
-        //HeartBeatServ, // 服务端发起心跳
+        // HeartBeatServ, // 服务端发起心跳
         StepOutRoom, // 暂时离开房间
 
         PingFromServ, // 服务端 -> Client

@@ -27,19 +27,6 @@ namespace Serv4Fish3
 
         public static void Main(string[] args)
         {
-            //new EmptyClassC();
-            //return;
-            //Console.WriteLine(Util.GetTimeStamp());
-            //return;
-            //new EmptyClassA();
-            //////Thread.Sleep(1000);
-            ////Thread.Sleep(TimeSpan.FromSeconds(1));
-
-            //Console.WriteLine("------------------------");
-            //new EmptyClassB();
-
-
-            //return;
             Console.WriteLine("------------------------");
             Console.WriteLine("PID: " + Process.GetCurrentProcess().Id);
             Console.WriteLine("------------------------");

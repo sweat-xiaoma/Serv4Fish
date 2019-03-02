@@ -8,7 +8,8 @@
         // 持续时间
         public const int SKILL_ICE_DURATION = 8;
         // 冷却时间
-        public const int SKILL_ICE_CD = 60;
+        //public const int SKILL_ICE_CD = 60;
+        public const int SKILL_ICE_CD = 10;
         /** 技能 -- 冰冻 end **/
 
         /** 技能 -- 瞄准射击 start **/

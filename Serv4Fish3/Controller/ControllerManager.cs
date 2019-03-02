@@ -56,7 +56,9 @@ namespace Serv4Fish3.Controller
             {
                 return;
             }
-            server.SendResponse2Client(client, actionCode, re as string);
+            //if (client)
+            //server.SendResponse2Client(client, actionCode, re as string);
+            client.Send(actionCode, re as string);
 
         }
 

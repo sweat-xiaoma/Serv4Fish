@@ -83,38 +83,42 @@ namespace Serv4Fish3.Controller
 
         public string GameSkill(string data, Client client, Server server)
         {
+
+            Console.WriteLine("使用技能: " + data);
+
             GameSkillCode skillIndex = (GameSkillCode)int.Parse(data);
 
             Room room = client.Room;
             if (skillIndex == GameSkillCode.FROZEN)
             {
-                bool re = room.StartFrozen();
-                if (re)
-                {
-                    string data71 = (int)ReturnCode.Success + "|"
-                         //+ 1 + "|" + client.GetUser().Corner + "|" + Defines.SKILL_ICE_DURATION;
-                         + client.GetUser().Corner + "|"
-                         + (int)GameSkillCode.FROZEN + "|"
-                         + Defines.SKILL_ICE_CD;
-                    room.BroadcastMessage(null, ActionCode.GameSkill, data71);
-                }
-                else // 冰冻中 不能再冰冻
-                {
-                    string data79 = ((int)ReturnCode.Fail).ToString() + "|" + client.GetUser().Corner;
-                    client.Send(ActionCode.GameSkill, data79);
-                }
-
-                // 扣钻石
                 int costDiamond = 100;
-                if (client.GetWallet().Diamond >= costDiamond)
+                if (client.GetWallet().Diamond >= costDiamond) // 钻石够用
                 {
-                    client.GetWallet().Diamond -= costDiamond;
-                    string data72 = client.GetUser().Corner + "|" + client.GetWallet().Diamond;
-                    room.BroadcastMessage(null, ActionCode.UpdateDiamond, data72);
+                    bool re = room.StartFrozen(); // 开始冰冻
+                    if (re)
+                    {
+                        // 扣钱
+                        client.GetWallet().Diamond -= costDiamond;
+                        string data72 = client.GetUser().Corner + "|" + client.GetWallet().Diamond;
+                        room.BroadcastMessage(null, ActionCode.UpdateDiamond, data72);
+
+                        string data71 = (int)ReturnCode.Success + "|"
+                             + client.GetUser().Corner + "|"
+                             + (int)GameSkillCode.FROZEN + "|"
+                             + Defines.SKILL_ICE_CD;
+                        room.BroadcastMessage(null, ActionCode.GameSkill, data71);
+                    }
+                    else // 冰冻中 不能再冰冻
+                    {
+                        // 冰冻失败
+                        string data79 = ((int)ReturnCode.ERROR_B).ToString() + "|" + client.GetUser().Corner;
+                        client.Send(ActionCode.GameSkill, data79);
+                    }
                 }
                 else
                 {
-                    string data96 = ((int)ReturnCode.Fail).ToString() + "|" + client.GetUser().Corner;
+                    // 钻石不够
+                    string data96 = ((int)ReturnCode.ERROR_A).ToString() + "|" + client.GetUser().Corner;
                     client.Send(ActionCode.GameSkill, data96);
                 }
             }
@@ -124,7 +128,8 @@ namespace Serv4Fish3.Controller
                                 + client.GetUser().Corner + "|"
                                 + (int)GameSkillCode.FOCUSON + "|"
                                 + Defines.SKILL_FOCUS_CD;
-                room.BroadcastMessage(null, ActionCode.GameSkill, data124);
+                //room.BroadcastMessage(null, ActionCode.GameSkill, data124);
+                client.Send(ActionCode.GameSkill, data124);
 
                 int costMoney = 2000;
                 if (client.GetWallet().Money >= costMoney)

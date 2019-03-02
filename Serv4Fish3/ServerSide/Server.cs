@@ -95,16 +95,19 @@ namespace Serv4Fish3.ServerSide
                 //randomIndex = 17;
                 //randomIndex = random.Next(16, 18);
                 Fish fishvo = this.fishList[randomIndex];
-                foreach (Room item in this.roomList)
+                try
                 {
-                    try
+                    foreach (Room item in this.roomList)
                     {
                         item.GenerateFishs(fishvo);
                     }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("[" + DateTime.Now + "] generateFishWithDelay 异常 Exception: " + ex.Message);
-                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("");
+                    Console.WriteLine("[" + DateTime.Now + "] generateFishWithDelay 异常 Exception: " + ex.Message);
+                    Console.WriteLine(ex.StackTrace);
+                    Console.WriteLine("");
                 }
 
                 //Thread.Sleep(TimeSpan.FromSeconds(30f));
@@ -157,11 +160,11 @@ namespace Serv4Fish3.ServerSide
                 clientList.Remove(client);
         }
 
-        public void SendResponse2Client(Client client, ActionCode actionCode, string data)
-        {
-            //Console.WriteLine(client.GetHashCode());
-            client.Send(actionCode, data);
-        }
+        //public void SendResponse2Client(Client client, ActionCode actionCode, string data)
+        //{
+        //    //Console.WriteLine(client.GetHashCode());
+        //    client.Send(actionCode, data);
+        //}
 
         public void HandleRequest(RequestCode requestCode, ActionCode actionCode, string data, Client client)
         {
