@@ -283,31 +283,25 @@ namespace Serv4Fish3.ServerSide
                     //Console.WriteLine("打死了鱼: " + findFish.diamond + " hashCode: " + findFish.GetHashCode()
                     //+ " HashCode: " + findFish.GetHashCode() % 2);
 
-                    string dataFishDead;
 
-
-                    // 随机一下发不发钻石
-                    if (findFish.diamond > 0 && findFish.GetHashCode() % 2 == 0)
+                    //// 随机一下发不发钻石
+                    //if (findFish.diamond > 0 && findFish.GetHashCode() % 2 == 0)
+                    if (findFish.diamond > 0)
                     {
                         // 发钻石
                         client.GetWallet().Diamond += findFish.diamond;
                         string data301 = killCorner + "|" + client.GetWallet().Diamond;
                         this.BroadcastMessage(null, ActionCode.UpdateDiamond, data301);
-
-                        // 广播 鱼死了,发钱
-                        dataFishDead = killCorner + "|" + fishguid + "|" + "d" + "|" + findFish.diamond;
                     }
-                    else
+                    if (findFish.coin > 0)
                     {
                         // 发金币
                         // 玩家 - 加钱 (广播 同步金币)
                         client.GetWallet().Money += findFish.coin;
                         string data294 = killCorner + "|" + client.GetWallet().Money;
                         this.BroadcastMessage(null, ActionCode.UpdateMoney, data294);
-
-                        // 广播 鱼死了,发钱
-                        dataFishDead = killCorner + "|" + fishguid + "|" + "a" + "|" + findFish.coin;
                     }
+                    string dataFishDead = killCorner + "|" + fishguid + "|" + findFish.diamond + "|" + findFish.coin;
                     this.BroadcastMessage(null, ActionCode.FishDead, dataFishDead);
 
                     //todo test  

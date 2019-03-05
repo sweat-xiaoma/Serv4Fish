@@ -48,7 +48,6 @@ namespace Serv4Fish3.ServerSide
         void initServSocket()
         {
             serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            //serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Udp);
             serverSocket.Bind(ipEndPoint);
             serverSocket.Listen(0);
             serverSocket.BeginAccept(AcceptCallback, null);
