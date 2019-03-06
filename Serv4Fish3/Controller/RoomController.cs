@@ -131,17 +131,36 @@ namespace Serv4Fish3.Controller
                 //room.BroadcastMessage(null, ActionCode.GameSkill, data124);
                 client.Send(ActionCode.GameSkill, data124);
 
-                int costMoney = 2000;
+                int costMoney = 200;
+                //if (client.GetWallet().Money >= costMoney)
+                //{
+                //    client.GetWallet().Money -= costMoney;
+                //    string data131 = client.GetUser().Corner + "|" + client.GetWallet().Money;
+                //    room.BroadcastMessage(null, ActionCode.UpdateMoney, data131);
+                //}
+                //else
+                //{
+                //    string data136 = ((int)ReturnCode.Fail).ToString() + "|" + client.GetUser().Corner;
+                //    client.Send(ActionCode.GameSkill, data136);
+                //}
+
                 if (client.GetWallet().Money >= costMoney)
-                {
+                { // 金币够用
                     client.GetWallet().Money -= costMoney;
-                    string data131 = client.GetUser().Corner + "|" + client.GetWallet().Money;
-                    room.BroadcastMessage(null, ActionCode.UpdateMoney, data131);
+                    string data150 = client.GetUser().Corner + "|" + client.GetWallet().Money;
+                    room.BroadcastMessage(null, ActionCode.UpdateMoney, data150);
+
+                    string data123 = (int)ReturnCode.Success + "|"
+                        + client.GetUser().Corner + "|"
+                        + (int)GameSkillCode.FOCUSON + "|"
+                        + Defines.SKILL_FOCUS_CD;
+                    room.BroadcastMessage(null, ActionCode.GameSkill, data123);
                 }
                 else
                 {
-                    string data136 = ((int)ReturnCode.Fail).ToString() + "|" + client.GetUser().Corner;
-                    client.Send(ActionCode.GameSkill, data136);
+                    // 金币不够
+                    string data121 = ((int)ReturnCode.ERROR_C).ToString() + "|" + client.GetUser().Corner;
+                    client.Send(ActionCode.GameSkill, data121);
                 }
             }
 
