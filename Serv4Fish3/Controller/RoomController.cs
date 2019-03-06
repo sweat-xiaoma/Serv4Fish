@@ -124,12 +124,12 @@ namespace Serv4Fish3.Controller
             }
             else if (skillIndex == GameSkillCode.FOCUSON)
             {
-                string data124 = (int)ReturnCode.Success + "|"
-                                + client.GetUser().Corner + "|"
-                                + (int)GameSkillCode.FOCUSON + "|"
-                                + Defines.SKILL_FOCUS_CD;
-                //room.BroadcastMessage(null, ActionCode.GameSkill, data124);
-                client.Send(ActionCode.GameSkill, data124);
+                //string data124 = (int)ReturnCode.Success + "|"
+                //                + client.GetUser().Corner + "|"
+                //                + (int)GameSkillCode.FOCUSON + "|"
+                //                + Defines.SKILL_FOCUS_CD;
+                ////room.BroadcastMessage(null, ActionCode.GameSkill, data124);
+                //client.Send(ActionCode.GameSkill, data124);
 
                 int costMoney = 200;
                 //if (client.GetWallet().Money >= costMoney)
